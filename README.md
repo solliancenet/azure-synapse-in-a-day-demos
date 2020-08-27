@@ -1,1 +1,1 @@
-# azure-synapse-in-a-day-demos
+# Azure Synapse in a day demos
