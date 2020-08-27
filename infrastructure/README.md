@@ -62,3 +62,43 @@ The first step is to deploy and configure the resources. It's easy to do from th
 
 > TODO: Update image
 
+### Task 1: Create Azure Synapse Analytics workspace
+
+1. Navigate to the Azure portal (<https://portal.azure.com>) to create the Azure Synapse Analytics workspace.
+
+2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics (workspaces preview)**.
+
+    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
+
+3. Select **Add**.
+
+    ![The add button is selected.](media/synapse-add.png "Add")
+
+4. In the `Create Synapse workspace` form, enter the values shown in the table below. For the Azure Data Lake Storage Gen2 account name, select **Create new**, enter the account name, then select **OK**.
+
+    ![The form is shown as described below.](media/create-synapse-1.png "Create Synapse workspace 1")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Subscription | Any | If you are unsure, please contact the person in charge of billing management. |
+    | Resource group | `synapse-lab-infrastructure` | Select **Create new**, then enter the name. |
+    | Workspace name | `synapselabinfra` + your initials + `asws` (example: `synapselabinfrajdhasws`) | Lowercase alphanumeric characters only |
+    | Region | Select the region closest to you, such as `West US`. | |
+    | Select Data Lake Storage Gen2 | From subscription | Default settings |
+    | Account name | `synapselabinfra` + your initials + `adls` (example: `synapselabinfrajdhadls`) | Select **Create new** (lowercase alphanumeric characters only) |
+
+5. Select **Create new** for `File system name`, type **datalake** in the name field, then select **OK**.
+
+    ![The form is shown as described.](media/create-synapse-2.png "Create Synapse workspace 2")
+
+6. Check the `Assign myself the Storage Blob Data Contributor role` checkbox, then select **Next: Security and networking**.
+
+    ![The checkbox is checked and the Next button is highlighted.](media/create-synapse-3.png "Create Synapse workspace 3")
+
+7. Review the settings, then select **Review + create**.
+
+    ![The network settings are displayed.](media/create-synapse-4.png "Create Synapse workspace network settings")
+
+8. Review the settings, then select **Create**. It takes around five minutes to create the workspace.
+
+    ![The Create button is highlighted.](media/create-synapse-5.png "Create Synapse workspace review")
