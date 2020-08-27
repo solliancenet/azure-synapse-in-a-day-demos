@@ -1,0 +1,2535 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Devart.Data</name>
+    <version>5.0.1441.0</version>
+    <fullname>Devart.Data, Version=5.0.1441.0, Culture=neutral, PublicKeyToken=09af7300eec23701</fullname>
+  </assembly>
+  <members>
+    <member name="N:Devart.Common">
+      <summary>The <see cref="N:Devart.Common" /> namespace contains classes shared by the Devart data providers. </summary>
+    </member>
+    <member name="T:Devart.Common.ConnectionLostCause">
+      <summary>Specifies the cause of the connection loss. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostCause.Connect">
+      <summary>Connection loss detected during connection. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostCause.Execute">
+      <summary>Connection loss detected during SQL execution. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostCause.Prepare">
+      <summary>Connection loss detected during preparation command on the server. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostCause.Read">
+      <summary>Connection loss detected during read data. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostCause.StartTransaction">
+      <summary>Connection loss detected during starting transaction. </summary>
+    </member>
+    <member name="T:Devart.Common.ConnectionLostContext">
+      <summary>Specifies the state of the connection when error ocurred. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostContext.HasPrepared">
+      <summary>The connection has prepared statement in current session. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostContext.InFetch">
+      <summary>The connection already had an open DataReader. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostContext.InTransaction">
+      <summary>The connection executed sql in transaction. </summary>
+    </member>
+    <member name="F:Devart.Common.ConnectionLostContext.None">
+      <summary>The connection was in none state. </summary>
+    </member>
+    <member name="T:Devart.Common.ConnectionLostEventArgs">
+      <summary>Provides data for the ConnectionLost event. </summary>
+    </member>
+    <member name="M:Devart.Common.ConnectionLostEventArgs.#ctor(System.Object,Devart.Common.ConnectionLostCause,Devart.Common.ConnectionLostContext,Devart.Common.RetryMode,System.Int32)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.ConnectionLostEventArgs" /> class. </summary>
+      <param name="component">The object where the connection loss occurs. </param>
+      <param name="cause">The reason of the connection loss. </param>
+      <param name="context">The state of connection when connection is lost. </param>
+      <param name="retryMode">The application behavior when connection is lost. </param>
+      <param name="attemptNumber">The number of attempts to reconnect. </param>
+    </member>
+    <member name="P:Devart.Common.ConnectionLostEventArgs.AttemptNumber">
+      <summary>The state of connection when connection is lost. </summary>
+      <keywords>ConnectionLostEventArgs.AttemptNumber property </keywords>
+    </member>
+    <member name="P:Devart.Common.ConnectionLostEventArgs.Cause">
+      <summary>The reason of the connection loss. </summary>
+      <keywords>ConnectionLostEventArgs.Cause property </keywords>
+    </member>
+    <member name="P:Devart.Common.ConnectionLostEventArgs.Component">
+      <summary>The object where the connection loss occurs. </summary>
+      <keywords>ConnectionLostEventArgs.Component property </keywords>
+    </member>
+    <member name="P:Devart.Common.ConnectionLostEventArgs.Context">
+      <summary>The state of the connection when connection is lost. </summary>
+      <keywords>ConnectionLostEventArgs.Context property </keywords>
+    </member>
+    <member name="P:Devart.Common.ConnectionLostEventArgs.RetryMode">
+      <summary>The application behavior when connection is lost. </summary>
+      <keywords>ConnectionLostEventArgs.RetryMode property </keywords>
+    </member>
+    <member name="T:Devart.Common.ConnectionLostEventHandler">
+      <summary>Represents the method that will handle the Error ConnectionLost of <see cref="T:Devart.Data.SQLite.SQLiteConnection" />. </summary>
+      <keywords>ConnectionLostEventHandler delegate </keywords>
+      <param name="sender">The source of the event. </param>
+      <param name="e">The <see cref="T:Devart.Common.ConnectionLostEventArgs" /> object that contains the event data. </param>
+    </member>
+    <member name="T:Devart.Common.DbCommandBase">
+      <summary>Represents a SQL statement  to execute against a data source. </summary>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.BeginExecuteNonQuery()">
+      <summary>Starts an asynchronous invocation of an <see cref="M:Devart.Common.DbCommandBase.ExecuteNonQuery" /> method. </summary>
+      <keywords>DbCommandBase.BeginExecuteNonQuery method </keywords>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+      <overloads>Starts an asynchronous invocation of an <see cref="M:Devart.Common.DbCommandBase.ExecuteNonQuery" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.BeginExecuteNonQuery(System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of an <see cref="M:Devart.Common.DbCommandBase.ExecuteNonQuery" /> method with information for callback function. </summary>
+      <keywords>DbCommandBase.BeginExecuteNonQuery method </keywords>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.BeginExecuteReader()">
+      <summary>Starts an asynchronous invocation of an <see cref="M:System.Data.Common.DbCommand.ExecuteReader" /> method. </summary>
+      <keywords>DbCommandBase.BeginExecuteReader method </keywords>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+      <overloads>Starts an asynchronous invocation of an <see cref="M:System.Data.Common.DbCommand.ExecuteReader" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.BeginExecuteReader(System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of an <see cref="M:System.Data.Common.DbCommand.ExecuteReader" /> method with information for callback function. </summary>
+      <keywords>DbCommandBase.BeginExecuteReader method </keywords>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.BeginExecuteReader(System.AsyncCallback,System.Object,System.Data.CommandBehavior)">
+      <summary>Starts an asynchronous invocation of an <see cref="M:System.Data.Common.DbCommand.ExecuteReader" /> method with information for callback function. </summary>
+      <keywords>DbCommandBase.BeginExecuteReader method </keywords>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <param name="behavior">One of the <see cref="T:System.Data.CommandBehavior" /> values. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.BeginExecuteReader(System.Data.CommandBehavior)">
+      <summary>Starts an asynchronous invocation of an <see cref="M:System.Data.Common.DbCommand.ExecuteReader" /> method. </summary>
+      <keywords>DbCommandBase.BeginExecuteReader method </keywords>
+      <param name="behavior">One of the <see cref="T:System.Data.CommandBehavior" /> values. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.Cancel()">
+      <summary>Attempts to cancel the execution of a query currently running. </summary>
+      <keywords>DbCommandBase.Cancel method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.CommandText">
+      <summary>Gets or sets the SQL statement to execute against a data source. </summary>
+      <keywords>DbCommandBase.CommandText property </keywords>
+      <value>The SQL statement  to execute. The default value is an empty string (""). </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.CommandTimeout">
+      <summary>Gets or sets the wait time before terminating an attempt to execute a command and generating an error. Note that it is the time to wait for any server reply since the command was sent to a server, and it doesn't include the time necessary to fetch data if the command selects some data. </summary>
+      <keywords>DbCommandBase.CommandTimeout property </keywords>
+      <value>The time (in seconds) to wait for the command to execute. The default value is 30 seconds. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.CommandType">
+      <summary>Gets or sets a value indicating how the <see cref="P:Devart.Common.DbCommandBase.CommandText" /> property is to be interpreted. </summary>
+      <keywords>DbCommandBase.CommandType property </keywords>
+      <value>One of the <see cref="T:System.Data.CommandType" /> values. The default value is <see cref="T:System.Data.CommandType.Text" />. </value>
+    </member>
+    <member name="F:Devart.Common.DbCommandBase.DefaultCommandTimeout">
+      <summary>Gets or sets the default timeout for all commands. </summary>
+      <keywords>DbCommandBase.DefaultCommandTimeout field </keywords>
+      <value>The default timeout for all commands. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.DesignTimeVisible">
+      <summary>Gets or sets a value indicating whether the command object should be visible in a customized interface control. </summary>
+      <keywords>DbCommandBase.DesignTimeVisible property </keywords>
+      <value>
+        <see langword="true" />, if the command object should be visible in a control; otherwise <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.EndExecuteNonQuery(System.IAsyncResult)">
+      <summary>Ends an asynchronous invocation of the <see cref="M:Devart.Common.DbCommandBase.ExecuteNonQuery" /> method. </summary>
+      <keywords>DbCommandBase.EndExecuteNonQuery method </keywords>
+      <param name="result">The <see cref="T:System.IAsyncResult" /> returned by <see cref="M:Devart.Common.DbCommandBase.BeginExecuteNonQuery" />. </param>
+      <returns>For UPDATE, INSERT, and DELETE statements, the return value is the number of rows affected by the command. For all other types of statements, the return value is -1. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.EndExecuteReader(System.IAsyncResult)">
+      <summary>Ends an asynchronous invocation of the <see cref="M:System.Data.Common.DbCommandBase.ExecuteReader" /> method. </summary>
+      <keywords>DbCommandBase.EndExecuteReader method </keywords>
+      <param name="result">The <see cref="T:System.IAsyncResult" /> returned by <see cref="M:Devart.Common.DbCommandBase.BeginExecuteReader" />. </param>
+      <returns>A <see cref="T:Devart.Common.DbDataReaderBase" /> object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.ExecuteNonQuery()">
+      <summary>Executes SQL statement against the <see cref="P:System.Data.Common.DbCommand.Connection" /> and returns the number of rows affected. </summary>
+      <keywords>DbCommandBase.ExecuteNonQuery method </keywords>
+      <returns>For UPDATE, INSERT, and DELETE statements, the return value is the number of rows affected by the command. For all other types of statements, the return value is -1. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.ExecutePageReader(System.Data.CommandBehavior,System.Int32,System.Int32)">
+      <summary>Returns a specific subset of rows when paging through the results of a query. </summary>
+      <keywords>DbCommandBase.ExecutePageReader method </keywords>
+      <param name="behavior">One of the <see cref="T:System.Data.CommandBehavior" /> values. </param>
+      <param name="startRecord">Zero-based ordinal of row that result set starts with. </param>
+      <param name="maxRecords">Quantity of rows in result set. </param>
+      <returns>A <see cref="T:Devart.Common.DbDataReaderBase" /> object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.ExecuteScalar()">
+      <summary>Executes the query, and returns the first column of the first row in the result set returned by the query. Extra columns or rows are ignored. </summary>
+      <keywords>DbCommandBase.ExecuteScalar method </keywords>
+      <returns>The first column of the first row in the result set. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.GetRecordCount()">
+      <summary>Returns count of records in the resultset. </summary>
+      <keywords>DbCommandBase.GetRecordCount method </keywords>
+      <returns>The count of records. </returns>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.Name">
+      <summary>Gets or sets the name of component that will be displayed in dbMonitor application. </summary>
+      <keywords>DbCommandBase.Name property </keywords>
+      <value>The name of the component. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.Owner">
+      <summary>Gets or sets a form or other container that the <see cref="T:Devart.Common.DbCommandBase" /> instance belongs to. </summary>
+      <keywords>DbCommandBase.Owner property </keywords>
+      <value>A form or other container that the object belongs to. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.ParameterCheck">
+      <summary>Gets or sets a value indicating whether the command object regenerates parameter objects if text of the command is changed. </summary>
+      <keywords>DbCommandBase.ParameterCheck property </keywords>
+      <value>Value indicating whether the command object regenerates parameter objects if text of the command is changed. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.Prepare()">
+      <summary>Creates a prepared (or compiled) version of the command on the server. </summary>
+      <keywords>DbCommandBase.Prepare method </keywords>
+    </member>
+    <member name="M:Devart.Common.DbCommandBase.ResetCommandTimeout()">
+      <summary>Resets <see cref="P:Devart.Common.DbCommandBase.CommandTimeout" /> to its default value, which is taken from <see cref="F:Devart.Common.DbCommandBase.DefaultCommandTimeout" />. </summary>
+      <keywords>DbCommandBase.ResetCommandTimeout method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbCommandBase.UpdatedRowSource">
+      <summary>Gets or sets how command results are applied to the <see cref="T:System.Data.DataRow" /> when used by the <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> method of the <see cref="T:System.Data.Common.DbDataAdapter" />. </summary>
+      <keywords>DbCommandBase.UpdatedRowSource property </keywords>
+      <value>One of the <see cref="T:System.Data.UpdateRowSource" /> values. </value>
+    </member>
+    <member name="T:Devart.Common.DbCommandBuilder">
+      <summary>Allows to automatically generate single-table commands used to reconcile changes made to a <see cref="T:System.Data.DataSet" /> with the associated data source. </summary>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetDeleteCommand()">
+      <summary>Gets the automatically generated SQL statement required to perform deletions when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetDeleteCommand method </keywords>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+      <overloads>Gets the automatically generated SQL statement required to perform deletions. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetDeleteCommand(System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to perform deletions when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetDeleteCommand method </keywords>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetInsertCommand()">
+      <summary>Gets the automatically generated SQL statement required to perform inserts when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetInsertCommand method </keywords>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+      <overloads>Gets the automatically generated SQL statement required to perform inserts. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetInsertCommand(System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to perform inserts when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetInsertCommand method </keywords>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetInsertCommand(System.String[],System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to perform inserts for the specified fields when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetInsertCommand method </keywords>
+      <param name="fields">The array of string containing list of the field names. </param>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetRefreshCommand()">
+      <summary>Gets the automatically generated SQL statement required to refresh values from the data source. </summary>
+      <keywords>DbCommandBuilder.GetRefreshCommand method </keywords>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+      <overloads>Gets the automatically generated SQL statement required to refresh values from the data source. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetRefreshCommand(System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to refresh values from the data source. </summary>
+      <keywords>DbCommandBuilder.GetRefreshCommand method </keywords>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetRefreshCommand(System.String[],System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to refresh values from the data source. </summary>
+      <keywords>DbCommandBuilder.GetRefreshCommand method </keywords>
+      <param name="fields">The array of string containing list of the field names. </param>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetUpdateCommand()">
+      <summary>Gets the automatically generated SQL statement required to perform updates on the data source when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetUpdateCommand method </keywords>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+      <overloads>Gets the automatically generated SQL statement required to perform updates on the data source. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetUpdateCommand(System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to perform updates when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetUpdateCommand method </keywords>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.GetUpdateCommand(System.String[],System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to perform updates for the specified fields when an application calls <see cref="M:System.Data.Common.DbDataAdapter.Update(System.Data.DataSet)" /> on the <see cref="T:System.Data.IDbDataAdapter" />. </summary>
+      <keywords>DbCommandBuilder.GetUpdateCommand method </keywords>
+      <param name="fields">The array of string containing list of the field names. </param>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilder.QuoteIdentifier(System.String)">
+      <summary>Returns the string passed as the parameter enclosed in quotes. </summary>
+      <keywords>DbCommandBuilder.QuoteIdentifier method </keywords>
+      <param name="unquotedIdentifier">Identifier to be placed inside the quotes. </param>
+      <returns>The identifier enclosed in quotes. </returns>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilder.QuotePrefix">
+      <summary>Gets or sets the beginning character or characters to use when specifying data source objects (for example, tables or columns) whose names contain characters such as spaces or reserved tokens. </summary>
+      <keywords>DbCommandBuilder.QuotePrefix property </keywords>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilder.QuoteSuffix">
+      <summary>Gets or sets the ending character or characters to use when specifying data source objects (for example, tables or columns) whose names contain characters such as spaces or reserved tokens. </summary>
+      <keywords>DbCommandBuilder.QuoteSuffix property </keywords>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilder.UpdatingFields">
+      <summary>Gets or sets the list of the fields, separated with ';' (semicolon), that should be updated with the update commands in the <see cref="T:Devart.Common.DbCommandBuilder" />. If the field is not included in the list, it will not be updated. </summary>
+      <keywords>DbCommandBuilder.UpdatingFields property </keywords>
+      <value>The list of the fields, separated with ';' (semicolon), that should be updated with the update commands in the <see cref="T:Devart.Common.DbCommandBuilder" />. </value>
+    </member>
+    <member name="T:Devart.Common.DbCommandBuilderBase">
+      <summary>Allows to automatically generate single-table commands used to reconcile changes made to a <see cref="T:System.Data.DataSet" /> with the associated data source. </summary>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilderBase.GetRefreshCommand()">
+      <summary>Gets the automatically generated SQL statement required to refresh values from the data source. </summary>
+      <keywords>DbCommandBuilderBase.GetRefreshCommand method </keywords>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+      <overloads>Gets the automatically generated SQL statement required to refresh values from the data source. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilderBase.GetRefreshCommand(System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to refresh values from the data source. </summary>
+      <keywords>DbCommandBuilderBase.GetRefreshCommand method </keywords>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilderBase.GetRefreshCommand(System.String[],System.Boolean)">
+      <summary>Gets the automatically generated SQL statement required to refresh values from the data source. </summary>
+      <keywords>DbCommandBuilderBase.GetRefreshCommand method </keywords>
+      <param name="fields">The array of string containing list of the field names. </param>
+      <param name="useColumnsForParameterNames">Determines whether dotConnect uses columns metadata to make up parameters' names. If <see langword="true" />, the names are composed using colon and name of appropriate column; otherwise the names look like :p1, :p2 etc. </param>
+      <returns>A <see cref="T:Devart.Common.DbCommandBase" /> with <see cref="P:Devart.Common.DbCommandBase.CommandText" /> containing SQL statement to be executed. </returns>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.KeyFields">
+      <summary>Gets or sets string containing list of key field names separated by semicolon. They are used to generate update commands. </summary>
+      <keywords>DbCommandBuilderBase.KeyFields property </keywords>
+      <value>The string containing list of key field names separated by semicolon. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.Quoted">
+      <summary>Gets or sets whether the command builder quotes all the names of data source objects. </summary>
+      <keywords>DbCommandBuilderBase.Quoted property </keywords>
+      <value>
+        <see langword="true" /> if the command builder will quote all the names of data source objects; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.RefreshMode">
+      <summary>Gets or sets a value that indicates whether and how the <see cref="T:Devart.Common.DbCommandBuilderBase" /> should retrieve field values adjusted by server after an update. </summary>
+      <keywords>DbCommandBuilderBase.RefreshMode property </keywords>
+      <value>One of the <see cref="T:Devart.Common.RefreshRowMode" /> values. </value>
+    </member>
+    <member name="M:Devart.Common.DbCommandBuilderBase.RefreshSchema()">
+      <summary>Refreshes the data source schema information used to generate INSERT, UPDATE, or DELETE statements. </summary>
+      <keywords>DbCommandBuilderBase.RefreshSchema method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.RefreshingFields">
+      <summary>Gets or sets list of fields whose values should be retrieved after a DML statement execution. </summary>
+      <keywords>DbCommandBuilderBase.RefreshingFields property </keywords>
+      <value>The string containing list of field names separated by semicolon. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.UpdatingTable">
+      <summary>Gets or sets table name to generate update statements for. </summary>
+      <keywords>DbCommandBuilderBase.UpdatingTable property </keywords>
+      <value>The name of the table. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.UseCatalog">
+      <summary>Specifies whether the catalog identifier is included in data source object names. </summary>
+      <keywords>DbCommandBuilderBase.UseCatalog property </keywords>
+      <value><see langword="true" /> if the catalog identifier is included in data source object names; otherwise, <see langword="false" />. The default value is <see langword="true" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbCommandBuilderBase.UseSchema">
+      <summary>Specifies whether the schema identifier is included in data source object names. </summary>
+      <keywords>DbCommandBuilderBase.UseSchema property </keywords>
+      <value><see langword="true" /> if the schema identifier is included in data source object names; otherwise, <see langword="false" />. The default value is <see langword="true" />. </value>
+    </member>
+    <member name="T:Devart.Common.DbConnectionStringBuilder">
+      <summary>Generates automatically connection strings used to connect to a data source. </summary>
+    </member>
+    <member name="M:Devart.Common.DbConnectionStringBuilder.#ctor()">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbConnectionStringBuilder" /> class. </summary>
+    </member>
+    <member name="M:Devart.Common.DbConnectionStringBuilder.EquivalentTo(Devart.Common.DbConnectionStringBuilder,System.Boolean)">
+      <summary>Compares the specified connection information in this <see cref="T:Devart.Common.DbConnectionStringBuilder" /> object with the specified connection information in the supplied <see cref="T:Devart.Common.DbConnectionStringBuilder" /> object. </summary>
+      <keywords>DbConnectionStringBuilder.EquivalentTo method </keywords>
+      <param name="connectionStringBuilder">The <see cref="T:Devart.Common.DbConnectionStringBuilder" /> to be compared with this <see cref="T:Devart.Common.DbConnectionStringBuilder" /> object. </param>
+      <param name="loginOnly">If this parameter is <see langword="true" />, only the following <see cref="T:Devart.Common.DbConnectionStringBuilder" /> properties are compared:
+<ul>
+<li><see cref="P:Devart.Data.SQLite.SQLiteConnectionStringBuilder.Password" /></li>
+<li><see cref="P:Devart.Data.SQLite.SQLiteConnectionStringBuilder.DataSource" /></li>
+<li><see cref="P:Devart.Data.SQLite.SQLiteConnectionStringBuilder.Encryption" /></li>
+</ul>
+If this parameter is <see langword="false" />, all the <see cref="T:Devart.Common.DbConnectionStringBuilder" /> properties are compared. </param>
+      <returns><see langword="true" />if the specified connection information in both of the <see cref="T:Devart.Common.DbConnectionStringBuilder" /> objects is equal; otherwise, <see langword="false" />. </returns>
+      <overloads>Compares the specified connection information in this <see cref="T:Devart.Common.DbConnectionStringBuilder" /> object with the specified connection information in the supplied <see cref="T:Devart.Common.DbConnectionStringBuilder" /> object. </overloads>
+    </member>
+    <member name="P:Devart.Common.DbConnectionStringBuilder.InitializationCommand">
+      <summary>Specifies a data source-specific command that should be executed immediately after establishing the connection. </summary>
+      <keywords>DbConnectionStringBuilder.InitializationCommand property </keywords>
+      <value>A data source-specific command that should be executed immediately after establishing the connection. </value>
+    </member>
+    <member name="P:Devart.Common.DbConnectionStringBuilder.Item(System.String)">
+      <summary>Gets or sets the value associated with the specified key. </summary>
+      <keywords>DbConnectionStringBuilder.Item property </keywords>
+      <param name="keyword">The key of the item to get or set. </param>
+      <value>Value associated with the specified key. </value>
+    </member>
+    <member name="P:Devart.Common.DbConnectionStringBuilder.RunOnceCommand">
+      <summary>Specifies a data source-specific command that should be executed immediately after first establishing the connection. Unlike <see cref="P:Devart.Common.DbConnectionStringBuilder.InitializationCommand" />, this command is not executed when a connection is taken from the pool. </summary>
+      <keywords>DbConnectionStringBuilder.RunOnceCommand property </keywords>
+      <value>A data source-specific command that should be executed immediately after establishing the connection. </value>
+    </member>
+    <member name="T:Devart.Common.DbDataAdapter">
+      <summary>Represents a set of data commands and a data source connection that are used to fill the <see cref="T:System.Data.DataSet" /> and update a data source. </summary>
+    </member>
+    <member name="M:Devart.Common.DbDataAdapter.FillPage(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>Fills associated DataSet with specified range of rows. </summary>
+      <keywords>DbDataAdapter.FillPage method </keywords>
+      <param name="dataTable">A <b>DataTable</b> to fill. </param>
+      <param name="startRecord">Ordinal of row that result set starts with. </param>
+      <param name="maxRecords">Quantity of rows to fill. </param>
+      <returns>Number of rows filled. </returns>
+    </member>
+    <member name="T:Devart.Common.DbDataReaderBase">
+      <summary>Allows to read a forward-only stream of rows from a data source. </summary>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.Close()">
+      <summary>Closes the <see cref="T:Devart.Common.DbDataReaderBase" /> object. </summary>
+      <keywords>DbDataReaderBase.Close method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.Depth">
+      <summary>Gets a value indicating the depth of nesting for the current row. </summary>
+      <keywords>DbDataReaderBase.Depth property </keywords>
+      <value>The depth of nesting for the current row. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.EndOfData">
+      <summary>Indicates whether the <see cref="T:Devart.Common.DbDataReaderBase" /> has been read completely. </summary>
+      <keywords>DbDataReaderBase.EndOfData property </keywords>
+      <value>
+        <see langword="true" /> if there is no more data in <see cref="T:Devart.Common.DbDataReaderBase" />. This property is <see langword="false" /> if there is more data to read, or there were no data at all. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.FieldCount">
+      <summary>Gets the number of columns in the current row. </summary>
+      <keywords>DbDataReaderBase.FieldCount property </keywords>
+      <value>When not positioned in a valid record set, 0; otherwise the number of columns in the current record. The default value is -1. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetBoolean(System.String)">
+      <summary>Gets the value of the specified column as a Boolean. </summary>
+      <keywords>DbDataReaderBase.GetBoolean method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetByte(System.String)">
+      <summary>Gets the value of the specified column as a byte. </summary>
+      <keywords>DbDataReaderBase.GetByte method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)">
+      <summary>Reads a stream of bytes from the specified column offset into the buffer as an array starting at the given buffer offset. </summary>
+      <keywords>DbDataReaderBase.GetBytes method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <param name="fieldOffset">The index within the field where the read operation is to begin. </param>
+      <param name="buffer">The buffer into which to read the stream of bytes. </param>
+      <param name="bufferOffset">The index where buffer is to begin the write operation. </param>
+      <param name="length">The maximum length to copy into the buffer. </param>
+      <returns>
+        <para>The actual number of bytes read.</para> </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetBytes(System.String,System.Int64,System.Byte[],System.Int32,System.Int32)">
+      <summary>Reads a stream of bytes from the specified column offset into the buffer as an array starting at the given buffer offset. </summary>
+      <keywords>DbDataReaderBase.GetBytes method </keywords>
+      <param name="name">The name of the column. </param>
+      <param name="fieldOffset">The index within the field where the read operation is to begin. </param>
+      <param name="buffer">The buffer into which to read the stream of bytes. </param>
+      <param name="bufferOffset">The index where buffer is to begin the write operation. </param>
+      <param name="length">The maximum length to copy into the buffer. </param>
+      <returns>
+        <para>The actual number of bytes read.</para> </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetChar(System.String)">
+      <summary>Gets the value of the specified column as a single character. </summary>
+      <keywords>DbDataReaderBase.GetChar method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)">
+      <summary>Reads a stream of characters from the specified column offset into the buffer as an array starting at the given buffer offset. </summary>
+      <keywords>DbDataReaderBase.GetChars method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <param name="fieldOffset">The index within the row where the read operation is to begin. </param>
+      <param name="buffer">The buffer into which to copy data. </param>
+      <param name="bufferOffset">The index where buffer is to begin the write operation. </param>
+      <param name="length">The maximum number of characters to read. </param>
+      <returns>
+        <para>The actual number of characters read.</para> </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetChars(System.String,System.Int64,System.Char[],System.Int32,System.Int32)">
+      <summary>Reads a stream of characters from the specified column offset into the buffer as an array starting at the given buffer offset. </summary>
+      <keywords>DbDataReaderBase.GetChars method </keywords>
+      <param name="name">The name of the column. </param>
+      <param name="fieldOffset">The index within the row where the read operation is to begin. </param>
+      <param name="buffer">The buffer into which to copy data. </param>
+      <param name="bufferOffset">The index where buffer is to begin the write operation. </param>
+      <param name="length">The maximum number of characters to read. </param>
+      <returns>
+        <para>The actual number of characters read.</para> </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDataTypeName(System.Int32)">
+      <summary>Gets the name of the source data type. </summary>
+      <keywords>DbDataReaderBase.GetDataTypeName method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <returns>The name of the back-end data type. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDataTypeName(System.String)">
+      <summary>Gets the name of the source data type. </summary>
+      <keywords>DbDataReaderBase.GetDataTypeName method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The name of the back-end data type. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDateTime(System.String)">
+      <summary>Gets the value of the specified column as a DateTime object. </summary>
+      <keywords>DbDataReaderBase.GetDateTime method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDateTimeOffset(System.Int32)">
+      <summary>Gets the value of the specified column as a <see cref="T:System.DateTimeOffset" /> object. </summary>
+      <keywords>DbDataReaderBase.GetDateTimeOffset method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDateTimeOffset(System.String)">
+      <summary>Gets the value of the specified column as a DateTimeOffset object. </summary>
+      <keywords>DbDataReaderBase.GetDateTimeOffset method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDecimal(System.String)">
+      <summary>Gets the value of the specified column as a DateTime object. </summary>
+      <keywords>DbDataReaderBase.GetDecimal method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetDouble(System.String)">
+      <summary>Gets the value of the specified column as a double-precision floating point number. </summary>
+      <keywords>DbDataReaderBase.GetDouble method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetEnumerator()">
+      <summary>Fills <see cref="T:System.Collection.IEnumerator" /> object with data from <see cref="T:Devart.Common.DbDataReaderBase" />. </summary>
+      <keywords>DbDataReaderBase.GetEnumerator method </keywords>
+      <returns>
+        <see cref="T:System.Collection.IEnumerator" /> object to be populated with data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetFieldType(System.Int32)">
+      <summary>Gets the <see cref="T:System.Type" /> that is the data type of the object. </summary>
+      <keywords>DbDataReaderBase.GetFieldType method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <returns>The <see cref="T:System.Type" /> that is the data type of the object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetFieldType(System.String)">
+      <summary>Gets the <see cref="T:System.Type" /> that is the data type of the object. </summary>
+      <keywords>DbDataReaderBase.GetFieldType method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The <see cref="T:System.Type" /> that is the data type of the object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetFloat(System.String)">
+      <summary>Gets the value of the specified column as a single-precision floating point number. </summary>
+      <keywords>DbDataReaderBase.GetFloat method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetGuid(System.String)">
+      <summary>Gets the value of the specified column as a globally-unique identifier (GUID). </summary>
+      <keywords>DbDataReaderBase.GetGuid method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetInt16(System.String)">
+      <summary>Gets the value of the specified column as a 16-bit signed integer. </summary>
+      <keywords>DbDataReaderBase.GetInt16 method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetInt32(System.String)">
+      <summary>Gets the value of the specified column as a 32-bit signed integer. </summary>
+      <keywords>DbDataReaderBase.GetInt32 method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetInt64(System.String)">
+      <summary>Gets the value of the specified column as a 64-bit signed integer. </summary>
+      <keywords>DbDataReaderBase.GetInt64 method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetName(System.Int32)">
+      <summary>
+        <para>Gets the name of the specified column.</para> </summary>
+      <keywords>DbDataReaderBase.GetName method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <returns>
+        <para>A string that is the name of the specified column.</para> </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetOrdinal(System.String)">
+      <summary>Gets the column ordinal, given the name of the column. </summary>
+      <keywords>DbDataReaderBase.GetOrdinal method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The zero-based column ordinal. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetProviderSpecificFieldType(System.String)">
+      <summary>Returns the provider-specific field type of the specified column. </summary>
+      <keywords>DbDataReaderBase.GetProviderSpecificFieldType method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The provider-specific field type of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetProviderSpecificValue(System.String)">
+      <summary>Gets the value of the specified column as an instance of <see cref="T:System.Object" /> </summary>
+      <keywords>DbDataReaderBase.GetProviderSpecificValue method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The provider-specific field type of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetSchemaTable()">
+      <summary>Returns a <see cref="T:System.Data.DataTable" /> that describes the column metadata of the <see cref="T:Devart.Common.DbDataReaderBase" />. </summary>
+      <keywords>DbDataReaderBase.GetSchemaTable method </keywords>
+      <returns>A <see cref="T:System.Data.DataTable" /> that describes the column metadata. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetString(System.String)">
+      <summary>Gets the value of the specified column as an instance of <see cref="T:System.String" /> </summary>
+      <keywords>DbDataReaderBase.GetString method </keywords>
+      <param name="name">The name of the column. </param>
+      <returns>The value of the specified column. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetValue(System.Int32)">
+      <summary>Gets the value of the specified column in its native format. </summary>
+      <keywords>DbDataReaderBase.GetValue method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <returns>The value to return. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetValue(System.String)">
+      <summary>Gets the value of the specified column in its native format. </summary>
+      <keywords>DbDataReaderBase.GetValue method </keywords>
+      <param name="name">The value of the specified column. </param>
+      <returns>The value to return. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.GetValues(System.Object[])">
+      <summary>Gets all attribute columns in the collection for the current row. </summary>
+      <keywords>DbDataReaderBase.GetValues method </keywords>
+      <param name="values">An array of <see cref="T:System.Object" /> into which to copy the attribute columns. </param>
+      <returns>The number of instances of <see cref="T:System.Object" /> in the array. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.HasRows">
+      <summary>Gets a value indicating whether the <see cref="T:Devart.Common.DbDataReaderBase" /> contains one or more rows. </summary>
+      <keywords>DbDataReaderBase.HasRows property </keywords>
+      <value>
+        <see langword="true" /> if the <see cref="T:Devart.Common.DbDataReaderBase" /> contains one or more rows; otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.IsClosed">
+      <summary>Gets a value indicating whether the data reader is closed. </summary>
+      <keywords>DbDataReaderBase.IsClosed property </keywords>
+      <value>
+        <see langword="true" /> if the <see cref="T:Devart.Common.DbDataReaderBase" /> is closed; otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.IsDBNull(System.Int32)">
+      <summary>Gets a value indicating whether the column contains non-existent or missing values. </summary>
+      <keywords>DbDataReaderBase.IsDBNull method </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <returns>
+        <see langword="true" /> if the specified column value is equivalent to <see cref="T:System.DBNull" />; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.IsDBNull(System.String)">
+      <summary>Gets a value indicating whether the column contains non-existent or missing values. </summary>
+      <keywords>DbDataReaderBase.IsDBNull method </keywords>
+      <param name="name">The value of the specified column. </param>
+      <returns>
+        <see langword="true" /> if the specified column value is equivalent to <see cref="T:System.DBNull" />; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.Item(System.Int32)">
+      <summary>Gets the value of the specified column in its native format given the column ordinal. </summary>
+      <keywords>DbDataReaderBase.Item property </keywords>
+      <param name="ordinal">The zero-based column ordinal. </param>
+      <value>The value of the specified column in its native format. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.Item(System.String)">
+      <summary>Gets the value of the specified column in its native format given the column name. </summary>
+      <keywords>DbDataReaderBase.Item property </keywords>
+      <param name="name">The column name. </param>
+      <value>The value of the specified column in its native format. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.NextResult()">
+      <summary>Advances the data reader to the next result, when reading the results of batch SQL statements. </summary>
+      <keywords>DbDataReaderBase.NextResult method </keywords>
+      <returns>
+        <see langword="true" /> if there are more result sets; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataReaderBase.Read()">
+      <summary>Advances the <see cref="T:Devart.Common.DbDataReaderBase" /> to the next record. </summary>
+      <keywords>DbDataReaderBase.Read method </keywords>
+      <returns>
+        <see langword="true" /> if there are more rows; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataReaderBase.RecordsAffected">
+      <summary>Gets the number of rows changed, inserted, or deleted by execution of the SQL statement. </summary>
+      <keywords>DbDataReaderBase.RecordsAffected property </keywords>
+      <value>The number of rows changed, inserted, or deleted. -1 for SELECT statements; 0 if no rows were affected, or the statement failed. </value>
+    </member>
+    <member name="T:Devart.Common.DbDataSet">
+      <summary>Represents an in-memory cache of data with connected model support. </summary>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.#ctor()">
+      <summary>Initializes a new instance of a <see cref="T:Devart.Common.DbDataSet" /> class with the given name. </summary>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.Clear()">
+      <summary>Clears the <see cref="T:Devart.Common.DbDataSet" /> of any data by removing all rows in all tables. </summary>
+      <keywords>DbDataSet.Clear method </keywords>
+      <overloads>Clears the <see cref="T:Devart.Common.DbDataSet" /> of any data by removing all rows in all tables. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.Clone()">
+      <summary>Copies the structure of the <see cref="T:Devart.Common.DbDataSet" />, including all <see cref="T:Devart.Common.DbDataTable" /> schemas, relations, and constraints. Does not copy any data. </summary>
+      <keywords>DbDataSet.Clone method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataSet.Connection">
+      <summary>Gets or sets <see cref="T:Devart.Common.DbConnectionBase" /> used by the <see cref="T:Devart.Common.DbDataSet" />. </summary>
+      <keywords>DbDataSet.Connection property </keywords>
+      <value>A <see cref="T:Devart.Common.DbDataSet" /> object. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.CreateDataTable()">
+      <summary>Creates new table in the <see cref="T:Devart.Common.DbDataSet" />. </summary>
+      <keywords>DbDataSet.CreateDataTable method </keywords>
+      <returns>A new table object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.Fill()">
+      <summary>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataSet" /> with rows from the data source. </summary>
+      <keywords>DbDataSet.Fill method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataSet.Name">
+      <summary>Gets or sets name of the <see cref="T:Devart.Common.DbDataSet" />. </summary>
+      <keywords>DbDataSet.Name property </keywords>
+      <value>The name of the <see cref="T:Devart.Common.DbDataSet" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataSet.Owner">
+      <summary>Gets or sets a form or other container that the <see cref="T:Devart.Common.DbDataSet" /> instance belongs to. </summary>
+      <keywords>DbDataSet.Owner property </keywords>
+      <value>A form or other container that the object belongs to. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.IO.Stream)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified <see cref="E:System.IO.Stream" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="stream">An object that derives from <see cref="E:System.IO.Stream" />. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+      <overloads>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" />. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.IO.Stream,System.Data.XmlReadMode)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified <see cref="E:System.IO.Stream" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="stream">An object that derives from <see cref="E:System.IO.Stream" />. </param>
+      <param name="mode">One of the <see cref="E:System.Data.XmlReadMode" /> values. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.IO.TextReader)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified <see cref="E:System.IO.TextReader" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="reader">The <see cref="E:System.IO.TextReader" /> from which to read the schema and data. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.IO.TextReader,System.Data.XmlReadMode)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified <see cref="E:System.IO.TextReader" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="reader">The <see cref="E:System.IO.TextReader" /> from which to read the schema and data. </param>
+      <param name="mode">One of the <see cref="E:System.Data.XmlReadMode" /> values. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.String)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified file. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="fileName">The filename (including the path) from which to read. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.String,System.Data.XmlReadMode)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified file and <see cref="E:System.Data.XmlReadMode" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="fileName">The filename (including the path) from which to read. </param>
+      <param name="mode">One of the <see cref="E:System.Data.XmlReadMode" /> values. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.Xml.XmlReader)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified <see cref="E:System.Xml.XmlReader" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="reader">The <see cref="E:System.Xml.XmlReader" /> from which to read the schema and data. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.ReadXml(System.Xml.XmlReader,System.Data.XmlReadMode)">
+      <summary>Reads XML schema and data into the <see cref="T:Devart.Common.DbDataSet" /> using the specified <see cref="E:System.Xml.XmlReader" />. </summary>
+      <keywords>DbDataSet.ReadXml method </keywords>
+      <param name="reader">The <see cref="E:System.Xml.XmlReader" /> from which to read the schema and data. </param>
+      <param name="mode">One of the <see cref="E:System.Data.XmlReadMode" /> values. </param>
+      <returns>The <see cref="E:System.Data.XmlReadMode" /> used to read the data. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataSet.RemotingFormat">
+      <summary>Gets or sets a <see cref="T:System.Data.SerializationFormat" /> for the <see cref="T:Devart.Common.DbDataSet" /> used during remoting. </summary>
+      <keywords>DbDataSet.RemotingFormat property </keywords>
+      <value>A <see cref="T:System.Data.SerializationFormat" /> object. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataSet.Update()">
+      <summary>Executes the appropriate commands to delete, insert, or update rows in the data source. </summary>
+      <keywords>DbDataSet.Update method </keywords>
+    </member>
+    <member name="T:Devart.Common.DbDataSourceEnumerator">
+      <summary>Retrieves list of available servers in the network. </summary>
+    </member>
+    <member name="M:Devart.Common.DbDataSourceEnumerator.GetDataSources()">
+      <summary>Retrieves a <b>DataTable</b> containing information about all visible instances of the server. </summary>
+      <keywords>DbDataSourceEnumerator.GetDataSources method </keywords>
+      <returns>A <b>DataTable</b> containing information about the visible instances of the associated data source. </returns>
+    </member>
+    <member name="T:Devart.Common.DbDataTable">
+      <summary>The <see cref="T:Devart.Common.DbDataTable" /> class represents a single object that provides all of the functionality needed to retrieve and manipulate data from a data source. The <see cref="T:Devart.Common.DbDataTable" /> class is built using existing ADO.NET components. </summary>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Active">
+      <summary>Gets or sets whether a <see cref="T:Devart.Common.DbDataTable" /> is filled with data from a data source. </summary>
+      <keywords>DbDataTable.Active property </keywords>
+      <value>
+        <see langword="true" /> if a <see cref="T:Devart.Common.DbDataTable" /> is populated with data from a data source; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.BeginFill(System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of the <see cref="M:Devart.Common.DbDataTable.Fill()" /> method. </summary>
+      <keywords>DbDataTable.BeginFill method </keywords>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.CachedUpdates">
+      <summary>Enables or disables cached updates mode. </summary>
+      <keywords>DbDataTable.CachedUpdates property </keywords>
+      <value>If <see langword="true" />, the changes made to <see cref="T:Devart.Common.DbDataTable" /> are not sent to server until the <see cref="M:Devart.Common.DbDataTable.Update()" /> method is invoked. If <see langword="false" />, the <see cref="M:Devart.Common.DbDataTable.Update()" /> method is automatically called once a row finishes editing in a visual component. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.CancelFetch()">
+      <summary>Stops asynchronous fill operation. </summary>
+      <keywords>DbDataTable.CancelFetch method </keywords>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Clear()">
+      <summary>Clears <see cref="T:Devart.Common.DbDataTable" /> and stops Fill operation. </summary>
+      <keywords>DbDataTable.Clear method </keywords>
+      <overloads>Clears <see cref="T:Devart.Common.DbDataTable" /> and stops Fill operation. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Clone()">
+      <summary>Clones the structure of the <see cref="T:Devart.Common.DbDataTable" />, including all <see cref="T:System.Data.DataTable" /> schemes and constraints. </summary>
+      <keywords>DbDataTable.Clone method </keywords>
+      <returns>A new <see cref="T:Devart.Common.DbDataTable" /> with the same schema as the current <see cref="T:Devart.Common.DbDataTable" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Close()">
+      <summary>Disconnects <see cref="T:Devart.Common.DbDataTable" /> from the data source and frees server resources allocated for the query. </summary>
+      <keywords>DbDataTable.Close method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Columns">
+      <summary>Gets the collection of columns that belong to this table. </summary>
+      <keywords>DbDataTable.Columns property </keywords>
+      <value>A <see cref="T:System.Data.DataColumnCollection" /> that contains the collection of <see cref="T:System.Data.DataColumn" /> objects for the table; otherwise, a null value if no <see cref="T:System.Data.DataColumn" /> objects exist.
+<para>This property is read-only.</para> </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.ConflictOption">
+      <summary>Specifies which <see cref="T:System.Data.ConflictOption" /> is to be used by the <see cref="T:Devart.Common.DbDataTable" />. </summary>
+      <keywords>DbDataTable.ConflictOption property </keywords>
+      <value>One of the <see cref="T:System.Data.ConflictOption" /> values describing the behavior of this <see cref="T:Devart.Common.DbDataTable" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Connection">
+      <summary>Gets or sets the <see cref="T:System.Data.IDbConnection" /> used to connect to the data source. </summary>
+      <keywords>DbDataTable.Connection property </keywords>
+      <value>An <see cref="T:System.Data.IDbConnection" /> object which provides a connection to the data source. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Constraints">
+      <summary>Gets the collection of constraints maintained by this table. </summary>
+      <keywords>DbDataTable.Constraints property </keywords>
+      <value>A <see cref="T:System.Data.ConstraintCollection" /> that contains the collection of <see cref="T:System.Data.Constraint" /> objects for the table; otherwise, a null value if no <see cref="T:System.Data.Constraint" /> objects exist.
+<para>This property is read-only.</para> </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.DeleteCommand">
+      <summary>Gets or sets a SQL statement to delete records from the data set. </summary>
+      <keywords>DbDataTable.DeleteCommand property </keywords>
+      <value>An <see cref="T:System.Data.IDbCommand" /> used during an update operation to delete records in the data source that correspond to deleted rows in the <see cref="T:System.Data.DataSet" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.DesignTimeVisible">
+      <summary>Determines whether the component is visible in design time. </summary>
+      <keywords>DbDataTable.DesignTimeVisible property </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.DisableListChangedEvents">
+      <summary>Disables some of the events, which occurs when <see cref="T:Devart.Common.DbDataTable" /> content is changed. </summary>
+      <keywords>DbDataTable.DisableListChangedEvents property </keywords>
+    </member>
+    <member name="E:Devart.Common.DbDataTable.Disposed">
+      <summary>Adds an event handler to listen to the Disposed event on the component. </summary>
+      <keywords>DbDataTable.Disposed event </keywords>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.EndFill(System.IAsyncResult)">
+      <summary>Ends an asynchronous invocation of the <see cref="M:Devart.Common.DbDataTable.Fill()" /> method. </summary>
+      <keywords>DbDataTable.EndFill method </keywords>
+      <param name="result">The <see cref="T:System.IAsyncResult" /> returned from <see cref="M:Devart.Common.DbDataTable.BeginFill(System.AsyncCallback,System.Object)" />. </param>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.EndInit()">
+      <summary>Ends the initialization of a <see cref="T:Devart.Common.DbDataTable" /> that is used on a form or used by another component. The initialization occurs at run time. </summary>
+      <keywords>DbDataTable.EndInit method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.FetchAll">
+      <summary>Determines whether data is requested from server entirely or partially. </summary>
+      <keywords>DbDataTable.FetchAll property </keywords>
+      <value>If <see langword="true" />, the data is requested when the <see cref="T:Devart.Common.DbDataTable" /> is opened, otherwise records are fetched only when necessary. </value>
+    </member>
+    <member name="E:Devart.Common.DbDataTable.FetchFinished">
+      <summary>Occurs when a result set is completely fetched. </summary>
+      <keywords>DbDataTable.FetchFinished event </keywords>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Fill()">
+      <summary>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataTable" /> with rows from the data source. </summary>
+      <keywords>DbDataTable.Fill method </keywords>
+      <returns>The number of rows successfully added to or refreshed in the <see cref="T:Devart.Common.DbDataTable" />. This does not include rows affected by statements that do not return rows. </returns>
+      <overloads>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataTable" /> with rows from the data source. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Fill(System.Object[])">
+      <summary>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataTable" /> with rows from the data source using the parameter values passed in <paramref name="parameterValues" />. </summary>
+      <keywords>DbDataTable.Fill method </keywords>
+      <param name="parameterValues">Used to fill the <see cref="P:Devart.Data.SQLite.SQLiteCommand.Parameters" /> collection of the <see cref="P:Devart.Common.DbDataTable.SelectCommand" /> property. </param>
+      <returns>The number of rows successfully added to or refreshed in the <see cref="T:Devart.Common.DbDataTable" />. This does not include rows affected by statements that do not return rows. </returns>
+    </member>
+    <member name="E:Devart.Common.DbDataTable.FillError">
+      <summary>Occurs when an error is raised during a fill operation. </summary>
+      <keywords>DbDataTable.FillError event </keywords>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.FillPage(System.Int32,System.Int32)">
+      <summary>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataTable" /> with rows from the data source starting at the row indicated by <paramref name="startRecord" /> and including up to the number of rows indicated by <paramref name="maxRecords" />. </summary>
+      <keywords>DbDataTable.FillPage method </keywords>
+      <param name="startRecord">The number of the first row to retrieve. Value 0 means the first row, 1 means the second, and so on. </param>
+      <param name="maxRecords">The maximum number of records to retrieve. </param>
+      <returns>The number of rows successfully added to or refreshed in the <see cref="T:Devart.Common.DbDataTable" />. This does not include rows affected by statements that do not return rows. </returns>
+      <overloads>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataTable" /> with rows from the data source starting at the row indicated by <paramref name="startRecord" /> and including up to the number of rows indicated by <paramref name="maxRecords" />. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.FillPage(System.Int32,System.Int32,System.Object[])">
+      <summary>Fills the <see cref="P:System.Data.DataTable.Rows" /> collection of the <see cref="T:Devart.Common.DbDataTable" /> with rows from the data source starting at the row indicated by <paramref name="startRecord" /> and including up to the number of rows indicated by <paramref name="maxRecords" /> using the parameter values passed in <paramref name="parameterValues" />. </summary>
+      <keywords>DbDataTable.FillPage method </keywords>
+      <param name="startRecord">The number of the first row to retrieve. Value 0 means the first row, 1 means the second, and so on. </param>
+      <param name="maxRecords">The maximum number of records to retrieve. </param>
+      <param name="parameterValues">Used to fill the <see cref="P:System.Data.IDbCommand.Parameters" /> collection of the <see cref="P:Devart.Common.DbDataTable.SelectCommand" /> property. </param>
+      <returns>The number of rows successfully added to or refreshed in the <see cref="T:Devart.Common.DbDataTable" />. This does not include rows affected by statements that do not return rows. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.FillSchema()">
+      <summary>Configures the schema to match that in the data source. </summary>
+      <keywords>DbDataTable.FillSchema method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.InsertCommand">
+      <summary>Gets or sets a SQL statement to insert new records into the data source. </summary>
+      <keywords>DbDataTable.InsertCommand property </keywords>
+      <value>An <see cref="T:System.Data.IDbCommand" /> used during an update operation to insert records in the data source that correspond to new rows in the <see cref="T:System.Data.DataTable" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.MaxRecords">
+      <summary>Gets or sets max number of records to fetch starting from <see cref="P:Devart.Common.DbDataTable.StartRecord" />. </summary>
+      <keywords>DbDataTable.MaxRecords property </keywords>
+      <value>Max number of records to fetch starting from <see cref="P:Devart.Common.DbDataTable.StartRecord" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.MissingSchemaAction">
+      <summary>Determines the action to take when existing DataSet schema does not match incoming data. </summary>
+      <keywords>DbDataTable.MissingSchemaAction property </keywords>
+      <value>One of the <see cref="T:System.Data.MissingSchemaAction" /> values. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Name">
+      <summary>Gets or sets name of the component. </summary>
+      <keywords>DbDataTable.Name property </keywords>
+      <value>Name of the component </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.NonBlocking">
+      <summary>Gets or sets data request mode. </summary>
+      <keywords>DbDataTable.NonBlocking property </keywords>
+      <value>If this property is true, <see langword="true" />, and the <see cref="P:Devart.Common.DbDataTable.FetchAll" /> property is <see langword="true" /> also, the data is requested asynchronously. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Open()">
+      <summary>Fetches data and sets the <see cref="P:Devart.Common.DbDataTable.Active" /> property to true. </summary>
+      <keywords>DbDataTable.Open method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Owner">
+      <summary>Gets or sets form that the component resides on. </summary>
+      <keywords>DbDataTable.Owner property </keywords>
+      <value>The form that the component resides on. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.ParentRelation">
+      <summary>Gets or sets a <see cref="T:Devart.Common.ParentDataRelation" /> object that is used for server side master-detail relation. </summary>
+      <keywords>DbDataTable.ParentRelation property </keywords>
+      <value>A <see cref="T:Devart.Common.ParentDataRelation" /> object. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.PrimaryKey">
+      <summary>Gets or sets an array of columns that function as primary keys for the data table. </summary>
+      <keywords>DbDataTable.PrimaryKey property </keywords>
+      <value>An array of <see cref="T:System.Data.DataColumn" /> objects. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.QueryRecordCount">
+      <summary>Determines whether <see cref="T:Devart.Common.DbDataTable" /> should perfrom additional request to determine quantity of records in the result set. </summary>
+      <keywords>DbDataTable.QueryRecordCount property </keywords>
+      <value>If <see langword="true" />, an additional request to server is executed, and the <see cref="P:Devart.Common.DbDataTable.RecordCount" /> is updated. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.Quoted">
+      <summary>Gets or sets whether the <see cref="T:Devart.Common.DbDataTable" /> quotes all the names of data source objects. </summary>
+      <keywords>DbDataTable.Quoted property </keywords>
+      <value>
+        <see langword="true" /> if the <see cref="T:Devart.Common.DbDataTable" /> will quote all the names of data source objects; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Read()">
+      <summary>Reads the next data row when <see cref="T:Devart.Common.DbDataTable" /> operates in connected model. </summary>
+      <keywords>DbDataTable.Read method </keywords>
+      <returns>
+        <see langword="true" /> if there are more rows; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.ReadComplete(System.Data.DataRow)">
+      <summary>Fills a row with data not fetched in the initial fill operation. </summary>
+      <keywords>DbDataTable.ReadComplete method </keywords>
+      <param name="row">Row to read out. </param>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.RecordCount">
+      <summary>Gets number of rows in the result set. </summary>
+      <keywords>DbDataTable.RecordCount property </keywords>
+      <value>Number of rows in the result set. Meaning of this value depends on the <see cref="P:Devart.Common.DbDataTable.QueryRecordCount" /> property. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.RefreshMode">
+      <summary>Gets or sets a value that indicates whether and how the <see cref="T:Devart.Common.DbDataTable" /> should retrieve field values adjusted by server after an update. </summary>
+      <keywords>DbDataTable.RefreshMode property </keywords>
+      <value>One of the <see cref="T:Devart.Common.RefreshRowMode" /> values. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.RefreshRow(System.Data.DataRow)">
+      <summary>Refreshes the specified row with values from server. </summary>
+      <keywords>DbDataTable.RefreshRow method </keywords>
+      <param name="row">The row to refresh. </param>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.RefreshingFields">
+      <summary>Gets or sets list of fields whose values should be retrieved after a DML statement execution. </summary>
+      <keywords>DbDataTable.RefreshingFields property </keywords>
+      <value>The string containing list of field names separated by semicolon. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.RemotingFormat">
+      <summary>Gets or sets a <see cref="T:System.Data.SerializationFormat" /> for the <see cref="T:Devart.Common.DbDataTable" /> used during remoting. </summary>
+      <keywords>DbDataTable.RemotingFormat property </keywords>
+      <value>A <see cref="T:System.Data.SerializationFormat" /> object. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.RetrieveAutoIncrementSeed">
+      <summary>Gets or sets a value that indicates whether <see cref="T:Devart.Common.DbDataTable" /> should perform additional roundtrip to server to request the autoincremented value. </summary>
+      <keywords>DbDataTable.RetrieveAutoIncrementSeed property </keywords>
+      <value>If <see langword="true" />, an additional roundtrip is performed. The default value is <see langword="true" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.ReturnProviderSpecificTypes">
+      <summary>Determines whether to use provider-specific types whenever possible. </summary>
+      <keywords>DbDataTable.ReturnProviderSpecificTypes property </keywords>
+      <value>If <see langword="true" />, <see cref="T:Devart.Common.DbDataTable" /> uses the <see cref="M:Devart.Common.DbDataReaderBase.GetProviderSpecificFieldType(System.Int32)" /> and <see cref="M:Devart.Common.DbDataReaderBase.GetProviderSpecificValue(System.Int32)" /> methods to retrieve data from server. </value>
+    </member>
+    <member name="E:Devart.Common.DbDataTable.RowFetched">
+      <summary>Occurs when another row is completely fetched. </summary>
+      <keywords>DbDataTable.RowFetched event </keywords>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.SchemaTable">
+      <summary>Gets the schema table corresponding to the <see cref="P:Devart.Common.DbDataTable.SelectCommand" /> query. </summary>
+      <keywords>DbDataTable.SchemaTable property </keywords>
+      <value>The schema table corresponding to the <see cref="P:Devart.Common.DbDataTable.SelectCommand" /> query. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Select()">
+      <summary>Gets an array of all DataRow objects. </summary>
+      <keywords>DbDataTable.Select method </keywords>
+      <returns>An array of DataRow objects. </returns>
+      <overloads>Gets an array of DataRow objects. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Select(System.String)">
+      <summary>Gets an array of all DataRow objects that match the filter criteria. </summary>
+      <keywords>DbDataTable.Select method </keywords>
+      <param name="filterExpression">The criteria to use to filter the rows. </param>
+      <returns>An array of DataRow objects. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Select(System.String,System.String)">
+      <summary>Gets an array of all DataRow objects that match the filter criteria, in the specified sort order. </summary>
+      <keywords>DbDataTable.Select method </keywords>
+      <param name="filterExpression">The criteria to use to filter the rows. </param>
+      <param name="sort">A string specifying the column and sort direction. </param>
+      <returns>An array of DataRow objects matching the filter expression. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Select(System.String,System.String,System.Data.DataViewRowState)">
+      <summary>Gets an array of all DataRow objects that match the filter in the order of the sort that match the specified state. </summary>
+      <keywords>DbDataTable.Select method </keywords>
+      <param name="filterExpression">The criteria to use to filter the rows. </param>
+      <param name="sort">A string specifying the column and sort direction. </param>
+      <param name="recordStates">One of the <b>DataViewRowState</b> values. </param>
+      <returns>An array of DataRow objects matching the filter expression. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.SelectCommand">
+      <summary>Gets or sets a SQL statement used to select records in the data source. </summary>
+      <keywords>DbDataTable.SelectCommand property </keywords>
+      <value>An <see cref="T:System.Data.IDbCommand" /> that is used during a fill operation to select records from the data source for placement in the <see cref="T:Devart.Common.DbDataTable" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.StartRecord">
+      <summary>Gets or sets record number to start. </summary>
+      <keywords>DbDataTable.StartRecord property </keywords>
+      <value>Record number to start. Value 0 means the first row, 1 means the second, and so on. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.SuspendFill()">
+      <summary>Suspends asynchronous fill operation. </summary>
+      <keywords>DbDataTable.SuspendFill method </keywords>
+      <overloads>Suspends asynchronous fill operation. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.SuspendFill(System.Boolean)">
+      <summary>Suspends asynchronous fill operation. </summary>
+      <keywords>DbDataTable.SuspendFill method </keywords>
+      <param name="wait">Determines whether to wait for break operation. If <see langword="false" />, the method returns before the fill operation is actually suspended. </param>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.SyncRoot">
+      <summary>Gets an object that can be used to synchronize access to the <see cref="P:System.Data.DataTable.Rows" /> collection. </summary>
+      <keywords>DbDataTable.SyncRoot property </keywords>
+      <value>A synchronization object. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.TableMapping">
+      <summary>Gets a <see cref="T:System.Data.Common.DataTableMapping" /> that provides the master mapping between a source table and a <see cref="T:Devart.Common.DbDataTable" />. </summary>
+      <keywords>DbDataTable.TableMapping property </keywords>
+      <value>A <see cref="T:System.Data.Common.DataTableMapping" /> that provides the master mapping between a source table and a <see cref="T:Devart.Common.DbDataTable" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.Update()">
+      <summary>Executes the appropriate commands to delete, insert, or update rows in the data source. </summary>
+      <keywords>DbDataTable.Update method </keywords>
+      <returns>The number of rows successfully updated from the <see cref="T:Devart.Common.DbDataTable" />. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.UpdateBatchSize">
+      <summary>Gets or sets a value that enables or disables batch processing support, and specifies the number of commands that can be executed in a batch. </summary>
+      <keywords>DbDataTable.UpdateBatchSize property </keywords>
+      <value>The number of rows to process per batch. If 0, there is no limit on the batch size. If 1, batch updating is disabled. If more than 1, determines the amount of operations sent at once. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.UpdateCommand">
+      <summary>Gets or sets a SQL statement used to update records in the data source. </summary>
+      <keywords>DbDataTable.UpdateCommand property </keywords>
+      <value>An <see cref="T:System.Data.IDbCommand" /> used during an update operation to update records in the data source that correspond to modified rows in the <see cref="T:Devart.Common.DbDataTable" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbDataTable.UpdateRows(System.Data.DataRow[])">
+      <summary>Executes the appropriate commands to delete, insert, or update the specified rows in the data source. </summary>
+      <keywords>DbDataTable.UpdateRows method </keywords>
+      <param name="datarows">An array of <see cref="T:System.Data.DataRow" /> objects containing the rows to be updated. </param>
+      <returns>The number of rows successfully updated from the <see cref="T:Devart.Common.DbDataTable" />. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.UpdatingFields">
+      <summary>Gets or sets string containing list of field names used to generate update commands. </summary>
+      <keywords>DbDataTable.UpdatingFields property </keywords>
+      <value>The string containing list of field names separated by semicolon. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.UpdatingKeyFields">
+      <summary>Gets or sets string containing list of key field names separated by semicolon. They are used to generate update commands. </summary>
+      <keywords>DbDataTable.UpdatingKeyFields property </keywords>
+      <value>The string containing list of key field names separated by semicolon. </value>
+    </member>
+    <member name="P:Devart.Common.DbDataTable.UpdatingTable">
+      <summary>Gets or sets table name to generate update statements for. </summary>
+      <keywords>DbDataTable.UpdatingTable property </keywords>
+      <value>The name of the table. </value>
+    </member>
+    <member name="T:Devart.Common.DbDump">
+      <summary>Serves to store a database or its parts as a script and also to restore database from the received script. </summary>
+    </member>
+    <member name="M:Devart.Common.DbDump.Backup()">
+      <summary>Generates a script and writes it to the <see cref="P:Devart.Common.DbDump.DumpText" /> property. </summary>
+      <keywords>DbDump.Backup method </keywords>
+      <overloads>Generates a script for further restoring with the <see cref="M:Devart.Common.DbDump.Restore" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDump.Backup(System.IO.Stream)">
+      <summary>Generates a script and writes it to the specified <see cref="T:System.IO.Stream" />. </summary>
+      <keywords>DbDump.Backup method </keywords>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> to write the script to. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.Backup(System.IO.TextWriter)">
+      <summary>Generates a script and writes it to the specified <see cref="T:System.IO.TextWriter" />. </summary>
+      <keywords>DbDump.Backup method </keywords>
+      <param name="writer">The <see cref="T:System.IO.TextWriter" /> to write the script to. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.Backup(System.String)">
+      <summary>Generates a script and writes it to the specified file. </summary>
+      <keywords>DbDump.Backup method </keywords>
+      <param name="fileName">The name of the file to write the script to. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.BackupQuery(System.String)">
+      <summary>Generates a script with a backup of the data, returned by the specified query, and writes it to the <see cref="P:Devart.Common.DbDump.DumpText" /> property. </summary>
+      <keywords>DbDump.BackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <overloads>Generates a script with a backup of the data, returned by the specified query, for further restoring with the <see cref="M:Devart.Common.DbDump.Restore" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDump.BackupQuery(System.String,System.IO.Stream)">
+      <summary>Generates a script with a backup of the data, returned by the specified query, and writes it to the specified <see cref="T:System.IO.Stream" />. </summary>
+      <keywords>DbDump.BackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> to write the script to. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.BackupQuery(System.String,System.IO.TextWriter)">
+      <summary>Generates a script with a backup of the data, returned by the specified query, and writes it to the specified <see cref="T:System.IO.TextWriter" />. </summary>
+      <keywords>DbDump.BackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="writer">The <see cref="T:System.IO.TextWriter" /> to write the script to. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.BackupQuery(System.String,System.String)">
+      <summary>Generates a script with a backup of the data, returned by the specified query, and writes it to the specified file. </summary>
+      <keywords>DbDump.BackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="fileName">Name of the file to write the script to. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup()">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup" /> method. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+      <overloads>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.IO.Stream)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup(System.IO.Stream)" /> method. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> to write the script to. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.IO.Stream,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup(System.IO.Stream)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> to write the script to. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.IO.TextWriter)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup(System.IO.TextWriter)" /> method. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="writer">The <see cref="T:System.IO.TextWriter" /> to write the script to. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.IO.TextWriter,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup(System.IO.TextWriter)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="writer">The <see cref="T:System.IO.TextWriter" /> to write the script to. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.String)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup(System.String)" /> method. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="fileName">The name of the file to write the script to. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackup(System.String,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Backup(System.String)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackup method </keywords>
+      <param name="fileName">The name of the file to write the script to. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String)" /> method. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+      <overloads>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.IO.Stream)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String,System.IO.Stream)" /> method. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> to write the script to. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.IO.Stream,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String,System.IO.Stream)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> to write the script to. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.IO.TextWriter)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String,System.IO.TextWriter)" /> method. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="writer">The <see cref="T:System.IO.TextWriter" /> to write the script to. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.IO.TextWriter,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String,System.IO.TextWriter)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="writer">The <see cref="T:System.IO.TextWriter" /> to write the script to. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.String)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String,System.String)" /> method. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="fileName">The name of the file to write the script to. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginBackupQuery(System.String,System.String,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.BackupQuery(System.String,System.String)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginBackupQuery method </keywords>
+      <param name="query">The query, returning data for backup. </param>
+      <param name="fileName">The name of the file to write the script to. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore()">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore" /> method. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+      <overloads>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore" /> method. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.IO.Stream)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore(System.IO.Stream)" /> method. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> object to read the script from. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.IO.Stream,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore(System.IO.Stream)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> object to read the script from. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.IO.TextReader)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore(System.IO.TextReader)" /> method. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="reader">The <see cref="T:System.IO.TextReader" /> object to read the script from. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.IO.TextReader,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore(System.IO.TextReader)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="reader">The <see cref="T:System.IO.TextReader" /> object to read the script from. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.String)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore(System.String)" /> method. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="fileName">The name of the file to load the script from. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="M:Devart.Common.DbDump.BeginRestore(System.String,System.AsyncCallback,System.Object)">
+      <summary>Starts an asynchronous invocation of a <see cref="M:Devart.Common.DbDump.Restore(System.String)" /> method with information for callback function. </summary>
+      <keywords>DbDump.BeginRestore method </keywords>
+      <param name="fileName">The name of the file to load the script from. </param>
+      <param name="callback">The delegate to call when the asynchronous invoke is complete. If callback is a null reference (Nothing in Visual Basic), the delegate is not called. </param>
+      <param name="stateObject">State information that is passed on to the delegate. </param>
+      <returns>An <see cref="T:System.IAsyncResult" /> interface that represents the asynchronous operation started by calling this method. </returns>
+    </member>
+    <member name="P:Devart.Common.DbDump.Connection">
+      <summary>Gets or sets the <see cref="T:System.Data.Common.DbConnectionBase" /> used by this instance of the <see cref="T:Devart.Common.DbDump" />. </summary>
+      <keywords>DbDump.Connection property </keywords>
+      <value>The connection to a data source. The default value is a null reference. </value>
+    </member>
+    <member name="P:Devart.Common.DbDump.DumpText">
+      <summary>Gets as a result of <see cref="M:Devart.Common.DbDump.Backup()" /> execution, or sets data needed to execute <see cref="M:Devart.Common.DbDump.Restore()" /> method. </summary>
+      <keywords>DbDump.DumpText property </keywords>
+      <value>SQL commands separated by ';' symbols. </value>
+    </member>
+    <member name="M:Devart.Common.DbDump.EndBackup(System.IAsyncResult)">
+      <summary>Ends an asynchronous invocation of the <see cref="M:Devart.Common.DbDump.Backup" /> method. </summary>
+      <keywords>DbDump.EndBackup method </keywords>
+      <param name="result">The <see cref="T:System.IAsyncResult" /> returned by <see cref="M:Devart.Common.DbDump.BeginBackup" />. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.EndBackupQuery(System.IAsyncResult)">
+      <summary>Ends an asynchronous invocation of the <see cref="M:Devart.Common.DbDump.BackupQuery" /> method. </summary>
+      <keywords>DbDump.EndBackupQuery method </keywords>
+      <param name="result">The <see cref="T:System.IAsyncResult" /> returned by <see cref="M:Devart.Common.DbDump.BeginBackupQuery" />. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.EndRestore(System.IAsyncResult)">
+      <summary>Ends an asynchronous invocation of the <see cref="M:Devart.Common.DbDump.Restore" /> method. </summary>
+      <keywords>DbDump.EndRestore method </keywords>
+      <param name="result">The <see cref="T:System.IAsyncResult" /> returned by <see cref="M:Devart.Common.DbDump.BeginRestore" />. </param>
+    </member>
+    <member name="P:Devart.Common.DbDump.GenerateHeader">
+      <summary>Gets or sets a value that determines whether to add some extra information in the script header. </summary>
+      <keywords>DbDump.GenerateHeader property </keywords>
+      <value>If <see langword="true" />, <see cref="T:Devart.Data.SQLite.SQLiteDump" /> adds comments with information about server version, script generation date, and so on. </value>
+    </member>
+    <member name="P:Devart.Common.DbDump.IncludeDrop">
+      <summary>Determines whether to recreate database objects. </summary>
+      <keywords>DbDump.IncludeDrop property </keywords>
+      <value><see langword="true" />, if database objects must be recreated; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbDump.Mode">
+      <summary>Determines whether to include data from tables into the dump text, script to create database objects or both. </summary>
+      <keywords>DbDump.Mode property </keywords>
+      <value>One of <see cref="T:Devart.Common.DumpMode" /> values. </value>
+    </member>
+    <member name="P:Devart.Common.DbDump.QuoteIdentifier">
+      <summary>Determines whether to quote all identifiers present in the database. </summary>
+      <keywords>DbDump.QuoteIdentifier property </keywords>
+      <value><see langword="true" />, if database identifiers must be quoted; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbDump.Restore()">
+      <summary>Executes script specified in the <see cref="T:Devart.Common.DbDump" /> descendant property. </summary>
+      <keywords>DbDump.Restore method </keywords>
+      <overloads>Executes the previously dumped script. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbDump.Restore(System.IO.Stream)">
+      <summary>Executes script from the specified <see cref="T:System.IO.Stream" /> object. </summary>
+      <keywords>DbDump.Restore method </keywords>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> object to read the script from. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.Restore(System.IO.TextReader)">
+      <summary>Executes script from the specified <see cref="T:System.IO.TextReader" /> object. </summary>
+      <keywords>DbDump.Restore method </keywords>
+      <param name="reader">The <see cref="T:System.IO.TextReader" /> object to read the script from. </param>
+    </member>
+    <member name="M:Devart.Common.DbDump.Restore(System.String)">
+      <summary>Executes script from the specified file. </summary>
+      <keywords>DbDump.Restore method </keywords>
+      <param name="fileName">The name of the file to load the script from. </param>
+    </member>
+    <member name="P:Devart.Common.DbDump.Tables">
+      <summary>Gets or sets a list of the tables which will be used in the script. Table names are separated by semicolon. </summary>
+      <keywords>DbDump.Tables property </keywords>
+      <value><see cref="T:System.String" /> containing a list of the tables separated by semicolon. </value>
+    </member>
+    <member name="T:Devart.Common.DbLoader">
+      <summary>This class is not used in dotConnect for SQLite. </summary>
+    </member>
+    <member name="M:Devart.Common.DbLoader.#ctor()">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbLoader" /> class. </summary>
+      <overloads>Initializes a new instance of the <see cref="T:Devart.Common.DbLoader" /> class. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoader.#ctor(System.String)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbLoader" /> class with table name that will be loaded. </summary>
+      <param name="tableName">Name of the table that will be loaded. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.#ctor(System.String,System.Data.Common.DbConnection)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbLoader" /> class with table name that will be loaded and a <see cref="T:System.Data.Common.DbConnectionBase" /> object. </summary>
+      <param name="tableName">Name of the table that will be loaded. </param>
+      <param name="connection">A <see cref="T:System.Data.Common.DbConnectionBase" /> object that represents the connection to a data source. </param>
+    </member>
+    <member name="P:Devart.Common.DbLoader.BufferSize">
+      <summary>Gets or sets a size of data packet loaded to the server. </summary>
+      <keywords>DbLoader.BufferSize property </keywords>
+      <value>Size of the data packet in bytes. </value>
+    </member>
+    <member name="M:Devart.Common.DbLoader.Close()">
+      <summary>Closes loading session and flushes remaining rows to the table. </summary>
+      <keywords>DbLoader.Close method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbLoader.Columns">
+      <summary>Gets the <see cref="T:Devart.Common.DbLoaderColumnCollection" /> collection. </summary>
+      <keywords>DbLoader.Columns property </keywords>
+      <value>Columns which loaded table consist of. </value>
+    </member>
+    <member name="P:Devart.Common.DbLoader.Connection">
+      <summary>Gets or sets the <see cref="T:Devart.Common.DbConnectionBase" /> used by this instance of the <see cref="T:Devart.Common.DbLoader" />. </summary>
+      <keywords>DbLoader.Connection property </keywords>
+      <value>The connection to a data source. The default value is a null reference. </value>
+    </member>
+    <member name="M:Devart.Common.DbLoader.CreateColumns()">
+      <summary>Retrieves table columns information from the table specified in the <see cref="P:Devart.Common.DbLoader.TableName" /> property and populates columns collection. </summary>
+      <keywords>DbLoader.CreateColumns method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbLoader.Item(System.Int32)">
+      <summary>Sets the value of the column at the specified index for <see cref="T:Devart.Common.DbLoaderColumnCollection" />. </summary>
+      <keywords>DbLoader.Item property </keywords>
+      <param name="columnIndex">The zero-based index. </param>
+    </member>
+    <member name="P:Devart.Common.DbLoader.Item(System.String)">
+      <summary>Sets the value of the column with the specified name for <see cref="T:Devart.Common.DbLoaderColumnCollection" />. </summary>
+      <keywords>DbLoader.Item property </keywords>
+      <param name="columnName">The name of the column. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.LoadTable(System.Data.DataRow[])">
+      <summary>Loads data into the table from the specified array of data rows. </summary>
+      <keywords>DbLoader.LoadTable method </keywords>
+      <param name="rows">The array of data rows to load into target table. </param>
+      <overloads>Loads data into the table from the specified <b>DataTable</b>. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoader.LoadTable(System.Data.DataTable)">
+      <summary>Loads data into the table from the specified <b>DataTable</b>. </summary>
+      <keywords>DbLoader.LoadTable method </keywords>
+      <param name="table">The <b>DataTable</b> object to obtain data from. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.LoadTable(System.Data.DataTable,System.Data.DataRowState)">
+      <summary>Loads rows that match to the specified row state from the specified <b>DataTable</b> into the table. </summary>
+      <keywords>DbLoader.LoadTable method </keywords>
+      <param name="table">The <b>DataTable</b> object to obtain data from. </param>
+      <param name="rowState">The specified row state. Only rows that match it will be copied to the target table. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.LoadTable(System.Data.DataTable,System.Data.IColumnMappingCollection)">
+      <summary>Loads data into the table from the specified <b>DataTable</b>. </summary>
+      <keywords>DbLoader.LoadTable method </keywords>
+      <param name="table">The <b>DataTable</b> object to obtain data from. </param>
+      <param name="columnMappings">Column mappings used to match table columns to data source table columns. If this argument is null, the <b>DataTable</b> columns names are used. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.LoadTable(System.Data.IDataReader)">
+      <summary>Loads data into the table from the specified <b>IDataReader</b>. </summary>
+      <keywords>DbLoader.LoadTable method </keywords>
+      <param name="reader">The <b>IDataReader</b> object to obtain data from. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.NextRow()">
+      <summary>Advances <see cref="T:Devart.Common.DbLoader" /> to the next row. </summary>
+      <keywords>DbLoader.NextRow method </keywords>
+    </member>
+    <member name="M:Devart.Common.DbLoader.Open()">
+      <summary>Prepares <see cref="T:Devart.Common.DbLoader" /> for the loading. </summary>
+      <keywords>DbLoader.Open method </keywords>
+    </member>
+    <member name="M:Devart.Common.DbLoader.SetNull(System.Int32)">
+      <summary>Sets the value of the column with the specified index to NULL. </summary>
+      <keywords>DbLoader.SetNull method </keywords>
+      <param name="i">Zero-based index of the column. </param>
+      <overloads>Sets the value of the column with the specified name or ordinal to NULL. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoader.SetNull(System.String)">
+      <summary>Sets the value of the column with the specified name to NULL. </summary>
+      <keywords>DbLoader.SetNull method </keywords>
+      <param name="name">The name of the column. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoader.SetValue(System.Int32,System.Object)">
+      <summary>Sets the value of the column at the specified ordinal. </summary>
+      <keywords>DbLoader.SetValue method </keywords>
+      <param name="i">Zero-based index of the column. </param>
+      <param name="value">Column value. </param>
+      <overloads>Sets the value of the column with the specified name or ordinal. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoader.SetValue(System.String,System.Object)">
+      <summary>Sets the value of the column with the specified name. </summary>
+      <keywords>DbLoader.SetValue method </keywords>
+      <param name="name">The name of the column. </param>
+      <param name="value">Column value. </param>
+    </member>
+    <member name="P:Devart.Common.DbLoader.TableName">
+      <summary>Gets or sets table name that will be loaded. </summary>
+      <keywords>DbLoader.TableName property </keywords>
+      <value>Name of the table that will be loaded. </value>
+    </member>
+    <member name="T:Devart.Common.DbLoaderColumn">
+      <summary>This class is not used in dotConnect for SQLite. </summary>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumn.#ctor()">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbLoaderColumn" /> class. </summary>
+      <overloads>Initializes a new instance of the <see cref="T:Devart.Common.DbLoaderColumn" /> class. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumn.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbLoaderColumn" /> class with the column name, size, precision and scale. </summary>
+      <param name="name">The name of the column. </param>
+      <param name="size">Maximum size of column data. </param>
+      <param name="precision">The precision of the column. </param>
+      <param name="scale">The scale of the column. </param>
+    </member>
+    <member name="P:Devart.Common.DbLoaderColumn.Name">
+      <summary>Gets or sets the name of the <see cref="T:Devart.Common.DbLoaderColumn" />. </summary>
+      <keywords>DbLoaderColumn.Name property </keywords>
+      <value>The name of the <see cref="T:Devart.Common.DbLoaderColumn" />. The default value is an empty string (""). </value>
+    </member>
+    <member name="P:Devart.Common.DbLoaderColumn.Precision">
+      <summary>Gets or sets the maximum number of digits used to represent the column value. </summary>
+      <keywords>DbLoaderColumn.Precision property </keywords>
+      <value>The maximum number of digits used to represent the column value. The default value is 0. </value>
+    </member>
+    <member name="P:Devart.Common.DbLoaderColumn.Scale">
+      <summary>Gets or sets the number of decimal places to which column value is resolved. </summary>
+      <keywords>DbLoaderColumn.Scale property </keywords>
+      <value>The number of decimal places to which column value is resolved. The default value is 0. </value>
+    </member>
+    <member name="P:Devart.Common.DbLoaderColumn.Size">
+      <summary>Gets or sets the maximum size, in bytes, of the data within the column. </summary>
+      <keywords>DbLoaderColumn.Size property </keywords>
+      <value>The maximum size, in bytes, of the data within the column. </value>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumn.ToString()">
+      <summary>Returns the name of the <see cref="T:Devart.Common.DbLoaderColumn" />. </summary>
+      <keywords>DbLoaderColumn.ToString method </keywords>
+      <returns>The name of the <see cref="T:Devart.Common.DbLoaderColumn" />. </returns>
+    </member>
+    <member name="T:Devart.Common.DbLoaderColumnCollection">
+      <summary>This class is not used in dotConnect for SQLite. </summary>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.#ctor()">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.DbLoaderColumnCollection" /> class. </summary>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.Add(Devart.Common.DbLoaderColumn)">
+      <summary>Adds the specified <see cref="T:Devart.Common.DbLoaderColumn" /> to the <see cref="T:Devart.Common.DbLoaderColumnCollection" />. </summary>
+      <keywords>DbLoaderColumnCollection.Add method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.DbLoaderColumn" /> to add to the collection. </param>
+      <returns>Index of the new <see cref="T:Devart.Common.DbLoaderColumn" /> object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.Contains(Devart.Common.DbLoaderColumn)">
+      <summary>Gets a value indicating whether a <see cref="T:Devart.Common.DbLoaderColumn" /> object exists in the collection. </summary>
+      <keywords>DbLoaderColumnCollection.Contains method </keywords>
+      <param name="value">The value of the <see cref="T:Devart.Common.DbLoaderColumn" /> object to find. </param>
+      <returns>
+        <see langword="true" /> if the collection contains the <see cref="T:Devart.Common.DbLoaderColumn" />; otherwise, <see langword="false" />. </returns>
+      <overloads>Gets a value indicating whether a <see cref="T:Devart.Common.DbLoaderColumn" /> object exists in the collection. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.Contains(System.String)">
+      <summary>Gets a value indicating whether a <see cref="T:Devart.Common.DbLoaderColumn" /> object with the specified name exists in the collection. </summary>
+      <keywords>DbLoaderColumnCollection.Contains method </keywords>
+      <param name="name">The name of the column to find. </param>
+      <returns>
+        <see langword="true" /> if the collection contains the <see cref="T:Devart.Common.DbLoaderColumn" />; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.CopyTo(Devart.Common.DbLoaderColumn[],System.Int32)">
+      <summary>Copies <see cref="T:Devart.Common.DbLoaderColumn" /> objects from the <see cref="T:Devart.Common.DbLoaderColumnCollection" /> to the specified array. </summary>
+      <keywords>DbLoaderColumnCollection.CopyTo method </keywords>
+      <param name="array">The array into which to copy the <see cref="T:Devart.Common.DbLoaderColumn" /> objects. </param>
+      <param name="index">The zero-based index of the array. </param>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.IndexOf(Devart.Common.DbLoaderColumn)">
+      <summary>Gets the location in the collection of the <see cref="T:Devart.Common.DbLoaderColumn" /> object. </summary>
+      <keywords>DbLoaderColumnCollection.IndexOf method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.DbLoaderColumn" /> object to find. </param>
+      <returns>The zero-based location of the <see cref="T:Devart.Common.DbLoaderColumn" /> in the collection. </returns>
+      <overloads>Gets the location in the collection of the <see cref="T:Devart.Common.DbLoaderColumn" /> object. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.IndexOf(System.String)">
+      <summary>Gets the location in the collection of the <see cref="T:Devart.Common.DbLoaderColumn" /> object by the specified name. </summary>
+      <keywords>DbLoaderColumnCollection.IndexOf method </keywords>
+      <param name="name">The name of the column to find. </param>
+      <returns>The zero-based location of the <see cref="T:Devart.Common.DbLoaderColumn" /> in the collection. </returns>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.Insert(System.Int32,Devart.Common.DbLoaderColumn)">
+      <summary>Inserts a <see cref="T:Devart.Common.DbLoaderColumn" /> into the collection at the specified index. </summary>
+      <keywords>DbLoaderColumnCollection.Insert method </keywords>
+      <param name="index">The zero-based index where the column is to be inserted within the collection. </param>
+      <param name="value">The <see cref="T:Devart.Common.DbLoaderColumn" /> to add to the collection. </param>
+    </member>
+    <member name="P:Devart.Common.DbLoaderColumnCollection.Item(System.Int32)">
+      <summary>Gets or sets the <see cref="T:Devart.Common.DbLoaderColumn" /> at the specified index. </summary>
+      <keywords>DbLoaderColumnCollection.Item property </keywords>
+      <param name="index">The zero-based index of the column. </param>
+      <value>The <see cref="T:Devart.Common.DbLoaderColumn" /> at the specified index. </value>
+    </member>
+    <member name="P:Devart.Common.DbLoaderColumnCollection.Item(System.String)">
+      <summary>Gets or sets the <see cref="T:Devart.Common.DbLoaderColumn" /> with the specified name. </summary>
+      <keywords>DbLoaderColumnCollection.Item property </keywords>
+      <param name="name">The name of the column. </param>
+      <value>The <see cref="T:Devart.Common.DbLoaderColumn" /> with the specified name. </value>
+    </member>
+    <member name="M:Devart.Common.DbLoaderColumnCollection.Remove(Devart.Common.DbLoaderColumn)">
+      <summary>Removes the specified <see cref="T:Devart.Common.DbLoaderColumn" /> object from the collection. </summary>
+      <keywords>DbLoaderColumnCollection.Remove method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.DbLoaderColumn" /> object to remove from the collection. </param>
+    </member>
+    <member name="T:Devart.Common.DbMonitor">
+      <summary>Allows monitoring dynamic SQL execution in applications that use .NET data providers. </summary>
+    </member>
+    <member name="P:Devart.Common.DbMonitor.EventQueueLimit">
+      <summary>Gets or sets the maximal number of events that may be placed to a queue waiting to be processed by the dbMonitor application. </summary>
+      <keywords>DbMonitor.EventQueueLimit property </keywords>
+      <value>The maximal number of events that may be placed to a queue waiting to be processed by the dbMonitor application. </value>
+    </member>
+    <member name="P:Devart.Common.DbMonitor.Host">
+      <summary>Gets or sets the host where the dbMonitor application is running, 'localhost' by default. </summary>
+      <keywords>DbMonitor.Host property </keywords>
+      <value>The host where the dbMonitor application is running, 'localhost' by default. </value>
+    </member>
+    <member name="P:Devart.Common.DbMonitor.IsActive">
+      <summary>Enables or disables monitoring applications. </summary>
+      <keywords>DbMonitor.IsActive property </keywords>
+      <value>
+        <see langword="true" /> if monitoring the application is enabled; otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbMonitor.Port">
+      <summary>Gets or sets the port of the dbMonitor application to which to connect, 1000 by default. </summary>
+      <keywords>DbMonitor.Port property </keywords>
+      <value>Port of the dbMonitor application to which to connect, 1000 by default. </value>
+    </member>
+    <member name="E:Devart.Common.DbMonitor.TraceEvent">
+      <summary>Occurs when <see cref="T:Devart.Common.DbMonitor" /> object signals about some database activity. </summary>
+      <keywords>DbMonitor.TraceEvent event </keywords>
+    </member>
+    <member name="P:Devart.Common.DbMonitor.UseApp">
+      <summary>Disables or enables sending database interaction events to dbMonitor application. </summary>
+      <keywords>DbMonitor.UseApp property </keywords>
+      <value> <see langword="true" /> if sending database interaction events to dbMonitor application is enabled; otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbMonitor.UseIdeOutput">
+      <summary>Enables or disables writing log messages to the IDE output window. </summary>
+      <keywords>DbMonitor.UseIdeOutput property </keywords>
+      <value>If <see langword="true" />, the <see cref="T:Devart.Common.DbMonitor" /> object writes its information to the Output window (Visual Studio) or Messages window (Delphi). </value>
+    </member>
+    <member name="T:Devart.Common.DbParameterBase">
+      <summary>Represents a parameter to a <see cref="T:Devart.Common.DbCommandBase" />, and optionally, its mapping to <see cref="T:System.Data.DataSet" /> columns. </summary>
+    </member>
+    <member name="M:Devart.Common.DbParameterBase.CopyTo(System.Data.Common.DbParameter)">
+      <summary>Copies all properties of a <see cref="T:Devart.Common.DbParameterBase" /> object to another <see cref="T:Devart.Common.DbParameterBase" /> object. </summary>
+      <keywords>DbParameterBase.CopyTo method </keywords>
+      <param name="destination">The <see cref="T:System.Data.DbParameterBase" /> object to copy properties to. </param>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.Direction">
+      <summary>Gets or sets a value indicating whether the parameter is input-only, output-only, or bidirectional parameter. </summary>
+      <keywords>DbParameterBase.Direction property </keywords>
+      <value>One of the <see cref="T:System.Data.ParameterDirection" /> values. The default value is Input. </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.IsNullable">
+      <summary>Gets or sets a value indicating whether the parameter accepts null values. </summary>
+      <keywords>DbParameterBase.IsNullable property </keywords>
+      <value>
+        <see langword="true" /> if null values are accepted; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.ParameterName">
+      <summary>Gets or sets the name of the <see cref="T:Devart.Common.DbParameterBase" />. </summary>
+      <keywords>DbParameterBase.ParameterName property </keywords>
+      <value>The name of the <see cref="T:Devart.Common.DbParameterBase" />. The default value is an empty string (""). </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.Size">
+      <summary>Gets or sets the maximum size, in bytes, of the data within the column. </summary>
+      <keywords>DbParameterBase.Size property </keywords>
+      <value>The maximum size, in bytes, of the data within the column. The default value is inferred from the parameter value. </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.SourceColumn">
+      <summary>Gets or sets the name of the source column mapped to the <see cref="T:System.Data.DataSet" /> and used for loading or returning the <see cref="P:Devart.Common.DbParameterBase.Value" />. For internal use. </summary>
+      <keywords>DbParameterBase.SourceColumn property </keywords>
+      <value>The name of the source column that will be used to set the value of this parameter. The default value is an empty string (""). </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.SourceColumnNullMapping">
+      <summary>Sets or gets a value which indicates whether the source column is nullable. </summary>
+      <keywords>DbParameterBase.SourceColumnNullMapping property </keywords>
+      <value>
+        <see langword="true" /> if source column is nullable; otherwise, <see langword="false" />. The default value is <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.SourceVersion">
+      <summary>Gets or sets the <see cref="T:System.Data.DataRowVersion" /> to use when loading <see cref="P:Devart.Common.DbParameterBase.Value" />. </summary>
+      <keywords>DbParameterBase.SourceVersion property </keywords>
+      <value>One of the <see cref="T:System.Data.DataRowVersion" /> values. The default value is Current. </value>
+    </member>
+    <member name="M:Devart.Common.DbParameterBase.ToString()">
+      <summary>Gets the name of the <see cref="T:Devart.Common.DbParameterBase" />. </summary>
+      <keywords>DbParameterBase.ToString method </keywords>
+      <returns>The name of the <see cref="T:Devart.Common.DbParameterBase" />. </returns>
+    </member>
+    <member name="P:Devart.Common.DbParameterBase.Value">
+      <summary>Gets or sets the value of the parameter. </summary>
+      <keywords>DbParameterBase.Value property </keywords>
+      <value>An <see cref="T:System.Object" /> that is the value of the parameter. The default value is null. </value>
+    </member>
+    <member name="T:Devart.Common.DbParameterBaseCollection">
+      <summary>Collects all parameters relevant to a <see cref="T:Devart.Common.DbCommandBase" /> as well as their respective mappings to <see cref="T:System.Data.DataSet" /> columns. </summary>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.Add(System.Object)">
+      <summary>Adds the specified <see cref="T:Devart.Common.DbParameterBase" /> to the <see cref="T:Devart.Common.DbCommandBase" />. </summary>
+      <keywords>DbParameterBaseCollection.Add method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.DbParameterBase" /> to add to the <see cref="T:Devart.Common.DbCommandBase" />. </param>
+      <returns>The index of the new <see cref="T:Devart.Common.DbParameterBase" /> object. </returns>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.AddRange(System.Array)">
+      <summary>Adds the specified array of <see cref="T:Devart.Common.DbParameterBase" /> objects to the <see cref="T:Devart.Common.DbParameterBaseCollection" />. </summary>
+      <keywords>DbParameterBaseCollection.AddRange method </keywords>
+      <param name="values">Array of <see cref="T:Devart.Common.DbParameterBase" /> objects to be added to the <see cref="T:Devart.Common.DbParameterBaseCollection" />. </param>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.Clear()">
+      <summary>Removes all items from the collection. </summary>
+      <keywords>DbParameterBaseCollection.Clear method </keywords>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.Contains(System.Object)">
+      <summary>Gets a value indicating whether a <see cref="T:Devart.Common.DbParameterBase" /> object exists in the collection. </summary>
+      <keywords>DbParameterBaseCollection.Contains method </keywords>
+      <param name="value">The value of the <see cref="T:Devart.Common.DbParameterBase" /> object to find. </param>
+      <returns>
+        <see langword="true" /> if the collection contains the <see cref="T:Devart.Common.DbParameterBase" />; otherwise, <see langword="false" />. </returns>
+      <overloads>Gets a value indicating whether a <see cref="T:Devart.Common.DbParameterBase" /> object exists in the collection. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.Contains(System.String)">
+      <summary>Gets a value indicating whether a <see cref="T:Devart.Common.DbParameterBase" /> object with the specified parameter name exists in the collection. </summary>
+      <keywords>DbParameterBaseCollection.Contains method </keywords>
+      <param name="value">The name of the <see cref="T:Devart.Common.DbParameterBase" /> object to find. </param>
+      <returns>
+        <see langword="true" /> if the collection contains the <see cref="T:Devart.Common.DbParameterBase" />; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.CopyTo(System.Array,System.Int32)">
+      <summary>Copies a <see cref="T:Devart.Common.DbParameterBase" /> objects from the <see cref="T:Devart.Common.DbParameterBaseCollection" /> to the specified array. </summary>
+      <keywords>DbParameterBaseCollection.CopyTo method </keywords>
+      <param name="array">The array into which to copy the <see cref="T:Devart.Common.DbParameterBase" /> objects. </param>
+      <param name="index">The zero-based index of the array. </param>
+    </member>
+    <member name="P:Devart.Common.DbParameterBaseCollection.Count">
+      <summary>Gets the number of <see cref="T:Devart.Common.DbParameterBase" /> objects in the collection. </summary>
+      <keywords>DbParameterBaseCollection.Count property </keywords>
+      <value>The number of <see cref="T:Devart.Common.DbParameterBase" /> objects in the collection. </value>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.GetEnumerator()">
+      <summary>Returns an enumerator for the <see cref="T:Devart.Common.DbParameterBaseCollection" />. </summary>
+      <keywords>DbParameterBaseCollection.GetEnumerator method </keywords>
+      <returns>An enumerator for the <see cref="T:Devart.Common.DbParameterBaseCollection" />. </returns>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.IndexOf(System.Object)">
+      <summary>Gets the location in the collection of the <see cref="T:Devart.Common.DbParameterBase" /> objects. </summary>
+      <keywords>DbParameterBaseCollection.IndexOf method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.DbParameterBase" /> object to find. </param>
+      <returns>The zero-based location of the <see cref="T:Devart.Common.DbParameterBase" /> in the collection. </returns>
+      <overloads>Gets the location in the collection of the <see cref="T:Devart.Common.DbParameterBase" /> objects. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.IndexOf(System.String)">
+      <summary>Gets the location in the collection of the <see cref="T:Devart.Common.DbParameterBase" /> object with a specific parameter name. </summary>
+      <keywords>DbParameterBaseCollection.IndexOf method </keywords>
+      <param name="parameterName">The name of the parameter to retrieve. </param>
+      <returns>The zero-based location of the <see cref="T:Devart.Common.DbParameterBase" /> in the collection. </returns>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.Insert(System.Int32,System.Object)">
+      <summary>Inserts a <see cref="T:Devart.Common.DbParameterBase" /> into the collection at the specified index. </summary>
+      <keywords>DbParameterBaseCollection.Insert method </keywords>
+      <param name="index">The zero-based index where the parameter is to be inserted within the collection. </param>
+      <param name="value">The <see cref="T:Devart.Common.DbParameterBase" /> object to add to the collection. </param>
+    </member>
+    <member name="P:Devart.Common.DbParameterBaseCollection.IsFixedSize">
+      <summary>Indicating whether the collection has a fixed size. </summary>
+      <keywords>DbParameterBaseCollection.IsFixedSize property </keywords>
+      <value>
+        <see langword="true" /> if the collection has a fixed size; otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBaseCollection.IsReadOnly">
+      <summary>Indicates whether the collection is read-only. </summary>
+      <keywords>DbParameterBaseCollection.IsReadOnly property </keywords>
+      <value>
+        <see langword="true" /> if the collection is read-only; otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.DbParameterBaseCollection.IsSynchronized">
+      <summary>Indicates whether access to the collection is synchronized (thread-safe). </summary>
+      <keywords>DbParameterBaseCollection.IsSynchronized property </keywords>
+      <value>
+        <see langword="true" /> if access to the collection is synchronized (thread-safe); otherwise, <see langword="false" />. </value>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.Remove(System.Object)">
+      <summary>Removes the specified <see cref="T:Devart.Common.DbParameterBase" /> from the collection. </summary>
+      <keywords>DbParameterBaseCollection.Remove method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.DbParameterBase" /> object to remove from the collection. </param>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.RemoveAt(System.Int32)">
+      <summary>Removes the <see cref="T:Devart.Common.DbParameterBase" /> at the specified index from the collection. </summary>
+      <keywords>DbParameterBaseCollection.RemoveAt method </keywords>
+      <param name="index">The zero-based index of the parameter to remove. </param>
+      <overloads>Removes the specified <see cref="T:Devart.Common.DbParameterBase" /> from the collection. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbParameterBaseCollection.RemoveAt(System.String)">
+      <summary>Removes the <see cref="T:Devart.Common.DbParameterBase" /> with the specified name from the collection. </summary>
+      <keywords>DbParameterBaseCollection.RemoveAt method </keywords>
+      <param name="parameterName">The name of the parameter to remove. </param>
+    </member>
+    <member name="P:Devart.Common.DbParameterBaseCollection.SyncRoot">
+      <summary>Gets an object that can be used to synchronize access to the <see cref="T:Devart.Common.DbParameterBaseCollection" />. </summary>
+      <keywords>DbParameterBaseCollection.SyncRoot property </keywords>
+      <value>An object that can be used to synchronize access to the <see cref="T:Devart.Common.DbParameterBaseCollection" />. </value>
+    </member>
+    <member name="T:Devart.Common.DbProviderException">
+      <summary>The base class for all exceptions thrown on data provider side. This does not include data source exceptions. </summary>
+    </member>
+    <member name="M:Devart.Common.DbProviderException.ToString()">
+      <summary>Gets the exception text. </summary>
+      <keywords>DbProviderException.ToString method </keywords>
+      <returns>The exception text. </returns>
+    </member>
+    <member name="T:Devart.Common.DbScript">
+      <summary>Serves to execute series of SQL statements separated by special symbols. </summary>
+    </member>
+    <member name="M:Devart.Common.DbScript.Cancel()">
+      <summary>Tries to cancel the execution of a <see cref="T:Devart.Common.DbScript" /> descendant. </summary>
+      <keywords>DbScript.Cancel method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbScript.CommandTimeout">
+      <summary>Gets or sets the wait time before terminating an attempt to execute a script and generating an error. </summary>
+      <keywords>DbScript.CommandTimeout property </keywords>
+      <value>The time to wait while server responds when executing the command. The default value is 30 seconds. </value>
+    </member>
+    <member name="P:Devart.Common.DbScript.Connection">
+      <summary>Gets or sets the <see cref="T:System.Data.IDbConnection" /> used by this instance of the <see cref="T:Devart.Common.DbScript" />. </summary>
+      <keywords>DbScript.Connection property </keywords>
+      <value>The connection to a data source. The default value is a null reference. </value>
+    </member>
+    <member name="E:Devart.Common.DbScript.Error">
+      <summary>Occurs when a SQL statement within script has produced an error. </summary>
+      <keywords>DbScript.Error event </keywords>
+    </member>
+    <member name="M:Devart.Common.DbScript.Execute()">
+      <summary>Executes the script specified in <see cref="P:Devart.Common.DbScript.ScriptText" /> property. </summary>
+      <keywords>DbScript.Execute method </keywords>
+    </member>
+    <member name="M:Devart.Common.DbScript.ExecuteNext(System.Data.IDataReader@)">
+      <summary>Executes the next statement from the script. </summary>
+      <keywords>DbScript.ExecuteNext method </keywords>
+      <param name="reader">
+        <see cref="T:Devart.Common.DbDataReaderBase" /> to store result set. </param>
+      <returns>
+        <see langword="true" /> if there are more statements to execute; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="P:Devart.Common.DbScript.Name">
+      <summary>Gets or sets the name of component that will be displayed in dbMonitor application. </summary>
+      <keywords>DbScript.Name property </keywords>
+      <value>The name of the component. </value>
+    </member>
+    <member name="M:Devart.Common.DbScript.Open(System.IO.Stream)">
+      <summary>Prepares a stream to be executed as SQL script. </summary>
+      <keywords>DbScript.Open method </keywords>
+      <param name="stream">Stream to read SQL statements from. </param>
+      <overloads>Prepares a stream to be executed as SQL script. </overloads>
+    </member>
+    <member name="M:Devart.Common.DbScript.Open(System.IO.TextReader)">
+      <summary>Prepares a StreamReader to be executed as SQL script. </summary>
+      <keywords>DbScript.Open method </keywords>
+      <param name="reader">TextReader to read SQL statements from. </param>
+    </member>
+    <member name="M:Devart.Common.DbScript.Open(System.String)">
+      <summary>Prepares a file stream to be executed as SQL script. </summary>
+      <keywords>DbScript.Open method </keywords>
+      <param name="fileName">Name of file to open. </param>
+    </member>
+    <member name="E:Devart.Common.DbScript.Progress">
+      <summary>Occurs when a SQL statement within script has successfully executed. </summary>
+      <keywords>DbScript.Progress event </keywords>
+    </member>
+    <member name="M:Devart.Common.DbScript.Reset()">
+      <summary>Positions <see cref="M:Devart.Common.DbScript.ExecuteNext" /> method on the first statement in the script. </summary>
+      <keywords>DbScript.Reset method </keywords>
+    </member>
+    <member name="P:Devart.Common.DbScript.ScriptText">
+      <summary>Gets or sets script text. </summary>
+      <keywords>DbScript.ScriptText property </keywords>
+      <value>The text of the script. The default value is an empty string (""). </value>
+    </member>
+    <member name="P:Devart.Common.DbScript.Statements">
+      <summary>Gets the collection of statements that make up the script. </summary>
+      <keywords>DbScript.Statements property </keywords>
+      <value>Collection of statements. </value>
+    </member>
+    <member name="T:Devart.Common.DbTransactionBase">
+      <summary>Base class for the dotConnect for SQLite transaction class <see cref="T:Devart.Data.SQLite.SQLiteTransaction" /> </summary>
+    </member>
+    <member name="P:Devart.Common.DbTransactionBase.IsolationLevel">
+      <summary>Specifies the <see cref="T:System.Data.IsolationLevel" /> for the transaction. </summary>
+      <keywords>DbTransactionBase.IsolationLevel property </keywords>
+      <value>The  <see cref="T:System.Data.IsolationLevel" /> for the transaction. </value>
+    </member>
+    <member name="E:Devart.Common.DbTransactionBase.StateChanged">
+      <summary>Occurs when the state of the transaction is changed. </summary>
+      <keywords>DbTransactionBase.StateChanged event </keywords>
+    </member>
+    <member name="E:Devart.Common.DbTransactionBase.StateChanging">
+      <summary>Occurs when the state of the transaction is changing. </summary>
+      <keywords>DbTransactionBase.StateChanging event </keywords>
+    </member>
+    <member name="T:Devart.Common.DumpMode">
+      <summary>Specifies what kind of information should be exported by <see cref="T:Devart.Data.SQLite.SQLiteDump" />. </summary>
+    </member>
+    <member name="F:Devart.Common.DumpMode.All">
+      <summary>Export both data and metadata. The dump contains DDL and DML statements. </summary>
+    </member>
+    <member name="F:Devart.Common.DumpMode.Data">
+      <summary>Export only data contained in tables. The dump text contains DML statements only. </summary>
+    </member>
+    <member name="F:Devart.Common.DumpMode.Schema">
+      <summary>Export metadata information only. The dump contains DDL statements only.  </summary>
+    </member>
+    <member name="T:Devart.Common.MonitorEventArgs">
+      <summary>Provides data for the <see cref="E:Devart.Common.DbMonitor.TraceEvent" /> event of the <see cref="T:Devart.Common.DbMonitor" /> class. </summary>
+    </member>
+    <member name="P:Devart.Common.MonitorEventArgs.CallStack">
+      <summary>Gets the call stack of the monitor event. </summary>
+      <keywords>MonitorEventArgs.CallStack property </keywords>
+      <value>The call stack of the monitor event. </value>
+    </member>
+    <member name="P:Devart.Common.MonitorEventArgs.Description">
+      <summary>Gets the description of a <see cref="T:Devart.Common.DbMonitor" /> event. </summary>
+      <keywords>MonitorEventArgs.Description property </keywords>
+      <value>The text description of a <see cref="T:Devart.Common.DbMonitor" /> event. </value>
+    </member>
+    <member name="P:Devart.Common.MonitorEventArgs.Duration">
+      <summary>The time between the start and the end of the event. </summary>
+      <keywords>MonitorEventArgs.Duration property </keywords>
+    </member>
+    <member name="P:Devart.Common.MonitorEventArgs.EventType">
+      <summary>Gets <see cref="T:Devart.Common.DbMonitor" /> event type. </summary>
+      <keywords>MonitorEventArgs.EventType property </keywords>
+      <value>The <see cref="T:Devart.Common.DbMonitor" /> event type that depends on SQL activity of the application. </value>
+    </member>
+    <member name="P:Devart.Common.MonitorEventArgs.ExtraInfo">
+      <summary>Gets the additional information for a <see cref="T:Devart.Common.DbMonitor" /> event. </summary>
+      <keywords>MonitorEventArgs.ExtraInfo property </keywords>
+      <value>The string representation of the connection string, error text, or SQL parameters. </value>
+    </member>
+    <member name="P:Devart.Common.MonitorEventArgs.TracePoint">
+      <summary>Determines whether <see cref="E:Devart.Common.DbMonitor.TraceEvent" /> event occurs before or after the operation takes place. </summary>
+      <keywords>MonitorEventArgs.TracePoint property </keywords>
+      <value>One of <see cref="T:Devart.Common.MonitorTracePoint" /> values. </value>
+    </member>
+    <member name="T:Devart.Common.MonitorEventHandler">
+      <summary>Represents the method that will handle the <see cref="E:Devart.Common.DbMonitor.TraceEvent" /> event of the <see cref="T:Devart.Common.DbMonitor" /> class. </summary>
+      <keywords>MonitorEventHandler delegate </keywords>
+      <param name="sender">The source of the event. </param>
+      <param name="e">The <see cref="T:Devart.Common.MonitorEventArgs" /> object that contains the event data. </param>
+    </member>
+    <member name="T:Devart.Common.MonitorEventType">
+      <summary>Describes type of the current <see cref="T:Devart.Common.DbMonitor" /> event. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.ActivateInPool">
+      <summary>Application takes a connection from the pool. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.BeginTransaction">
+      <summary>Application begins a transaction (local or distributed) against a data source. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Commit">
+      <summary>Application executes COMMIT statement against a data source. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Connect">
+      <summary>Application opens connection to a data source. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Custom">
+      <summary>Application executes any user defined statement against a data source. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Disconnect">
+      <summary>Application closes connection to a data source. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Error">
+      <summary>Data source returns an error message. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Execute">
+      <summary>Application executes a statement against a data source. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Prepare">
+      <summary>Application prepares an execute statement. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.ReturnToPool">
+      <summary>Application returns a connection to the pool. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorEventType.Rollback">
+      <summary>Application executes ROLLBACK statement against a data source. </summary>
+    </member>
+    <member name="T:Devart.Common.MonitorTracePoint">
+      <summary>Determines when <see cref="E:Devart.Common.DbMonitor.TraceEvent" /> event occurs. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorTracePoint.AfterEvent">
+      <summary>Occurs in <see cref="T:Devart.Common.DbMonitor" /> after some operation is complete. </summary>
+    </member>
+    <member name="F:Devart.Common.MonitorTracePoint.BeforeEvent">
+      <summary>Occurs in <see cref="T:Devart.Common.DbMonitor" /> before some operation has started. </summary>
+    </member>
+    <member name="T:Devart.Common.ParentDataRelation">
+      <summary>Establishes query-based master-detail relation. </summary>
+    </member>
+    <member name="M:Devart.Common.ParentDataRelation.#ctor(System.ComponentModel.IListSource,System.String[],System.String[])">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.ParentDataRelation" /> class using the specified parent <see cref="T:Devart.Common.DbDataTable" /> and matched arrays of parent and child column names. </summary>
+      <param name="parentTable">A <see cref="T:Devart.Common.DbDataTable" /> that is used as master dataset. </param>
+      <param name="parentColumnNames">List of master columns used to establish the relation. </param>
+      <param name="childColumnNames">List of child columns used to establish the relation. </param>
+    </member>
+    <member name="P:Devart.Common.ParentDataRelation.ChildColumnNames">
+      <summary>Gets or sets list of child columns used to establish the relation. </summary>
+      <keywords>ParentDataRelation.ChildColumnNames property </keywords>
+      <value>List of child columns used to establish the relation. </value>
+    </member>
+    <member name="P:Devart.Common.ParentDataRelation.ParentColumnNames">
+      <summary>Gets or sets list of child columns used to establish the relation. </summary>
+      <keywords>ParentDataRelation.ParentColumnNames property </keywords>
+      <value>List of parent columns used to establish the relation. </value>
+    </member>
+    <member name="P:Devart.Common.ParentDataRelation.ParentTable">
+      <summary>Gets or sets the <see cref="T:Devart.Common.DbDataTable" /> that is used as master dataset. </summary>
+      <keywords>ParentDataRelation.ParentTable property </keywords>
+      <value>A <see cref="T:Devart.Common.DbDataTable" /> that is used as master dataset. </value>
+    </member>
+    <member name="T:Devart.Common.ProxyException">
+      <summary>Represents an exception that occurs when connecting through a proxy server. </summary>
+    </member>
+    <member name="M:Devart.Common.ProxyException.#ctor(System.Exception)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.ProxyException" /> class to initialize with inner exception. </summary>
+      <param name="inner">Inner exception </param>
+    </member>
+    <member name="M:Devart.Common.ProxyException.#ctor(System.String)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.ProxyException" /> class with the exception message. </summary>
+      <param name="message">The exception message. </param>
+    </member>
+    <member name="T:Devart.Common.ProxyOptions">
+      <summary>Represents proxy server settings. </summary>
+    </member>
+    <member name="M:Devart.Common.ProxyOptions.#ctor()">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.ProxyOptions" /> class. </summary>
+    </member>
+    <member name="M:Devart.Common.ProxyOptions.#ctor(System.String,System.Int32,System.String,System.String)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.ProxyOptions" /> class. </summary>
+      <param name="host">The host name or IP address of proxy server. </param>
+      <param name="port">The port number of the proxy server. </param>
+      <param name="user">The proxy server account name. </param>
+      <param name="password">The password for the proxy server account. </param>
+    </member>
+    <member name="F:Devart.Common.ProxyOptions.DefaultPort">
+      <summary>The default value for the <see cref="P:Devart.Common.ProxyOptions.Port" /> property. </summary>
+      <keywords>ProxyOptions.DefaultPort field </keywords>
+    </member>
+    <member name="P:Devart.Common.ProxyOptions.Host">
+      <summary>Gets or sets the host name or IP address of the proxy server to which to connect. </summary>
+      <keywords>ProxyOptions.Host property </keywords>
+      <value>The host name or IP address of proxy server. </value>
+    </member>
+    <member name="P:Devart.Common.ProxyOptions.Password">
+      <summary>Gets or sets the password for the proxy server account. </summary>
+      <keywords>ProxyOptions.Password property </keywords>
+      <value>The password for the proxy server account. </value>
+    </member>
+    <member name="P:Devart.Common.ProxyOptions.Port">
+      <summary>Gets or sets the port number of the proxy server. </summary>
+      <keywords>ProxyOptions.Port property </keywords>
+      <value>The port number of the proxy server. The default value is 3128. </value>
+    </member>
+    <member name="E:Devart.Common.ProxyOptions.PropertyChanged">
+      <summary>Occurs when one of the properties of the <see cref="T:Devart.Common.ProxyOptions" /> was changed. </summary>
+      <keywords>ProxyOptions.PropertyChanged event </keywords>
+    </member>
+    <member name="P:Devart.Common.ProxyOptions.ProxyAddress">
+      <summary>Gets the uniform resource identifier (URI), generated from the values of the <see cref="P:Devart.Common.ProxyOptions.Host" />, <see cref="P:Devart.Common.ProxyOptions.Port" />, <see cref="P:Devart.Common.ProxyOptions.User" />, and <see cref="P:Devart.Common.ProxyOptions.Password" /> properties. </summary>
+      <keywords>ProxyOptions.ProxyAddress property </keywords>
+    </member>
+    <member name="F:Devart.Common.ProxyOptions.ProxyHostKeyword">
+      <summary>Represents the name of proxy host parameter in the connection string. </summary>
+      <keywords>ProxyOptions.ProxyHostKeyword field </keywords>
+    </member>
+    <member name="F:Devart.Common.ProxyOptions.ProxyPasswordKeyword">
+      <summary>Represents the name of proxy password parameter in the connection string. </summary>
+      <keywords>ProxyOptions.ProxyPasswordKeyword field </keywords>
+    </member>
+    <member name="F:Devart.Common.ProxyOptions.ProxyPortKeyword">
+      <summary>Represents the name of proxy port parameter in the connection string. </summary>
+      <keywords>ProxyOptions.ProxyPortKeyword field </keywords>
+    </member>
+    <member name="F:Devart.Common.ProxyOptions.ProxyUserKeyword">
+      <summary>Represents the name of proxy user parameter in the connection string. </summary>
+      <keywords>ProxyOptions.ProxyUserKeyword field </keywords>
+    </member>
+    <member name="M:Devart.Common.ProxyOptions.ShouldSerialize()">
+      <summary>Indicates whether designers should serialize this instanse. </summary>
+      <keywords>ProxyOptions.ShouldSerialize method </keywords>
+      <returns><see langword="true" />, if this instance will be serialized; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.ProxyOptions.ToString()">
+      <summary>Returns a <see cref="T:System.String" /> that represents the current <see cref="T:Devart.Common.ProxyOptions" />. </summary>
+      <keywords>ProxyOptions.ToString method </keywords>
+    </member>
+    <member name="P:Devart.Common.ProxyOptions.User">
+      <summary>Gets or sets the proxy server account name. </summary>
+      <keywords>ProxyOptions.User property </keywords>
+      <value>The proxy server account name. </value>
+    </member>
+    <member name="T:Devart.Common.ProxyOptionsPropertyChanged">
+      <summary>Represents the method that will handle the <see cref="E:Devart.Common.ProxyOptions.PropertyChanged" /> event of the <see cref="T:Devart.Common.ProxyOptions" /> class. </summary>
+      <keywords>ProxyOptionsPropertyChanged delegate </keywords>
+      <param name="name">The name of the changed <see cref="T:Devart.Common.ProxyOptions" /> property. </param>
+      <param name="value">The new value of the <see cref="T:Devart.Common.ProxyOptions" /> property. </param>
+    </member>
+    <member name="T:Devart.Common.QueryRecordCountException">
+      <summary>Describes an error that is raised during record count request process. </summary>
+    </member>
+    <member name="T:Devart.Common.RefreshRowMode">
+      <summary>Describes autorefresh actions that can be taken by <see cref="T:Devart.Common.DbCommandBuilder" /> and <see cref="T:Devart.Common.DbDataTable" />. </summary>
+    </member>
+    <member name="F:Devart.Common.RefreshRowMode.AfterInsert">
+      <summary>Retrieve field values from the server after an INSERT statement execution. </summary>
+    </member>
+    <member name="F:Devart.Common.RefreshRowMode.AfterUpdate">
+      <summary>Retrieve field values from the server after an UPDATE statement execution. </summary>
+    </member>
+    <member name="F:Devart.Common.RefreshRowMode.Both">
+      <summary>Retrieve field values from the server after an execution of either INSERT or UPDATE statements. </summary>
+    </member>
+    <member name="F:Devart.Common.RefreshRowMode.None">
+      <summary>Never refresh field values from the server. </summary>
+    </member>
+    <member name="T:Devart.Common.RetryMode">
+      <summary>Specifies the application behavior when connection is lost. </summary>
+    </member>
+    <member name="F:Devart.Common.RetryMode.Raise">
+      <summary>An exception is raised. </summary>
+    </member>
+    <member name="F:Devart.Common.RetryMode.Reexecute">
+      <summary>Reconnect is performed and abortive operation is reexecuted. </summary>
+    </member>
+    <member name="T:Devart.Common.ScriptErrorEventArgs">
+      <summary>Provides data for the <see cref="E:Devart.Common.DbScript.Error" /> event of the <see cref="T:Devart.Common.DbScript" /> class. </summary>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.Exception">
+      <summary>Gets the <see cref="T:System.Exception" /> instance that <see cref="T:Devart.Common.DbScript" /> throws. </summary>
+      <keywords>ScriptErrorEventArgs.Exception property </keywords>
+      <value>An <see cref="T:System.Exception" /> instance that contains information specific to <see cref="T:Devart.Common.DbScript" /> error. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.Ignore">
+      <summary>Gets or sets whether the current error will be ignored or not. </summary>
+      <keywords>ScriptErrorEventArgs.Ignore property </keywords>
+      <value>
+        <see langword="true" /> if the current error will be ignored; otherwise <see langword="false" />. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.Length">
+      <summary>Gets length of statement where an error occurred. </summary>
+      <keywords>ScriptErrorEventArgs.Length property </keywords>
+      <value>Length of statement where an error occurred. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.LineNumber">
+      <summary>Gets number of the line where an error occurred. </summary>
+      <keywords>ScriptErrorEventArgs.LineNumber property </keywords>
+      <value>Number of the line where an error occurred. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.LinePosition">
+      <summary>Gets position in the line where an error occurred. </summary>
+      <keywords>ScriptErrorEventArgs.LinePosition property </keywords>
+      <value>Position in the line where an error occurred. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.Offset">
+      <summary>Gets offset of statement where an error occurred. </summary>
+      <keywords>ScriptErrorEventArgs.Offset property </keywords>
+      <value>Offset of statement where an error occurred. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.StatementType">
+      <summary>Gets type of the statement that caused an error. </summary>
+      <keywords>ScriptErrorEventArgs.StatementType property </keywords>
+      <value>One of the <see cref="T:Devart.Common.SqlStatementType" /> values. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptErrorEventArgs.Text">
+      <summary>Gets SQL statement where an error occurred. </summary>
+      <keywords>ScriptErrorEventArgs.Text property </keywords>
+      <value>SQL statement text where an error occurred. </value>
+    </member>
+    <member name="T:Devart.Common.ScriptErrorEventHandler">
+      <summary>Represents the method that will handle the <see cref="E:Devart.Common.DbScript.Error" /> event of the <see cref="T:Devart.Common.DbScript" />. </summary>
+      <keywords>ScriptErrorEventHandler delegate </keywords>
+      <param name="sender">The source of the event. </param>
+      <param name="e">The <see cref="T:Devart.Common.ScriptErrorEventArgs" /> object that contains the event data. </param>
+    </member>
+    <member name="T:Devart.Common.ScriptProgressEventArgs">
+      <summary>Provides data for the <see cref="E:Devart.Common.DbScript.Progress" /> event of the <see cref="T:Devart.Common.DbScript" /> class. </summary>
+    </member>
+    <member name="P:Devart.Common.ScriptProgressEventArgs.Length">
+      <summary>Gets length of the statement in symbols. </summary>
+      <keywords>ScriptProgressEventArgs.Length property </keywords>
+      <value>Length of the statement. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptProgressEventArgs.LineNumber">
+      <summary>Gets number of line in the whole script where the statement can be located. </summary>
+      <keywords>ScriptProgressEventArgs.LineNumber property </keywords>
+      <value>Number of line in the whole script. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptProgressEventArgs.LinePosition">
+      <summary>Gets position of the statement in its line. </summary>
+      <keywords>ScriptProgressEventArgs.LinePosition property </keywords>
+      <value>Position of the statement. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptProgressEventArgs.Offset">
+      <summary>Gets offset of the statement in the whole script text. </summary>
+      <keywords>ScriptProgressEventArgs.Offset property </keywords>
+      <value>Offset of the statement in the script text. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptProgressEventArgs.StatementType">
+      <summary>Gets type of the statement that is executed. </summary>
+      <keywords>ScriptProgressEventArgs.StatementType property </keywords>
+      <value>One of the <see cref="T:Devart.Common.SqlStatementType" /> values. </value>
+    </member>
+    <member name="P:Devart.Common.ScriptProgressEventArgs.Text">
+      <summary>Gets SQL statement that has been executed. </summary>
+      <keywords>ScriptProgressEventArgs.Text property </keywords>
+      <value>SQL statement. </value>
+    </member>
+    <member name="T:Devart.Common.ScriptProgressEventHandler">
+      <summary>Represents the method that will handle the <see cref="E:Devart.Common.DbScript.Progress" /> event of the <see cref="T:Devart.Common.DbScript" />. </summary>
+      <keywords>ScriptProgressEventHandler delegate </keywords>
+      <param name="sender">The source of the event. </param>
+      <param name="e">The <see cref="T:Devart.Common.ScriptErrorEventArgs" /> object that contains the event data. </param>
+    </member>
+    <member name="T:Devart.Common.SqlStatement">
+      <summary>Represents a single statement in a script. </summary>
+    </member>
+    <member name="M:Devart.Common.SqlStatement.Execute()">
+      <summary>Executes the statement and returns result set. </summary>
+      <keywords>SqlStatement.Execute method </keywords>
+      <returns>Result set returned by the statement execution. </returns>
+    </member>
+    <member name="M:Devart.Common.SqlStatement.ExecuteNonQuery()">
+      <summary>Executes the statement. </summary>
+      <keywords>SqlStatement.ExecuteNonQuery method </keywords>
+    </member>
+    <member name="P:Devart.Common.SqlStatement.Length">
+      <summary>Gets length of the statement in symbols. </summary>
+      <keywords>SqlStatement.Length property </keywords>
+      <value>Length of the statement in symbols. </value>
+    </member>
+    <member name="P:Devart.Common.SqlStatement.LineNumber">
+      <summary>Gets number of line in the whole script where the statement can be located. </summary>
+      <keywords>SqlStatement.LineNumber property </keywords>
+      <value>Number of line in the whole script. </value>
+    </member>
+    <member name="P:Devart.Common.SqlStatement.LinePosition">
+      <summary>Gets position of the statement in its line. </summary>
+      <keywords>SqlStatement.LinePosition property </keywords>
+      <value>Position of the statement. </value>
+    </member>
+    <member name="P:Devart.Common.SqlStatement.Offset">
+      <summary>Gets offset of the statement in the whole script text. </summary>
+      <keywords>SqlStatement.Offset property </keywords>
+      <value>Offset of the statement in the script text. </value>
+    </member>
+    <member name="P:Devart.Common.SqlStatement.StatementType">
+      <summary>Gets type of the statement. </summary>
+      <keywords>SqlStatement.StatementType property </keywords>
+      <value>One of the <see cref="T:Devart.Common.SqlStatementType" /> values. </value>
+    </member>
+    <member name="P:Devart.Common.SqlStatement.Text">
+      <summary>Gets SQL statement to be executed. </summary>
+      <keywords>SqlStatement.Text property </keywords>
+      <value>SQL statement. </value>
+    </member>
+    <member name="T:Devart.Common.SqlStatementCollection">
+      <summary>Represents collection of statements that constitute SQLite script. </summary>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.#ctor()">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.SqlStatementCollection" /> class. </summary>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.Add(Devart.Common.SqlStatement)">
+      <summary>Not used in <see cref="T:Devart.Common.SqlStatementCollection" />. </summary>
+      <keywords>SqlStatementCollection.Add method </keywords>
+      <param name="value"> </param>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.Contains(Devart.Common.SqlStatement)">
+      <summary>Gets a value indicating whether a <see cref="T:Devart.Common.SqlStatement" /> object exists in the collection. </summary>
+      <keywords>SqlStatementCollection.Contains method </keywords>
+      <param name="value">The value of the <see cref="T:Devart.Common.SqlStatement" /> object to find. </param>
+      <returns>
+        <see langword="true" /> if the collection contains the <see cref="T:Devart.Common.SqlStatement" />; otherwise, <see langword="false" />. </returns>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.CopyTo(Devart.Common.SqlStatement[],System.Int32)">
+      <summary>Copies <see cref="T:Devart.Common.SqlStatement" /> objects from the <see cref="T:Devart.Common.SqlStatementCollection" /> to the specified array. </summary>
+      <keywords>SqlStatementCollection.CopyTo method </keywords>
+      <param name="array">The array into which to copy the <see cref="T:Devart.Common.SqlStatement" /> objects. </param>
+      <param name="index">The zero-based index of the object to copy. </param>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.IndexOf(Devart.Common.SqlStatement)">
+      <summary>Gets the location in the collection of the <see cref="T:Devart.Common.SqlStatement" /> object. </summary>
+      <keywords>SqlStatementCollection.IndexOf method </keywords>
+      <param name="value">The <see cref="T:Devart.Common.SqlStatement" /> object to find. </param>
+      <returns>The zero-based location of the <see cref="T:Devart.Common.SqlStatement" /> in the collection. </returns>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.Insert(System.Int32,Devart.Common.SqlStatement)">
+      <summary>Not used in <see cref="T:Devart.Common.SqlStatementCollection" />. </summary>
+      <keywords>SqlStatementCollection.Insert method </keywords>
+      <param name="index"> </param>
+      <param name="value"> </param>
+    </member>
+    <member name="P:Devart.Common.SqlStatementCollection.Item(System.Int32)">
+      <summary>Gets the <see cref="T:Devart.Common.SqlStatement" /> at the specified index. </summary>
+      <keywords>SqlStatementCollection.Item property </keywords>
+      <param name="index">The zero-based index of the statement. </param>
+      <value>The <see cref="T:Devart.Common.SqlStatement" /> at the specified index. </value>
+    </member>
+    <member name="M:Devart.Common.SqlStatementCollection.Remove(Devart.Common.SqlStatement)">
+      <summary>Not used in <see cref="T:Devart.Common.SqlStatementCollection" />. </summary>
+      <keywords>SqlStatementCollection.Remove method </keywords>
+      <param name="value"> </param>
+    </member>
+    <member name="T:Devart.Common.SqlStatementType">
+      <summary>Describes type of a statement in a script. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Alter">
+      <summary>An ALTER statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Batch">
+      <summary>A complex construction like script or statement block. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Commit">
+      <summary>A COMMIT statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Create">
+      <summary>A CREATE statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Delete">
+      <summary>A DELETE statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Drop">
+      <summary>A DROP statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Execute">
+      <summary>An EXECUTE statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Extended">
+      <summary>A construction that does not represent usual SQL statements. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Insert">
+      <summary>An INSERT statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Rollback">
+      <summary>A ROLLBACK statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Select">
+      <summary>A SELECT statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Truncate">
+      <summary>A TRUNCATE statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Unknown">
+      <summary>Unknown statement type. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.Update">
+      <summary>An UPDATE statement. </summary>
+    </member>
+    <member name="F:Devart.Common.SqlStatementType.With">
+      <summary>A WITH statement. </summary>
+    </member>
+    <member name="T:Devart.Common.TransactionAction">
+      <summary>Indicates the operation, that is being performed or has been performed in the transaction in the <see cref="E:Devart.Common.DbTransactionBase.StateChanged" /> or <see cref="E:Devart.Common.DbTransactionBase.StateChanging" /> events. </summary>
+    </member>
+    <member name="F:Devart.Common.TransactionAction.BeginTransaction">
+      <summary>Transaction is being started or has been started. </summary>
+    </member>
+    <member name="F:Devart.Common.TransactionAction.Commit">
+      <summary>Transaction is being committed or has been committed. </summary>
+    </member>
+    <member name="F:Devart.Common.TransactionAction.ReleaseSavepoint">
+      <summary>Savepoint is being released or has been released. </summary>
+    </member>
+    <member name="F:Devart.Common.TransactionAction.Rollback">
+      <summary>Transaction is being rolled back or has been rolled back. </summary>
+    </member>
+    <member name="F:Devart.Common.TransactionAction.RollbackToSavepoint">
+      <summary>Transaction is being rolled back to savepoint or has been rolled back to savepoint. </summary>
+    </member>
+    <member name="F:Devart.Common.TransactionAction.Savepoint">
+      <summary>The savepoint is being created or has been created. </summary>
+    </member>
+    <member name="T:Devart.Common.TransactionStateChangeEventArgs">
+      <summary>Base class for <see cref="T:Devart.Common.TransactionStateChangedEventArgs" /> and <see cref="T:Devart.Common.TransactionStateChangingEventArgs" /> classes. </summary>
+    </member>
+    <member name="P:Devart.Common.TransactionStateChangeEventArgs.Action">
+      <summary>Indicates the operation that is being performed or has been performed in the transaction when the <see cref="E:Devart.Common.DbTransactionBase.StateChanged" /> or <see cref="E:Devart.Common.DbTransactionBase.StateChanging" /> event occurs. </summary>
+      <keywords>TransactionStateChangeEventArgs.Action property </keywords>
+      <value>One of the <see cref="T:Devart.Common.TransactionAction" /> values. </value>
+    </member>
+    <member name="T:Devart.Common.TransactionStateChangedEventArgs">
+      <summary>Provides data for the <see cref="E:Devart.Common.DbTransactionBase.StateChanged" /> event of the <see cref="T:Devart.Common.DbTransactionBase" /> class. </summary>
+    </member>
+    <member name="M:Devart.Common.TransactionStateChangedEventArgs.#ctor(Devart.Common.TransactionAction)">
+      <summary>Initializes an instance of the <see cref="T:Devart.Common.TransactionStateChangedEventArgs" /> class. </summary>
+      <param name="action">The operation that is being performed or has been performed in the transaction when the <see cref="E:Devart.Common.DbTransactionBase.StateChanged" /> event occurs. </param>
+    </member>
+    <member name="T:Devart.Common.TransactionStateChangedEventHandler">
+      <summary>Represents the method that will handle the <see cref="E:Devart.Common.DbTransactionBase.StateChanged" /> event of <see cref="T:Devart.Common.DbTransactionBase" /> descendants. </summary>
+      <keywords>TransactionStateChangedEventHandler delegate </keywords>
+      <param name="sender">The source of the event. </param>
+      <param name="e">The <see cref="T:Devart.Common.TransactionStateChangedEventArgs" /> object that contains the event data. </param>
+    </member>
+    <member name="T:Devart.Common.TransactionStateChangingEventArgs">
+      <summary>Provides data for the <see cref="E:Devart.Common.DbTransactionBase.StateChanging" /> event of the <see cref="T:Devart.Common.DbTransactionBase" /> class. </summary>
+    </member>
+    <member name="M:Devart.Common.TransactionStateChangingEventArgs.#ctor(Devart.Common.TransactionAction)">
+      <summary>Initializes a new instance of the <see cref="T:Devart.Common.TransactionStateChangingEventArgs" /> class. </summary>
+      <param name="action">The operation that is being performed or has been performed in the transaction when the <see cref="E:Devart.Common.DbTransactionBase.StateChanging" /> event occurs. </param>
+    </member>
+    <member name="T:Devart.Common.TransactionStateChangingEventHandler">
+      <summary>Represents the method that will handle the <see cref="E:Devart.Common.DbTransactionBase.StateChanging" /> event of <see cref="T:Devart.Common.DbTransactionBase" /> descendants. </summary>
+      <keywords>TransactionStateChangingEventHandler delegate </keywords>
+      <param name="sender">The source of the event. </param>
+      <param name="e">The <see cref="T:Devart.Common.TransactionStateChangingEventArgs" /> object that contains the event data. </param>
+    </member>
+    <member name="N:Devart.Data">
+      <summary>The <see cref="N:Devart.Data" /> namespace contains classes shared by the Devart data providers. </summary>
+    </member>
+    <member name="T:Devart.Data.DataLink">
+      <summary>Allows establishing flexible cross-form data binding. </summary>
+    </member>
+    <member name="M:Devart.Data.DataLink.#ctor()">
+      <summary>Creates a new instance of the <see cref="T:Devart.Data.DataLink" /> class. </summary>
+    </member>
+    <member name="M:Devart.Data.DataLink.AddNew()">
+      <summary>Adds a new item to the underlying list. </summary>
+      <keywords>DataLink.AddNew method </keywords>
+      <returns>The <see cref="T:System.Object" /> that was created and added to the list. </returns>
+    </member>
+    <member name="P:Devart.Data.DataLink.CurrentRow">
+      <summary>Gets the current data row, which can be changed by user by changing position in the data grid or data controls. </summary>
+      <keywords>DataLink.CurrentRow property </keywords>
+      <value>The current data row, which can be changed by user by changing position in the data grid or data controls. </value>
+    </member>
+    <member name="P:Devart.Data.DataLink.DataMember">
+      <summary>Gets or sets the specific data member in a multimember data source to bind to a data listing control. </summary>
+      <keywords>DataLink.DataMember property </keywords>
+      <value>A data member from a multimember data source. The default value is an empty string. </value>
+    </member>
+    <member name="P:Devart.Data.DataLink.DataSource">
+      <summary>Gets or sets the source containing a list of values used to populate the items within the control. </summary>
+      <keywords>DataLink.DataSource property </keywords>
+      <value>An IEnumerable or IListSource that contains a collection of values used to supply data to this control. The default value is a null reference. </value>
+    </member>
+    <member name="M:Devart.Data.DataLink.Find(System.String,System.Object)">
+      <summary>Returns the index of the item in the list with the specified property name and value. </summary>
+      <keywords>DataLink.Find method </keywords>
+      <param name="propertyName">The name of the property to search for. </param>
+      <param name="key">The value of the item with the specified name to find. </param>
+      <returns>The zero-based index of the item, having the specified property name and value. </returns>
+    </member>
+    <member name="P:Devart.Data.DataLink.List">
+      <summary>Gets the list that the connector is bound to. </summary>
+      <keywords>DataLink.List property </keywords>
+      <value>The list that the connector is bound to. </value>
+    </member>
+    <member name="P:Devart.Data.DataLink.Name">
+      <summary>Gets or sets name of the <see cref="T:Devart.Data.DataLink" />. </summary>
+      <keywords>DataLink.Name property </keywords>
+      <value>Name of the <see cref="T:Devart.Data.DataLink" />. </value>
+    </member>
+    <member name="P:Devart.Data.DataLink.Owner">
+      <summary>Gets or sets a form or other container that the <see cref="T:Devart.Data.DataLink" /> instance belongs to. </summary>
+      <keywords>DataLink.Owner property </keywords>
+      <value>A form or other container that the object belongs to. </value>
+    </member>
+    <member name="P:Devart.Data.DataLink.Position">
+      <summary>Gets or sets the index of the current item in the underlying list. </summary>
+      <keywords>DataLink.Position property </keywords>
+      <value>The zero-based index of the current item in the underlying list. </value>
+    </member>
+    <member name="P:Devart.Data.DataLink.SeparateEditing">
+      <summary>Puts separate filters over the DataView object that was created. </summary>
+      <keywords>DataLink.SeparateEditing property </keywords>
+    </member>
+    <member name="P:Devart.Data.DataLink.Synchronized">
+      <summary>Gets or sets a value indicating whether to synchronize current position with other <see cref="T:Devart.Data.DataLink" /> instances that reference the same data source. </summary>
+      <keywords>DataLink.Synchronized property </keywords>
+      <value>If <see lang="true" />, navigation in this instance of <see cref="T:Devart.Data.DataLink" /> will affect other instances. The default value is false. </value>
+    </member>
+  </members>
+</doc>
