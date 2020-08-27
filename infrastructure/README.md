@@ -60,6 +60,12 @@ The lab files are located in a GitHub repo. You must unzip the file and extract 
 
 1. Download the ZIP file for the lab from <https://github.com/solliancenet/azure-synapse-in-a-day-demos/archive/master.zip>.
 
+2. Extract the files to **`C:\`**. This will create a folder named `azure-synapse-in-a-day-demos-master` at the root of your C: drive.
+
+    ![The extract zipped folders dialog is displayed.](media/unzip.png "Extract Compressed (Zipped) Folders")
+
+3. 
+
 ## Exercise 1: Deploy Azure Synapse Analytics
 
 Time required: 10 minutes
