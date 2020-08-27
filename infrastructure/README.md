@@ -80,7 +80,7 @@ The first step is to deploy and configure the resources. It's easy to do from th
 
     | Parameters | Settings | Remarks |
     | --- | --- | --- |
-    | Subscription | Any | If you are unsure, please contact the person in charge of billing management. |
+    | Subscription | Any | Select the Azure subscription used for this lab. |
     | Resource group | `synapse-lab-infrastructure` | Select **Create new**, then enter the name. |
     | Workspace name | `synapselabinfra` + your initials + `asws` (example: `synapselabinfrajdhasws`) | Lowercase alphanumeric characters only |
     | Region | Select the region closest to you, such as `West US`. | |
