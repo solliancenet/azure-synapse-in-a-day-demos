@@ -1,5 +1,20 @@
 # Azure Synapse in a day demos - Infrastructure
 
+- [Azure Synapse in a day demos - Infrastructure](#azure-synapse-in-a-day-demos---infrastructure)
+  - [Overview](#overview)
+  - [Building analytic solutions with Azure Synapse Analytics (Basic)](#building-analytic-solutions-with-azure-synapse-analytics-basic)
+    - [About the latest data analysis infrastructure](#about-the-latest-data-analysis-infrastructure)
+    - [Scenario](#scenario)
+    - [Hands-on architecture](#hands-on-architecture)
+  - [Exercise 0: Download lab files](#exercise-0-download-lab-files)
+  - [Exercise 1: Deploy Azure Synapse Analytics](#exercise-1-deploy-azure-synapse-analytics)
+    - [Task 1: Create Azure Synapse Analytics workspace](#task-1-create-azure-synapse-analytics-workspace)
+    - [Task 2: Log in to Synapse Studio](#task-2-log-in-to-synapse-studio)
+  - [Exercise 2: Moving data to the data lake using Copy activity](#exercise-2-moving-data-to-the-data-lake-using-copy-activity)
+    - [About Synapse Pipeline](#about-synapse-pipeline)
+    - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
+    - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
+
 ## Overview
 
 This is a hands-on lab for infrastructure, telecommunications, transportation, and manufacturing using Azure Synapse Analytics. It provides step-by-step procedures for basic analysis platform construction, IoT sensor data visualization, and predictive maintenance features.
@@ -64,7 +79,9 @@ The lab files are located in a GitHub repo. You must unzip the file and extract 
 
     ![The extract zipped folders dialog is displayed.](media/unzip.png "Extract Compressed (Zipped) Folders")
 
-3. 
+3. Navigate to `C:\azure-synapse-in-a-day-demos-master\infrastructure\source` to view the files.
+
+    ![The extracted files are displayed in Windows Explorer.](media/extracted-files.png "Extracted files")
 
 ## Exercise 1: Deploy Azure Synapse Analytics
 
