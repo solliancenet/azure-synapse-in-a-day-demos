@@ -102,3 +102,19 @@ The first step is to deploy and configure the resources. It's easy to do from th
 8. Review the settings, then select **Create**. It takes around five minutes to create the workspace.
 
     ![The Create button is highlighted.](media/create-synapse-5.png "Create Synapse workspace review")
+
+### Task 2: Log in to Synapse Studio
+
+1. When the Azure Synapse Analytics workspace deployment completes, navigate to the resource. You can do this either by selecting **Go to resource** in the deployment completion dialog, or by navigating to the `synapse-lab-infrastructure` resource group and selecting the workspace within.
+
+2. In the **Overview** blade, select the **Workspace web URL** to navigate to Synapse Studio for this workspace.
+
+    ![The workspace web URL is highlighted.](media/synapse-workspace-url.png "Workspace web URL")
+
+    After authenticating your account, you should see the Synapse Studio home page for your workspace.
+
+    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
+
+3. If you see the Getting started dialog, select **Close**.
+
+    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
