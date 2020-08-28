@@ -9,11 +9,16 @@
   - [Exercise 0: Download lab files](#exercise-0-download-lab-files)
   - [Exercise 1: Deploy Azure Synapse Analytics](#exercise-1-deploy-azure-synapse-analytics)
     - [Task 1: Create Azure Synapse Analytics workspace](#task-1-create-azure-synapse-analytics-workspace)
-    - [Task 2: Log in to Synapse Studio](#task-2-log-in-to-synapse-studio)
+    - [Task 2: Set up blob data owner](#task-2-set-up-blob-data-owner)
+    - [Task 3: Set up user access administrator](#task-3-set-up-user-access-administrator)
+    - [Task 4: Log in to Synapse Studio](#task-4-log-in-to-synapse-studio)
   - [Exercise 2: Moving data to the data lake using Copy activity](#exercise-2-moving-data-to-the-data-lake-using-copy-activity)
     - [About Synapse Pipeline](#about-synapse-pipeline)
     - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
     - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
+  - [Exercise 3: Create a SQL Pool](#exercise-3-create-a-sql-pool)
+    - [Task 1: Create a SQL Pool](#task-1-create-a-sql-pool)
+    - [Task 2: Create table](#task-2-create-table)
 
 ## Overview
 
@@ -71,6 +76,8 @@ To build the architecture, complete the following tasks:
 
 ## Exercise 0: Download lab files
 
+Time required: 5 minutes
+
 The lab files are located in a GitHub repo. You must unzip the file and extract it to your desktop so you can access them throughout the lab.
 
 1. Download the ZIP file for the lab from <https://github.com/solliancenet/azure-synapse-in-a-day-demos/archive/master.zip>.
@@ -85,7 +92,7 @@ The lab files are located in a GitHub repo. You must unzip the file and extract 
 
 ## Exercise 1: Deploy Azure Synapse Analytics
 
-Time required: 10 minutes
+Time required: 15 minutes
 
 The first step is to deploy and configure the resources. It's easy to do from the Azure Portal.
 
@@ -132,9 +139,45 @@ The first step is to deploy and configure the resources. It's easy to do from th
 
     ![The Create button is highlighted.](media/create-synapse-5.png "Create Synapse workspace review")
 
-### Task 2: Log in to Synapse Studio
+### Task 2: Set up blob data owner
 
-1. When the Azure Synapse Analytics workspace deployment completes, navigate to the resource. You can do this either by selecting **Go to resource** in the deployment completion dialog, or by navigating to the `synapse-lab-infrastructure` resource group and selecting the workspace within.
+Data access permissions on the data lake must be set separately from the resource's permissions.
+
+1. When the Azure Synapse Analytics workspace deployment completes, navigate to the `synapse-lab-infrastructure` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-infrastructure`, then select the **synapse-lab-infrastructure** resource group in the search results under **Resource Groups**.
+
+    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
+
+2. Within the resource group, select the storage account you created when you deployed the Azure Synapse Analytics workspace.
+
+    ![The storage account is highlighted in the resource group.](media/resource-group-storage-account.png "Resource group")
+
+3. Within the storage account, select **Access control (IAM)**. Select **+ Add**, then **Add role assignment**.
+
+    ![The access control blade is displayed.](media/storage-iam.png "Access control")
+
+4. Select the **Storage Blob Data Owner** role. Select **Azure AD user, group, or service principal** under assign access to. Search for and select your Azure account, then select **Save**.
+
+    ![The add role assignment form is configured as described.](media/storage-add-role-assignment.png "Add role assignment")
+
+### Task 3: Set up user access administrator
+
+1. Return to the `synapse-lab-infrastructure` resource group and select the Azure Synapse Analytics workspace within.
+
+    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
+
+2. Within the Synapse workspace, select **Access control (IAM)**. Select **+ Add**, then **Add role assignment**.
+
+    ![The access control blade is displayed.](media/synapse-iam.png "Access control")
+
+3. Select the **User Access Administrator** role. Select **Azure AD user, group, or service principal** under assign access to. Search for and select your Azure account, then select **Save**.
+
+    ![The add role assignment form is configured as described.](media/synapse-add-role-assignment.png "Add role assignment")
+
+### Task 4: Log in to Synapse Studio
+
+1. Return to the `synapse-lab-infrastructure` resource group and select the Azure Synapse Analytics workspace within.
+
+    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
 
 2. In the **Overview** blade, select the **Workspace web URL** to navigate to Synapse Studio for this workspace.
 
@@ -270,3 +313,92 @@ The data integration feature, Synapse Pipeline, is designed with the following c
 16. Select the **Data** hub, select the **Linked** tab, expand storage accounts, then select **datalake** underneath the primary storage account. You will see the imported data on the right-hand side.
 
     ![The datalake data is displayed.](media/datalake-files.png "Datalake files")
+
+## Exercise 3: Create a SQL Pool
+
+Time required: 20 minutes
+
+> TODO: Update image
+
+SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data.
+
+A SQL pool offers T-SQL based compute and storage capabilities. After creating a SQL pool in your Synapse workspace, data can be loaded, modeled, processed, and delivered for faster analytic insight.
+
+### Task 1: Create a SQL Pool
+
+1. Select the **Manage** hub.
+
+    ![The manage hub is highlighted.](media/manage-hub.png "Manage hub")
+
+2. Select **SQL pools**, then select **+ New**.
+
+    ![The SQL pools blade is displayed.](media/new-sql-pool.png "SQL pools")
+
+3. Enter **aiaddw** for the SQL pool name, select the **DW100c** performance level, then select **Review + create**.
+
+    ![The form is displayed as described.](media/new-sql-pool-form.png "Create SQL pool")
+
+4. Select **Create** in the review blade.
+
+5. Wait for the SQL pool deployment to complete. You may need to periodically select **Refresh** to update the status.
+
+    ![The SQL pool is deploying and the refresh button is highlighted.](media/sql-pool-deploying.png "SQL pools")
+
+### Task 2: Create table
+
+1. Select the **Develop** hub.
+
+    ![The Develop hub is selected.](media/develop-hub.png "Develop hub")
+
+2. Select **+**, then select **SQL script**.
+
+    ![The new SQL script is selected.](media/new-sql-script.png "New SQL script")
+
+3. Enter **Create DelaySummary** in the Name value within the Properties blade. Select the **aiaddw** SQL pool you created in the previous task. Paste the script below into the script area, then select **Run**.
+
+    ```sql
+    --Set up Polybase
+    CREATE MASTER KEY
+
+    --Create destination table
+    CREATE TABLE [dbo].[DelaySummary]
+    ( 
+        [Year] int NULL,
+        [Month] int NULL,
+        [DayofMonth] int NULL,
+        [DayOfWeek] int NULL,
+        [OriginAirportCode] [nvarchar](10)  NULL,
+        [DepDelayCount] [bigint] NULL,
+        [DepDelay15Count] [bigint] NULL,
+        [AIRPORT_ID] [nvarchar](20) NULL,
+        [AIRPORT] [nvarchar](100)  NULL,
+        [DISPLAY_AIRPORT_NAME] [nvarchar](100) NULL,
+        [LATITUDE] [nvarchar](20)  NULL,
+        [LONGITUDE] [nvarchar](20)  NULL
+    ) WITH
+    (
+        DISTRIBUTION = ROUND_ROBIN,
+        CLUSTERED COLUMNSTORE INDEX
+    )
+    GO
+    ```
+
+    ![The DelaySummary script is displayed.](media/delaysummary-script.png "New SQL script")
+
+4. After you run the script, you should see a status that the script executed successfully.
+
+    ![The script successfully completed.](media/delaysummary-script-successful.png "Query executed successfully")
+
+5. Select **Publish all**, then select **Publish** in the dialog.
+
+    ![Publish all is highlighted.](media/publish-all.png "Publish all")
+
+    > ※	For the remainder of the lab, select **Publish** as appropriate to save your work.
+
+6. Select the **Data** hub.
+
+    ![The data hub is selected.](media/data-hub.png "Data hub")
+
+7. Select the **Workspace** tab, expand **Databases**, expand the **aiaddw** SQL pool, and expand **Tables**. You will see the `DelaySummary` table. If it does not appear, select **Refresh**.
+
+    ![The DelaySummary table is displayed.](media/delaysummary-table.png "DelaySummary table")
