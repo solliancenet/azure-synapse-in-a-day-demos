@@ -38,6 +38,14 @@
     - [Task 4: Create a Power BI workspace (optional)](#task-4-create-a-power-bi-workspace-optional)
     - [Task 5: Create a Power BI Linked Service (optional)](#task-5-create-a-power-bi-linked-service-optional)
     - [Task 6: Create a Power BI dataset (optional)](#task-6-create-a-power-bi-dataset-optional)
+  - [Build a predictive maintenance solutions with Azure Synapse Analytics (Advanced)](#build-a-predictive-maintenance-solutions-with-azure-synapse-analytics-advanced)
+    - [About Lambda Architecture](#about-lambda-architecture)
+    - [Scenario](#scenario-1)
+    - [Hands-on architecture](#hands-on-architecture-1)
+  - [Exercise 6: Create stream processing](#exercise-6-create-stream-processing)
+    - [Task 1: IoT Hub resource creation](#task-1-iot-hub-resource-creation)
+    - [Task 2: Event source settings](#task-2-event-source-settings)
+    - [Task 3: Create and configure Stream Analytics resources](#task-3-create-and-configure-stream-analytics-resources)
 
 ## Overview
 
@@ -58,7 +66,6 @@ To complete this lab, you must meet the following pre-requisites:
 4. [Power BI Pro license](https://powerbi.microsoft.com/power-bi-pro/) (can start a trial version of Pro).
 
     > If you have permission to publish reports to your Workspace (≠My Workspace), you can create Power BI Reports on Synapse. (Required: Power BI Pro license). If not, you can create a Report solely with Power BI Desktop.
-
 
 ## Building analytic solutions with Azure Synapse Analytics (Basic)
 
@@ -989,3 +996,314 @@ If you were able to create a Power BI workspace, you can continue with this task
 19. When the screen for the new report opens, run the report.
 
     ![The new Power BI report is displayed.](media/pbi-new-report.png "New report")
+
+## Build a predictive maintenance solutions with Azure Synapse Analytics (Advanced)
+
+### About Lambda Architecture
+
+The Lambda architecture is a common pattern in Big Data infrastructures.
+
+![Lambda architecture.](media/lambda-architecture.png "Lambda architecture")
+
+(https://docs.microsoft.com/azure/architecture/data-guide/big-data/#lambda-architecture)
+
+- **Batch layer, service layer**
+
+    Distributed processing has made it possible to process large amounts of data within business hours. Perform accumulation and distribution processing on the batch layer. By deploying the results of calculations on the service layer, you can analyze large amounts of data while ensuring separation of calculated results and raw data.
+    Periodic data processing flows sourced from pre-accumulated data are defined as cold paths.
+
+- **Speed layer**
+
+    Processing at the batch layer usually causes latency. The speed layer complements the weakness of latency during batch processing and enables real-time analysis of stream data arriving within batch processing schedule intervals. Continuous data processing flows sourced from stream data are defined as hot paths.
+
+### Scenario
+
+Build solutions for analysis and predictive maintenance of sensor data in aircraft engines. In predictive maintenance, it is possible to improve maintenance efficiency by predicting how long maintenance will be required (remaining service time: RUL) by using a model trained with machine learning.
+
+The lambda architecture can be constructed on Azure with Azure Synapse Analytics and PaaS for IoT data.
+
+This section of the lab demonstrates near-real-time visualization of engine sensor data defined in JSON, distributed and machine learning processing for accumulated large amounts of data, and DWH loading and visualization.
+
+### Hands-on architecture
+
+> TODO: Update image
+
+To build the architecture, complete the following tasks:
+
+- Create real-time aggregation of sensor data and raw data storage processing in the data lake
+- Create SQL query view to processed sensor data in data lake
+- Run sensor data near-real-time visualization report
+- Perform structured processing with Spark
+- Process scoring and create load processing to DWH
+- Run sensor data analysis report
+
+## Exercise 6: Create stream processing
+
+Time required: 30 minutes
+
+> TODO: Update image
+
+Create IoT Hub, Stream Analytics, receive sensor data, and implement real-time processing.
+
+Stream Analytics coordinates sensor data received in JSON format with the data lake, and outputs the results of the average value at 30-second intervals in parallel as a parquet file.
+
+**Note:**
+
+The ability to output from Azure Stream Analytics to Synapse SQL Pool with high throughput of 200 MB/s has been announced.
+
+Using Azure Stream Analytics with Azure Synapse Analytics: (https://docs.microsoft.com/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-integrate-azure-stream-analytics)
+
+**Note:**
+
+Synapse Link with Cosmos DB can now be converted to column-oriented format with No-ETL to take advantage of data in column-oriented formats, such as Parquet file conversion.
+
+Azure Synapse Link for Azure Cosmos DB: (https://docs.microsoft.com/azure/cosmos-db/synapse-link)
+
+### Task 1: IoT Hub resource creation
+
+1. Navigate to the Azure portal (<https://portal.azure.com>) to create the IoT Hub resource.
+
+2. In the search menu, type **IoT Hub**, then select **IoT Hub**.
+
+    ![IoT Hub is highlighted in the search box, and the IoT Hub item in the results is highlighted.](media/search-iot-hub.png "IoT Hub search")
+
+3. Select **Add**.
+
+    ![The add button is selected.](media/iot-hub-add.png "Add")
+
+4. In the `Create Synapse workspace` form, enter the values shown in the table below. Select **Review + create**.
+
+    ![The form is shown as described below.](media/create-iot-hub.png "Create IoT Hub")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Subscription | Any | Select the Azure subscription used for this lab. |
+    | Resource group | `synapse-lab-infrastructure` | Select existing resource group you have been using for this lab |
+    | Region | Select the region closest to you, such as `West US`. | |
+    | Workspace name | `synapselabinfra` + your initials + `ioth` (example: `synapselabinfrajdhioth`) | Lowercase alphanumeric characters only |
+
+5. Review the settings, then select **Create**. It takes a few minutes to create the resource.
+
+    ![The Create button is highlighted.](media/create-iot-hub-create.png "Create IoT Hub")
+
+6. When the deployment completes, navigate to the IoT Hub resource by selecting **Go to resource**. Alternately, you may navigate to the `synapse-lab-infrastructure` resource group and select the IoT Hub resource there.
+
+    ![Go to resource is highlighted.](media/iot-hub-deployed.png "Your deployment is complete")
+
+7. Select **IoT devices** in the left-hand menu, then select **+ New** in the IoT devices blade.
+
+    ![The IoT devices menu item is highlighted, as well as the New button on its blade.](media/iot-devices.png "IoT devices")
+
+8. Enter **vdev01** as the Device ID, select the **Symmetric key** authentication type, **Check** auto-generate key, and **Enable** the option to connect this device to an IoT Hub. Select **Save**.
+
+    ![The form is configured as described.](media/iot-device-create.png "Create a device")
+
+9. Select the device ID of the new device you created.
+
+    ![The new IoT device is highlighted.](media/iot-device-select.png "IoT device")
+
+10. Copy the **Primary Key** and save it to Notepad or similar text editor for later.
+
+    ![The device's primary key is highlighted.](media/iot-device-primary-key.png "Primary key")
+
+11. Navigate back to the IoT Hub resource and select **Built-in endpoints** on the left-hand menu. Scroll down to **Consumer Groups**. In the **Create a new consumer group** box, enter **streamanalytics**. Select **Save** to apply your changes.
+
+    ![The streamanalytics consumer group is highlighted.](media/iot-hub-consumer-group.png "Built-in endpoints")
+
+### Task 2: Event source settings
+
+In this task, we configure the `IoTVirtualDevices` virtual device simulator that simulates and sends sensor data to Azure.
+
+1. Select **Overview** in the left-hand menu of your IoT Hub. Copy the **Hostname** value and save it to Notebook or similar text editor for later.
+
+    ![Hostname is highlighted in the Overview blade.](media/iot-hub-hostname.png "Overview")
+
+2. Navigate to the location on your computer or Windows VM where you extracted the ZIP file for this lab. If you extracted it to `C:\`, navigate to `C:\azure-synapse-in-a-day-demos-master\infrastructure\source\IoTVirtualDevices\Release`. Open **IoTVirtualDevices.exe.config**.
+
+    ![The config file is highlighted.](media/iotvirtualdevices-path.png "Windows Explorer")
+
+3. Enter the **IoT Hub hostname** that you copied previously and save the configuration file, overwriting the previous value.
+
+    ![The setting to update is highlighted.](media/config-hostname.png "Configuration file")
+
+    ```xml
+    <setting name="IOT_HUB_NAME" serializeAs="String">
+        <value> YOUR_IOT_HUB_HOSTNAME_HERE </value>
+    </setting>
+    ```
+
+4. Close the file and, in the same directory, open **device_info.csv**. Enter the **Primary key** for the IoT device that you copied earlier, then save the file.
+
+    ![The file and primary key value are both highlighted.](media/config-device-info.png "device_info.csv")
+
+    ```text
+    DEVICE_ID,DEVICE_TYPE,SIGNING_KEY,DESCRIPTION
+    vdev01,1,YOUR_PRIMARY_KEY_HERE,AIAD
+    ```
+
+5. Close the file and, in the same directory, right-click **IoTVirtualDevices.exe** and select **Run as administrator**.
+
+    ![The executable and Run as administrator option are both highlighted.](media/run-exe-administrator.png "Run as administrator")
+
+6. If you receive a prompt asking you if you want to allow this app from an unknown publisher to make changes to your device, click **Yes**.
+
+    ![The Yes button is highlighted.](media/unknown-publisher.png "Unknown publisher")
+
+7. When the Virtual Devices application starts, click **File**, and then click **Normal Telemetry Data File Load**.
+
+    ![Select File, then Normal Telemetry Data File Load.](media/app-file-normal.png "Virtual Devices")
+
+8. Select **data_sample.csv** in the `IoTVirtualDevices\Release\` folder, then select **Open**.
+
+    ![The file is highlighted.](media/app-file-normal-open.png "Open file")
+
+9. Click **OK** in the dialog that appears after loading.
+
+    ![The OK button is highlighted.](media/app-file-loaded.png "File loaded")
+
+10. Click the **Virtual Device Stopped** button to get started.
+
+    ![Select the Virtual Device Stopped button.](media/app-stopped.png "Virtual Device Stopped")
+
+11. **Virtual Device Processing** is displayed.
+
+    ![The button is highlighted.](media/app-processing.png "Virtual Device Processing")
+
+12. Navigate to IoT Hub in the portal and, in the **Overview** blade, view the **IoT Hub Usage** chart. You should see the **Messages used today** count increase each time you **Refresh**.
+
+    ![The described items are highlighted in the Overview blade.](media/iot-hub-messages-used-today.png "IoT Hub overview")
+
+### Task 3: Create and configure Stream Analytics resources
+
+1. Navigate to the Azure portal (<https://portal.azure.com>) to create the IoT Hub resource.
+
+2. In the search menu, type **stream**, then select **Stream Analytics jobs**.
+
+    ![Stream is highlighted in the search box, and the Stream Analytics jobs item in the results is highlighted.](media/search-sa.png "Stream search")
+
+3. Select **Add**.
+
+    ![The add button is selected.](media/sa-add.png "Add")
+
+4. In the `New Stream Analytics job` form, enter the values shown in the table below. Select **Create**.
+
+    ![The form is shown as described below.](media/create-sa.png "Create IoT Hub")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Job name | `synapselabinfra` + your initials + `asa` (example: `synapselabinfrajdhasa`) | Lowercase alphanumeric characters only |
+    | Subscription | Any | Select the Azure subscription used for this lab. |
+    | Resource group | `synapse-lab-infrastructure` | Select existing resource group you have been using for this lab |
+    | Region | Select the region closest to you, such as `West US`. | |
+    | Hosting environment | Cloud | |
+    | Streaming units | 1 | |
+
+5. The resource should be ready in a few seconds. After it deploys, select **Go to resource**.
+
+    ![Go to resource is highlighted.](media/sa-deployed.png "Your deployment is complete")
+
+6. Select **Inputs** on the left-hand menu, select **+ Add stream input**, then **IoT Hub** in the drop-down menu.
+
+    ![The IoT Hub menu item is highlighted.](media/sa-add-iot-hub-input.png "Inputs")
+
+7. In the `IoT Hub` form, enter the values shown in the table below. Select **Save**.
+
+    ![The form is shown as described below.](media/sa-add-iot-hub-input-form.png "Create IoT Hub")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Input alias | `ioth` | |
+    | Subscription | Any | Select the Azure subscription used for this lab. |
+    | IoT Hub | Any | Select the IoT Hub service you created for this lab |
+    | Endpoint | Messaging | Default settings |
+    | Shared access policy name | `iothubowner` | Default settings |
+    | Consumer group | `streamanalytics` | Select the consumer group you created earlier |
+    | Event serialization format | JSON | Default settings |
+    | Encoding | UTF-8 | Default settings |
+    | Event compression type | None | Default settings |
+
+8. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu.
+
+    ![The storage menu item is highlighted.](media/sa-add-storage-input.png "Outputs")
+
+9. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
+
+    ![The form is shown as described below.](media/sa-add-storage-input-form.png "Create Storage output")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Output alias | `datalake-raw` | |
+    | Subscription | Any | Select the Azure subscription used for this lab. |
+    | Storage account | Any | Select the data lake storage account you created when you deployed Synapse Analytics |
+    | Container | `datalake` (choose use existing) | |
+    | Path pattern | `sensor-stream/{date}` | |
+    | Date format | `YYY/MM/DD` | Default settings |
+    | Time format | HH | Default settings |
+    | Event serialization format | JSON | Default settings |
+    | Encoding | UTF-8 | Default settings |
+    | Format | Line separated | Default settings |
+    | Minimum rows | `2000` | |
+    | Hours/minutes | `0` hours, `1` minute | |
+    | Authentication mode | Connection string | Default settings |
+
+10. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu to add another output.
+
+    ![The storage menu item is highlighted.](media/sa-add-storage-input.png "Outputs")
+
+11. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
+
+    ![The form is shown as described below.](media/sa-add-storage-input-form-curated.png "Create Storage output")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Output alias | `datalake-curated` | |
+    | Subscription | Any | Select the Azure subscription used for this lab. |
+    | Storage account | Any | Select the data lake storage account you created when you deployed Synapse Analytics |
+    | Container | `datalake` (choose use existing) | |
+    | Path pattern | `curated/sensor_asa/{date}` | |
+    | Date format | `YYY/MM/DD` | Default settings |
+    | Time format | HH | Default settings |
+    | Event serialization format | Parquet | Default settings |
+    | Encoding | UTF-8 | Default settings |
+    | Format | Line separated | Default settings |
+    | Minimum rows | `2000` | Default settings |
+    | Hours/minutes | `0` hours, `1` minute | Default settings |
+    | Authentication mode | Connection string | Default settings |
+
+12. Select **Query** in the left-hand menu. Copy and paste the following query into the query area on the right, then select **Save query**.
+
+    ```sql
+    --Use 30 second average
+    SELECT
+        DeviceId,
+        Period,
+        Cycle,
+        dateadd(hour,9,system.timestamp) as JSTTime,
+        AVG(Sensor11) as Sensor11,
+        AVG(Sensor14) as Sensor14,
+        AVG(Sensor15) as Sensor15,
+        AVG(Sensor9) as Sensor9
+    INTO [datalake-curated]
+    FROM ioth TIMESTAMP BY EventEnqueuedUtcTime
+    GROUP BY
+        DeviceId,
+        Period,
+        Cycle,
+        TUMBLINGWINDOW(ss,30);
+
+    -- Use raw data as-is
+    SELECT
+        *
+    INTO [datalake-raw]
+    FROM ioth TIMESTAMP BY EventEnqueuedUtcTime
+    ```
+
+    ![The query is displayed.](media/sa-query.png "Query")
+
+13. Select **Overview** in the left-hand menu, then select **Start**.
+
+    ![The Start button is highlighted on the Overview blade.](media/sa-start.png "Start")
+
+14. In the Start job dialog, select **Start** to begin the job.
+
+    ![The Start button is highlighted.](media/sa-start-dialog.png "Start")
