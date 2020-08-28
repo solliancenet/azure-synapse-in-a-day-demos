@@ -22,10 +22,14 @@
   - [Exercise 4: Implement Spark ETL with the GUI](#exercise-4-implement-spark-etl-with-the-gui)
     - [Task 1: Create ADLS Gen2 Linked Service](#task-1-create-adls-gen2-linked-service)
     - [Task 2: Create mapping data flow sources](#task-2-create-mapping-data-flow-sources)
-    - [Task 4: Create a filter](#task-4-create-a-filter)
-    - [Task 5: Add calculated columns](#task-5-add-calculated-columns)
-    - [Task 6: Select columns](#task-6-select-columns)
-    - [Task 7: Aggregation process](#task-7-aggregation-process)
+    - [Task 3: Create a filter](#task-3-create-a-filter)
+    - [Task 4: Add calculated columns](#task-4-add-calculated-columns)
+    - [Task 5: Select columns](#task-5-select-columns)
+    - [Task 6: Aggregation process](#task-6-aggregation-process)
+    - [Task 7: Data join process](#task-7-data-join-process)
+    - [Task 8: Data output](#task-8-data-output)
+    - [Task 9: Create and run Pipeline](#task-9-create-and-run-pipeline)
+    - [Task 10: View the transformed data](#task-10-view-the-transformed-data)
 
 ## Overview
 
@@ -412,7 +416,7 @@ A SQL pool offers T-SQL based compute and storage capabilities. After creating a
 
 ## Exercise 4: Implement Spark ETL with the GUI
 
-Time required: 30 minutes
+Time required: 45 minutes
 
 > TODO: Update image
 
@@ -532,7 +536,7 @@ Create datasets to extract "Flight delay" and "Airport master data".
 
     ![The checkbox is highlighted.](media/flightdelay-withairportcodes-source-form.png "Set properties")
 
-### Task 4: Create a filter
+### Task 3: Create a filter
 
 Create a filter for the records.
 
@@ -552,7 +556,7 @@ Create a filter for the records.
 
     ![The filter area, refresh button, and save button are all highlighted.](media/flightdelay-filter-builder.png "Visual expression builder")
 
-### Task 5: Add calculated columns
+### Task 4: Add calculated columns
 
 In this data, a delay of `1:30` is represented as `130`. Create a delay time column with the name "CRSDepHour" so that it can be represented as a `1.3` hour delay.
 
@@ -572,7 +576,7 @@ In this data, a delay of `1:30` is represented as `130`. Create a delay time col
 
     ![The CRSDEPHOUR expression builder is displayed.](media/flightdelay-withairportcodes-derivedcolumn-expression.png "Visual expression builder")
 
-### Task 6: Select columns
+### Task 5: Select columns
 
 Add an action to eliminate unnecessary columns so that only the required columns remain.
 
@@ -594,7 +598,7 @@ Add an action to eliminate unnecessary columns so that only the required columns
 
 ![The items to delete are checked.](media/flightdelay-withairportcodes-select-columns.png "Select settings")
 
-### Task 7: Aggregation process
+### Task 6: Aggregation process
 
 Add aggregation processing so that delays are aggregated at the granularity of the year, month, day, and airport.
 
@@ -643,3 +647,125 @@ Add aggregation processing so that delays are aggregated at the granularity of t
     ```
 
     ![The expression is highlighted.](media/flightdelay-withairportcodes-aggregate-depdelay15count-expression.png "Visual expression builder")
+
+### Task 7: Data join process
+
+Combine data sources.
+
+1. Under the `FlightDelaysWithAirportCodes` source, select **+** in the lower-right corner of the stream (from the new aggregate action you just created), and then select **Join**.
+
+    ![The plus button and Join menu option are highlighted.](media/flightdelay-add-join.png "Join")
+
+2. Within the Join settings form, enter each setting as described in the table below.
+
+    ![The Join settings form is configured as described in the table below.](media/flightdelay-join-settings.png "Join settings")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Output stream name | `Join1` | Default settings |
+    | Left stream | `Aggregate1` | |
+    | Right stream | `AirportCodeLocationLookupClean` | This is the first data source you added |
+    | Join type | `Inner` | Default settings |
+    | Left: Aggregate1's column | `OriginAirportCode` | |
+    | Right: AirportCodeLocationLookupClean's column | `AIRPORT` | |
+
+### Task 8: Data output
+
+Add a sink process to output to the SQL Pool and create a dataset that defines the destination table information.
+
+1. Under the `FlightDelaysWithAirportCodes` source, select **+** in the lower-right corner of the stream (from the new join action you just created), and then select **Sink**.
+
+    ![The plus button and Sink menu option are highlighted.](media/flightdelay-add-sink.png "Sink")
+
+2. Select **+ New** next to the Sink dataset.
+
+    ![The new dataset button is highlighted.](media/flight-delay-sink-dataset-new.png "Sink")
+
+3. Select **Azure Synapse Analytics (formerly SQL DW)**, then select **Continue**.
+
+    ![Azure Synapse Analytics is selected in the list.](media/flightdelay-sink-dataset-synapse.png "New dataset")
+
+4. Enter each setting as displayed in the table below, and then select **OK**.
+
+    ![The form is completed as described in the table below.](media/flightdelay-sink-dataset-properties.png "Set properties")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `dw_DelaySummary` | Be careful not to include extra spaces when copying |
+    | Linked service | Select the default SQL server for your workspace (`<Synapse workspace name>-WorkspaceDefaultSqlServer`) | |
+    | Table name | None | Default settings, set in subsequent steps |
+    | Import schema | None | Default settings |
+
+5. Select **Open** next to the Sink dataset.
+
+    ![The Open button is highlighted.](media/flightdelay-sink-dataset-open.png "Sink")
+
+6. Under the **Connection** tab of the dataset properties, enter **aiaddw** SQL pool name for the **DBName** value. Select **Refresh** next to the table list, then select **dbo.DelaySummary** from the list.
+
+    ![The form values are configured as described.](media/dw-delaysummary-properties.png "dw_DelaySummary properties")
+
+7. Select the **FlightDelayETL** tab to switch back to the mapping data flow. Select **Sink1**, select the **Settings** tab, then select **Truncate table** in the Table action options list. Make sure **Enable staging** is also checked.
+
+    ![The form values are configured as described.](media/flightdelay-sink-settings.png "Sink settings")
+
+8. Select **Publish all**, then select **Publish** in the dialog.
+
+    ![Publish all is highlighted.](media/publish-all.png "Publish all")
+
+### Task 9: Create and run Pipeline
+
+1. Select the **Orchestrate** hub, select **+**, then select **Pipeline**.
+
+    ![The new pipeline link is highlighted.](media/new-pipeline.png "New pipeline")
+
+2. For **Name**, enter `FlightDelay`, then select **Properties** to close the dialog.
+
+    ![The properties dialog is displayed.](media/flightdelay-pipeline-name.png "FlightDelay pipeline name")
+
+3. Expand **Move & transform** under the Activities menu. Drag and drop the **Data flow** activity onto the canvas area to the right.
+
+    ![The data flow activity has an arrow pointing to the canvas.](media/flightdelay-pipeline-add-data-flow.png "Add data flow activity")
+
+4. In the Adding data flow dialog, select **Use existing data flow**, select **FlightDelayETL** from the existing data flow list, then select **Finish**.
+
+    ![The form is configured as described.](media/flightdelay-pipeline-add-data-flow-dialog.png "Adding data flow")
+
+5. Select the **Settings** tab, select **key_adls** from the **Staging linked service** list, then enter **datalake** in the container field and **polybase** in the folder field of the **Staging storage folder** setting.
+
+    ![The settings form is configured as described.](media/flightdelay-pipeline-data-flow-settings.png "Data flow settings")
+
+6. Select **Publish all**, then select **Publish** in the dialog.
+
+    ![Publish all is highlighted.](media/publish-all.png "Publish all")
+
+7. Select **Add trigger**, then select **Trigger now**.
+
+    ![The trigger now option is highlighted.](media/flightdelay-pipeline-trigger-now.png "Trigger now")
+
+8. Select **OK** to run the trigger.
+
+    ![The OK button is highlighted.](media/import-data-trigger-pipeline-run.png "Pipeline run")
+
+9. Select the **Monitor** hub, then **Pipeline runs**. If the pipeline run status is `Succeeded` after a few minutes, then the pipeline run successfully completed.
+
+    ![The pipeline run successfully completed.](media/flightdelay-pipeline-monitor.png "Monitor pipeline runs")
+
+> **Note**: Mapping Data Flow runs with a minimum overhead of at least five to six minutes. This is because you are creating a Spark processing environment each time you run it. If you are using an ETL pipeline using Mapping Data Flow, plan your batch schedule with time in mind for creating a processing environment.
+
+> **Note**: Some of the imported data has a prepared dataset that has been amplified to 100 million items under the name "FlightDelaysWithAirportCodes100M.csv". With this csv data, you can see the scalability of Mapping Data Flow for 100 million data processes.
+
+### Task 10: View the transformed data
+
+When the data flow pipeline has successfully completed, view the data it wrote to the `dbo.DelaySummary` SQL pool table.
+
+1. Select the **Data** hub.
+
+    ![The data hub is selected.](media/data-hub.png "Data hub")
+
+2. Select the **Workspace** tab, expand **Databases**, expand the **aiaddw** SQL pool, and expand **Tables**. Right-click on the `DelaySummary` table, select  **New SQL script**, then select **Select TOP 100 rows**.
+
+    ![The DelaySummary table is displayed.](media/delaysummary-table-new-script.png "DelaySummary table")
+
+3. View the results of the executed script. Notice that the derived columns, joined columns, and aggregates you added to the Mapping Data Flow appear in the result set.
+
+    ![The query result set is displayed.](media/delaysummary-table-result-set.png "DelaySummary table result set")
