@@ -16,9 +16,12 @@
     - [About Synapse Pipeline](#about-synapse-pipeline)
     - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
     - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
-  - [Exercise 3: Create a SQL Pool](#exercise-3-create-a-sql-pool)
+  - [Exercise 3: Create a SQL Pool and table](#exercise-3-create-a-sql-pool-and-table)
     - [Task 1: Create a SQL Pool](#task-1-create-a-sql-pool)
     - [Task 2: Create table](#task-2-create-table)
+  - [Exercise 4: Implement Spark ETL with the GUI](#exercise-4-implement-spark-etl-with-the-gui)
+    - [Task 1: Create ADLS Gen2 Linked Service](#task-1-create-adls-gen2-linked-service)
+  - [Task 2: Create mapping data flow](#task-2-create-mapping-data-flow)
 
 ## Overview
 
@@ -314,7 +317,7 @@ The data integration feature, Synapse Pipeline, is designed with the following c
 
     ![The datalake data is displayed.](media/datalake-files.png "Datalake files")
 
-## Exercise 3: Create a SQL Pool
+## Exercise 3: Create a SQL Pool and table
 
 Time required: 20 minutes
 
@@ -402,3 +405,39 @@ A SQL pool offers T-SQL based compute and storage capabilities. After creating a
 7. Select the **Workspace** tab, expand **Databases**, expand the **aiaddw** SQL pool, and expand **Tables**. You will see the `DelaySummary` table. If it does not appear, select **Refresh**.
 
     ![The DelaySummary table is displayed.](media/delaysummary-table.png "DelaySummary table")
+
+## Exercise 4: Implement Spark ETL with the GUI
+
+Time required: 30 minutes
+
+> TODO: Update image
+
+Mapping data flows are visually designed data transformations in Azure Data Factory. Data flows allow data engineers to develop data transformation logic without writing code. The resulting data flows are executed as activities within Azure Data Factory pipelines that use scaled-out Apache Spark clusters. Data flow activities can be operationalized using existing Azure Data Factory scheduling, control, flow, and monitoring capabilities.
+
+Mapping data flows provide an entirely visual experience with the Synapse Studio GUI, with no coding required. Your data flows run on ADF-managed execution clusters for scaled-out data processing. Azure Data Factory handles all the code translation, path optimization, and execution of your data flow jobs.
+
+### Task 1: Create ADLS Gen2 Linked Service
+
+1. Select the **Manage** hub, **Linked services**, then select **+ New**.
+
+    ![The new linked service option is highlighted.](media/new-linked-service.png "New linked service")
+
+2. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![Azure Blob Storage and the Continue button are highlighted.](media/new-linked-service-adls.png "New linked service")
+
+3. Enter each setting described below, then select **Test connection**. When the connection is successful, select **Create**.
+
+    ![The new linked service form is displayed.](media/new-linked-service-key-adls.png "New linked service")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `key_adls` | |
+    | Description | No entry required | Default settings |
+    | Connect via integration runtime | AutoResolveIntegrationRuntime | Default settings |
+    | Authentication method | Account Key | Default settings |
+    | Account selection method | From Azure subscription | Default settings |
+    | Azure subscription | Any | Select the Azure subscription for this lab |
+    | Storage account name | Any | Select the storage account you created when deploying the workspace |
+
+## Task 2: Create mapping data flow
