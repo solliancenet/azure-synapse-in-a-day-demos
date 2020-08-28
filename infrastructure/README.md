@@ -21,7 +21,11 @@
     - [Task 2: Create table](#task-2-create-table)
   - [Exercise 4: Implement Spark ETL with the GUI](#exercise-4-implement-spark-etl-with-the-gui)
     - [Task 1: Create ADLS Gen2 Linked Service](#task-1-create-adls-gen2-linked-service)
-  - [Task 2: Create mapping data flow](#task-2-create-mapping-data-flow)
+    - [Task 2: Create mapping data flow sources](#task-2-create-mapping-data-flow-sources)
+    - [Task 4: Create a filter](#task-4-create-a-filter)
+    - [Task 5: Add calculated columns](#task-5-add-calculated-columns)
+    - [Task 6: Select columns](#task-6-select-columns)
+    - [Task 7: Aggregation process](#task-7-aggregation-process)
 
 ## Overview
 
@@ -440,4 +444,202 @@ Mapping data flows provide an entirely visual experience with the Synapse Studio
     | Azure subscription | Any | Select the Azure subscription for this lab |
     | Storage account name | Any | Select the storage account you created when deploying the workspace |
 
-## Task 2: Create mapping data flow
+### Task 2: Create mapping data flow sources
+
+Create datasets to extract "Flight delay" and "Airport master data".
+
+1. Select the **Develop** hub.
+
+    ![The Develop hub is selected.](media/develop-hub.png "Develop hub")
+
+2. Select **+**, then select **Data flow**.
+
+    ![The new Data flow is selected.](media/new-data-flow.png "New Data flow")
+
+3. Select the **Data flow debug** switch.
+
+    ![The data flow debug switch is highlighted.](media/data-flow-debug-switch.png "Data flow debug")
+
+4. Select **OK** in the `Turn on data flow debug` dialog.
+
+    ![The OK button is highlighted.](media/data-flow-debug-dialog.png "Turn on data flow debug")
+
+5. Set **FlightDelayETL** for the Name in the Properties blade. Select **Properties** to close the blade, then select **Add Source** on the canvas.
+
+    ![The name property is highlighted, along with the properties button and the Add Source box on the canvas.](media/flightdelay-name.png "Mapping data flow canvas")
+
+6. For **Output stream name**, enter **AirportCodeLocationLookupClean**, and select **+ New** next to **Source dataset**.
+
+    ![The source settings fields are highlighted.](media/flightdelay-airportcode-source.png "Source settings")
+
+7. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![Azure Data lake Storage Gen2 and the Continue button are highlighted.](media/import-data-sink-new-adls.png "New dataset")
+
+8. Select the **DelimitedText** format, then select **Continue**.
+
+    ![Binary and the Continue button are highlighted.](media/import-data-source-new-adls-delimited.png "Select format")
+
+9. Enter each setting as displayed in the table below, and then select **OK**.
+
+    ![The form is completed as described in the table below.](media/flightdelay-new-adls-properties.png "Set properties")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `csv_AirportCodeLocationLookupClean` | Be careful not to include extra spaces when copying |
+    | Linked service | Select the default storage for your workspace (`<Synapse workspace name>-WorkspaceDefaultStorage`) | |
+    | File path | `datalake` | Select file from "From specified path" in the next step |
+
+10. Select the **TravelDatasets** folder, then select **AirportCodeLocationLookupClean.csv** and select **OK**.
+
+    ![The folder and file are selected as described.](media/flightdelay-new-adls-airportcodelookup.png "Choose a file or folder")
+
+11. Check **First row as header**, ensure the **From connection / store** import schema option is selected, then select **OK**.
+
+    ![The checkbox is highlighted.](media/flightdelay-airportcode-source-form.png "Set properties")
+
+12. Select **Add Source** on the canvas below the source you just added.
+
+    ![Add Source is highlighted on the canvas.](media/flightdelay-add-source.png "Add Source")
+
+13. For **Output stream name**, enter **FlightDelaysWithAirportCodes**, and select **+ New** next to **Source dataset**.
+
+    ![The output stream name and new button are highlighted.](media/flightdelay-withairportcodes-source.png "Source")
+
+14. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![Azure Data lake Storage Gen2 and the Continue button are highlighted.](media/import-data-sink-new-adls.png "New dataset")
+
+15. Select the **DelimitedText** format, then select **Continue**.
+
+    ![Binary and the Continue button are highlighted.](media/import-data-source-new-adls-delimited.png "Select format")
+
+16. Enter each setting as displayed in the table below, and then select **OK**.
+
+    ![The form is completed as described in the table below.](media/flightdelay-withairportcodes-new-adls-properties.png "Set properties")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `csv_FlightDelaysWithAirportCodes` | Be careful not to include extra spaces when copying |
+    | Linked service | Select the default storage for your workspace (`<Synapse workspace name>-WorkspaceDefaultStorage`) | |
+    | File path | `datalake` | Select file from "From specified path" in the next step |
+
+17. Select the **TravelDatasets** folder, then select **FlightDelaysWithAirportCodes.csv** and select **OK**.
+
+    ![The folder and file are selected as described.](media/flightdelay-new-adls-withairportcodes.png "Choose a file or folder")
+
+18. Check **First row as header**, ensure the **From connection / store** import schema option is selected, then select **OK**.
+
+    ![The checkbox is highlighted.](media/flightdelay-withairportcodes-source-form.png "Set properties")
+
+### Task 4: Create a filter
+
+Create a filter for the records.
+
+1. Under the `FlightDelaysWithAirportCodes` source, select **+** in the lower-right corner, and then select **Filter**.
+
+    ![The plus button and Filter menu option are highlighted.](media/flightdelay-add-filter.png "Filter")
+
+2. Under "Filter on", select **Enter filter...**.
+
+    ![The enter filter box is highlighted.](media/flightdelay-filter-enter-filter.png "Filter settings")
+
+3. Copy and paste the following query into the query area to the right of FUNCTIONS. Select **Refresh** to review the data preview, then select **Save and finish**.
+
+    ```javascript
+    toInteger(DepDelay) > 0
+    ```
+
+    ![The filter area, refresh button, and save button are all highlighted.](media/flightdelay-filter-builder.png "Visual expression builder")
+
+### Task 5: Add calculated columns
+
+In this data, a delay of `1:30` is represented as `130`. Create a delay time column with the name "CRSDepHour" so that it can be represented as a `1.3` hour delay.
+
+1. Under the `FlightDelaysWithAirportCodes` source, select **+** in the lower-right corner of the stream (from the new filter you just created), and then select **Derived Column**.
+
+    ![The plus button and Derived Column menu option are highlighted.](media/flightdelay-withairportcodes-add-derivedcolumn.png "Derived Column")
+
+2. Under Columns, type **CRSDepHour**, and then select **Expression**.
+
+    ![The derived column's settings blade is displayed.](media/flightdelay-withairportcodes-derivedcolumn-columns.png "Derived column's settings")
+
+3. Copy and paste the following query into EXPRESSION FOR FIELD "CRSDEPHOUR". Select **Refresh** to review the Data rpeview, and then select **Save and finish**.
+
+    ```javascript
+    floor(toInteger(CRSDepTime)/100)
+    ```
+
+    ![The CRSDEPHOUR expression builder is displayed.](media/flightdelay-withairportcodes-derivedcolumn-expression.png "Visual expression builder")
+
+### Task 6: Select columns
+
+Add an action to eliminate unnecessary columns so that only the required columns remain.
+
+1. Under the `FlightDelaysWithAirportCodes` source, select **+** in the lower-right corner of the stream (from the new derived column action you just created), and then select **Select**.
+
+    ![The plus button and Select menu option are highlighted.](media/flightdelay-withairportcodes-add-select.png "Select")
+
+2. Check **DerivedColumn1's column** to check all columns. Then remove checks from the following nine items: Make sure that **all other items** besides the following nine are checked, and then select **Delete**.
+
+    - Year
+    - Month
+    - DayofMonth
+    - DayOfWeek
+    - CRSDepTime
+    - DepDelay
+    - DepDel15
+    - OriginAirportCode
+    - CRSDepHour
+
+![The items to delete are checked.](media/flightdelay-withairportcodes-select-columns.png "Select settings")
+
+### Task 7: Aggregation process
+
+Add aggregation processing so that delays are aggregated at the granularity of the year, month, day, and airport.
+
+1. Under the `FlightDelaysWithAirportCodes` source, select **+** in the lower-right corner of the stream (from the new select action you just created), and then select **Aggregate**.
+
+    ![The plus button and Aggregate menu option are highlighted.](media/flightdelay-withairportcodes-add-aggregate.png "Aggregate")
+
+2. Select the drop-down arrow on the right of Columns to add the following five columns. Click **+** to add an item:
+
+    - Year
+    - Month
+    - DayofMonth
+    - DayOfWeek
+    - OriginAirportCode
+
+    ![The dropdown arrow and plus button are highlighted.](media/flightdelay-withairportcodes-aggregate-columns.png "Columns")
+
+3. Verify that all five columns have been added, then select **Aggregates**.
+
+    ![The Aggregates header is highlighted.](media/flightdelay-withairportcodes-aggregate-columns-aggregate.png "Aggregates")
+
+4. In Columns, type **DepDelayCount**, and then select **Expression**.
+
+    ![The DepDelayCount column is highlighted.](media/flightdelay-withairportcodes-aggregate-add-depdelaycount.png "DepDelayCount")
+
+5. Paste the following expression into EXPRESSION FOR FIELD "DEPDELAYCOUNT" and select **Save and finish**:
+
+    ```javascript
+    sum(1)
+    ```
+
+    ![The expression is highlighted.](media/flightdelay-withairportcodes-aggregate-depdelaycount-expression.png "Visual expression builder")
+
+6. Select **+** to the right of the column you just added, then select **Add column**.
+
+    ![The add column menu item is highlighted.](media/flightdelay-withairportcodes-aggregate-add-column.png "Add column")
+
+7. In Columns, type **DepDelay15Count**, and then select **Expression**.
+
+    ![The DepDelayCount column is highlighted.](media/flightdelay-withairportcodes-aggregate-add-depdelay15count.png "DepDelayCount")
+
+8. Paste the following expression into EXPRESSION FOR FIELD "DEPDELAY15COUNT" and select **Save and finish**:
+
+    ```javascript
+    sum(toInteger(DepDel15))
+    ```
+
+    ![The expression is highlighted.](media/flightdelay-withairportcodes-aggregate-depdelay15count-expression.png "Visual expression builder")
