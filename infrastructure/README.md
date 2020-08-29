@@ -50,6 +50,11 @@
     - [Task 1: Query for Parquet files](#task-1-query-for-parquet-files)
     - [Task 2: Create a view](#task-2-create-a-view)
     - [Task 3: Create near-real-time dashboards](#task-3-create-near-real-time-dashboards)
+  - [Exercise 8: Create a structured process for large amounts of data with Spark](#exercise-8-create-a-structured-process-for-large-amounts-of-data-with-spark)
+    - [Task 1: Create a Spark pool](#task-1-create-a-spark-pool)
+    - [Task 2: Develop Spark ETL](#task-2-develop-spark-etl)
+  - [Exercise 9: Spark ML learning/inference and SQL pool load](#exercise-9-spark-ml-learninginference-and-sql-pool-load)
+    - [Task 1: Import and execute notebook](#task-1-import-and-execute-notebook)
 
 ## Overview
 
@@ -1457,3 +1462,99 @@ In addition to the traditional SQL data warehouse functionality, Azure Synapse A
 12. Click the **Save** icon on the top-left. Enter a file name and click **Save**.
 
     ![The save dialog is displayed.](media/pbi-save-od.png "Save")
+
+## Exercise 8: Create a structured process for large amounts of data with Spark
+
+Time required: 10 minutes
+
+> TODO: Update image
+
+In addition to SQL analysis, Synapse Analytics enables analysis and development with Spark, a distributed processing framework for OSS. By using Spark, you can select a development language (Python, Scala, .Net) tailored to your skill set and develop a structure to process large-scale data at high speed.
+
+### Task 1: Create a Spark pool
+
+Spark pools are configured as an environment running Spark and are automatically stopped/scaled according to usage, resulting in cost-optimized, on-demand ETL processing.
+
+1. Return to Synapse Studio (<https://web.azuresynapse.net/>) and select the **Manage** hub, **Apache Spark pools**, then select **+ New**.
+
+    ![The New button on the Apache Spark pools blade is highlighted.](media/sp-new.png "Apache Spark pools: New")
+
+2. Enter each setting as shown in the table below, then select **Review + create**.
+
+    ![The form is configured as described.](media/sp-new-form.png "Create Apache Spark pool")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Apache Spark pool name | `aiadspark` | |
+    | Node size | Small | |
+    | Autocale | Enabled | Default settings |
+    | Number of nodes | 3-40 | Default settings |
+
+3. Review the settings, then select **Create**.
+
+    ![The create button is highlighted.](media/sp-new-review.png "Create")
+
+### Task 2: Develop Spark ETL
+
+Synapse Studio's Notebook UI is provided as an interface for developing Spark. Using your notebook, you can interact with Spark ETL and create simple charts.
+
+In this task, you will use the `SensorPrep.ipynb` notebook in the `source/ETLandPREDICT` folder.
+
+1. Select the **Develop** hub.
+
+    ![The Develop hub is selected.](media/develop-hub.png "Develop hub")
+
+2. Select **+**, then select **Import** from the drop-down menu.
+
+    ![The Import menu item is selected.](media/develop-import.png "Import")
+
+3. Navigate to the folder where you extracted the ZIP file for this lab. If you extracted the files to `C:\`, navigate to `C:\azure-synapse-in-a-day-demos-master\infrastructure\source\ETLandPREDICT` and select **SensorPrep.ipynb**.
+
+    ![The SensorPrep file is highlighted.](media/sensorprep-file.png "Open")
+
+4. With the `SensorPrep` notebook open, edit the storage `account_name` value in **Cell 2**. Enter just the account name (eg. `synapselabinfrajdhadls`) and not the fully-qualified name.
+
+    ![The account name variable is highlighted.](media/sensorprep-cell2.png "Edit Cell 2")
+
+5. With **Cell 2** selected, press **Shift+Enter**. The contents of **Cell 2** will run and the cursor moves to **Cell 3**. Similarly, press **Ctrl+Enter** to run the selected cell and remain there without moving on to the next cell.
+
+    ![Cell 2 is highlighted.](media/sensorprep-cell2-run.png "Run Cell 2")
+
+6. When you execute **Cell 10**, change the view to **Chart** in the cell results. Select **View options** and configure the settings as displayed below, then select **Apply**.
+
+    ![The chart and its options are displayed as described.](media/sensorprep-cell10.png "Cell 10 visualization")
+
+    | Parameters | Settings |
+    | --- | --- |
+    | Chart type | Line chart |
+    | Key | `timestamp_PST` |
+    | Values | `Period`, `Sensor11` |
+    | Series Group | |
+    | Aggregation | MAX |
+    | Aggregation over all results | Unchecked |
+
+## Exercise 9: Spark ML learning/inference and SQL pool load
+
+Time required: 10 minutes
+
+> TODO: Update image
+
+In addition to ETL processing, you can run machine learning workloads using Spark ML within a Spark Notebook. You can also use the Azure Machine Learning Python SDK from within a Spark Notebook in Synapse to perform automatic machine learning, a feature of Azure Machine Learning.
+
+### Task 1: Import and execute notebook
+
+Train and run machine learning models in a Spark pool and load the predicted results into a SQL pool.
+
+1. Select the **Develop** hub.
+
+    ![The Develop hub is selected.](media/develop-hub.png "Develop hub")
+
+2. Select **+**, then select **Import** from the drop-down menu.
+
+    ![The Import menu item is selected.](media/develop-import.png "Import")
+
+3. Navigate to the folder where you extracted the ZIP file for this lab. If you extracted the files to `C:\`, navigate to `C:\azure-synapse-in-a-day-demos-master\infrastructure\source\ETLandPREDICT` and select **TrainAndScoreRULModel.ipynb**.
+
+    ![The TrainAndScoreRULModel file is highlighted.](media/trainmodel-file.png "Open")
+
+4. Run the notebook to run SparkML and load the data into your SQL pool.
