@@ -122,7 +122,7 @@ This lab will guide you through the basic deployment of Azure Synapse Analytics 
 
 You will configure an architecture such as the following:
 
-> TODO: Update image
+![The architecture diagram for the lab.](media/lab-1-diagram.png "Lab architecture diagram")
 
 To build the architecture, complete the following tasks:
 
@@ -154,7 +154,7 @@ Time required: 15 minutes
 
 The first step is to deploy and configure the resources. It's easy to do from the Azure Portal.
 
-> TODO: Update image
+![The Azure Synapse Analytics area of the diagram is highlighted.](media/synapse.png "Azure Synapse Analytics")
 
 ### Task 1: Create Azure Synapse Analytics workspace
 
@@ -255,7 +255,7 @@ Time required: 30 minutes
 
 In this exercise, you will import a large amount of data into the primary data lake account.
 
-> TODO: Update image
+![The copy activity portion of the diagram is highlighted.](media/diagram-copy.png "Copy activity")
 
 ### About Synapse Pipeline
 
@@ -376,7 +376,7 @@ The data integration feature, Synapse Pipeline, is designed with the following c
 
 Time required: 20 minutes
 
-> TODO: Update image
+![The SQL Pool portion of the diagram is highlighted.](media/diagram-sql-pool.png "SQL Pool")
 
 SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data.
 
@@ -465,7 +465,7 @@ A SQL pool offers T-SQL based compute and storage capabilities. After creating a
 
 Time required: 45 minutes
 
-> TODO: Update image
+![The mapping data flow is highlighted on the diagram.](media/diagram-etl-pipeline.png "ETL Pipeline")
 
 Mapping data flows are visually designed data transformations in Azure Data Factory. Data flows allow data engineers to develop data transformation logic without writing code. The resulting data flows are executed as activities within Azure Data Factory pipelines that use scaled-out Apache Spark clusters. Data flow activities can be operationalized using existing Azure Data Factory scheduling, control, flow, and monitoring capabilities.
 
@@ -821,7 +821,7 @@ When the data flow pipeline has successfully completed, view the data it wrote t
 
 Time required: 15 minutes
 
-> TODO: Update image
+![The visualize portion of the diagram is highlighted.](media/diagram-visualize.png "Visualize")
 
 Power BI reports can be created, edited, and viewed from within Synapse Studio. This level of integration allows you to easily get data into your Power BI workspace. It also minimizes your need to switch tabs and navigate between services in the browser.
 
