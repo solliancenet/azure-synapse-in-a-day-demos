@@ -98,9 +98,9 @@ The modern data analytics infrastructure, called the Modern Data Warehouse patte
 
 In traditional Azure data analytic infrastructures, the solution was for architects to combine PaaS such as Azure Data Factory, Azure Databricks, Azure SQL Data Warehouse, and Azure Data Lake Storage to accommodate a variety of workloads.
 
-Traditional Azure analytic infrastructure configuration
+**Traditional Azure analytic infrastructure configuration**
 
-> TODO: Update image
+![The traditional analytics pattern is displayed.](media/traditional-azure-analytics.png "Traditional Azure Analytics")
 
 With Azure Synapse Analytics, enjoy advantages of traditional scalable cloud data analytic infrastructures while:
 
@@ -108,9 +108,9 @@ With Azure Synapse Analytics, enjoy advantages of traditional scalable cloud dat
 - Reducing infrastructure complexity
 - Reducing costs and improving development efficiency with integrated workspace and management screen
 
-Azure Synapse Analytics
+**Azure Synapse Analytics**
 
-> TODO: Update image
+![Synapse Analytics takes the place of ADF, Azure Databricks, and Azure SQL Data Warehouse.](media/azure-synapse-analytics.png "Azure Synapse Analytics")
 
 ### Scenario
 
@@ -1711,3 +1711,13 @@ You have reached the end of the lab. Follow the steps below to end processing an
 1. Stop the **IoTVirtualDevices** application by clicking **Virtual Device Processing** or closing the window to exit the app.
 
     ![The app window is shown.](media/virtual-device-processing.png "Virtual Devices")
+
+<!-- ## Appendix
+
+### Native scoring with T-SQL PREDICT
+
+You can use the T-SQL PREDICT function by registering a learned model created with Azure ML or Spark ML with SQL Pool. This feature allows data batch scoring on your data warehouse without having to navigate out of Synapse Studio.
+
+#### Register model files
+
+Import the model file with SQL. To do this, use the `ETLandPREDICT/RegisterModel.sql` file. -->
