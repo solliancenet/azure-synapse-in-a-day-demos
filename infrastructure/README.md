@@ -1041,7 +1041,7 @@ This section of the lab demonstrates near-real-time visualization of engine sens
 
 ### Hands-on architecture
 
-> TODO: Update image
+![The stream processing diagram is displayed.](media/advanced-diagram.png "Stream processing architecture")
 
 To build the architecture, complete the following tasks:
 
@@ -1056,7 +1056,7 @@ To build the architecture, complete the following tasks:
 
 Time required: 30 minutes
 
-> TODO: Update image
+![The stream processing portion of the diagram is highlighted.](media/diagram-stream-processing.png "Stream processing")
 
 Create IoT Hub, Stream Analytics, receive sensor data, and implement real-time processing.
 
@@ -1327,7 +1327,7 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
 
 Time required: 15 minutes
 
-> TODO: Update image
+![The SQL Serverless portion of the diagram is highlighted.](media/diagram-sql-serverless.png "SQL Serverless")
 
 In addition to the traditional SQL data warehouse functionality, Azure Synapse Analytics has added SQL serverless as a way to execute SQL queries directly against the data lake. SQL serverless does not have persistent tables, but is billed based on query run time, enabling rapid data search and cost optimization.
 
@@ -1473,7 +1473,7 @@ In addition to the traditional SQL data warehouse functionality, Azure Synapse A
 
 Time required: 10 minutes
 
-> TODO: Update image
+![The Spark ETL part of the diagram is highlighted.](media/diagram-spark-etl.png "Spark ETL")
 
 In addition to SQL analysis, Synapse Analytics enables analysis and development with Spark, a distributed processing framework for OSS. By using Spark, you can select a development language (Python, Scala, .Net) tailored to your skill set and develop a structure to process large-scale data at high speed.
 
@@ -1543,7 +1543,7 @@ In this task, you will use the `SensorPrep.ipynb` notebook in the `source/ETLand
 
 Time required: 10 minutes
 
-> TODO: Update image
+![The ML and SQL Pool portions of the diagram are highlighted.](media/diagram-ml-sql-pool.png "ML and SQL Pool load")
 
 In addition to ETL processing, you can run machine learning workloads using Spark ML within a Spark Notebook. You can also use the Azure Machine Learning Python SDK from within a Spark Notebook in Synapse to perform automatic machine learning, a feature of Azure Machine Learning.
 
@@ -1569,7 +1569,7 @@ Train and run machine learning models in a Spark pool and load the predicted res
 
 Time required: 10 minutes
 
-> TODO: Update image
+![The SensorPredictions report is highlighted on the diagram.](media/diagram-visualize-sql-pool.png "Visualize")
 
 Create a sensor summary report in Power BI.
 
