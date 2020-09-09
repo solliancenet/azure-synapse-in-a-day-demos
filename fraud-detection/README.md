@@ -149,3 +149,205 @@ This hands-on training uses the following developed content by executing queries
 
 #### Create a Resource Group
 
+In this task, you will use the Azure Portal to create a new Azure Resource Group for this lab.
+
+1. Log into the [Azure Portal](https://portal.azure.com).
+
+2. On the top-left corner of the portal, select the menu icon to display the menu.
+
+    ![The portal menu icon is displayed.](media/portal-menu-icon.png "Menu icon")
+
+3. In the left-hand menu, select **Resource Groups**.
+
+4. At the top of the screen select the **Add** button.
+
+   ![Add Resource Group Menu](media/add-resource-group-menu.png 'Resource Group Menu')
+
+5. Create a new resource group with the name **synapse-lab-fraud-detection**, ensuring that the proper subscription and region nearest you are selected. **Please note** that currently, the only regions available for deploying to the Azure Database for PostgreSQL Hyperscale (Citus) deployment option are East US, East US 2, West US 2, North Central US, Canada Central, Australia East, Southeast Asia, North Europe, UK South, and West Europe. It is therefore recommended that you choose one of these regions for your resource group and all created resources. Once you have chosen a location, select **Review + Create**.
+
+   ![Create Resource Group](media/create-resource-group.png 'Resource Group')
+
+6. On the Summary blade, select **Create** to provision your resource group.
+
+### Listing the Resources Created During the Hands-On Training
+
+The following are the resources you will create over the course of this hands-on training.
+
+| No | Name | Type | Resource details |
+| 1 | `synapselabfraud` + your initials + `asws` (example: `synapselabfraudjdhasws`) | Synapse workspace | Creates an Azure Synapse Analytics workspace. |
+| 2 | `synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`) | Storage account | Creates a StorageV2 (general-purpose v2) storage account. |
+| 3 | `sqllabfraud` | SQL pool | Creates an SQL pool. |
+| 4 | `sparklabfraud` | Apache Spark Pool | Creates an Apache Spark pool. |
+| 5 | PowerBI | Virtual machine | Prepares a virtual environment for running the Power BI Desktop app. |
+
+> **Note**: We will create the resources throughout the hands-on training, so do not create any of these resources yet.
+
+### Prepare a Virtual Machine to Run Power BI Desktop
+
+To proceed with the steps described in this hands-on training, you'll need to use the Power BI Desktop app that is installed in the Windows 10 environment.
+
+In this step, you will create a virtual machine running Windows 10 and then install Power BI.
+
+1. In the [Azure portal](https://portal.azure.com), type in "virtual machines" in the top search menu and then select **Virtual machines** from the results.
+
+    ![In the Services search result list, Virtual machines is selected.](media/azure-create-vm-search.png 'Virtual machines')
+
+2. Select **+ Add** on the Virtual machines page and then select the **Virtual machine** option.
+
+3. In the **Basics** tab, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Subscription                   | _select the appropriate subscription_              |
+   | Resource group                 | _select `synapse-lab-fraud-detection`_             |
+   | Virtual machine name           | _`powerbi`_                                        |
+   | Region                         | _select the resource group's location_             |
+   | Availability options           | _select `No infrastructure redundancy required`_   |
+   | Image                          | _select `Windows 10 Pro, Version 1809 - Gen1`_     |
+   | Azure Spot instance            | _select `No`_                                      |
+   | Size                           | _select `Standard_D2s_v3`_                         |
+   | Username                       | _select `powerbiuser`_                             |
+   | Password                       | _enter a password you will remember_               |
+   | Key pair name                  | _select `modernize-app-vm_key`_                    |
+   | Public inbound ports           | _select `Allow selected ports`_                    |
+   | Select inbound ports           | _select `RDP (3389)`_                              |
+   | Licensing                      | _select the option to confirm that you have an  eligible Windows 10 license with multi-tenant hosting rights._ |
+
+   ![The form fields are completed with the previously described settings.](media/azure-create-vm-1.png 'Create a virtual machine')
+
+4. Select **Review + create**. On the review screen, select **Create**.  After the deployment completes, select **Go to resource** to go to the virtual machine.
+
+    ![The Go to resource option is selected.](media/azure-create-vm-2.png 'Go to resource')
+
+5. Select **Connect** from the actions menu and choose **RDP**.
+
+    ![The option to connect to the virtual machine via RDP is selected.](media/azure-vm-connect.png 'Connect via RDP')
+
+6. On the **Connect** tab, select **Download RDP File**.
+
+    ![Download the RDP file to connect to the Power BI virtual machine.](media/azure-vm-connect-2.png 'Download RDP File')
+
+7. Open the RDP file and select **Connect** to access the virtual machine.  When prompted for credentials, enter `powerbiuser` for the username and the password you chose.
+
+    ![Connect to a remote host.](media/azure-vm-connect-3.png 'Connect to a remote host')
+
+8. Launch the Microsoft App Store from the Windows 10 taskbar.
+
+    ![Launch the Microsoft Store.](media/vm-launch-app-store.png 'Microsoft Store')
+
+9. Enter **power bi** into the search menu and select **Power BI Desktop** from the results.
+
+    ![The Power BI Desktop app is selected.](media/vm-install-power-bi.png 'Power BI Desktop')
+
+10. Select **Get** to install Power BI Desktop on the virtual machine.
+
+    ![The option to get Power BI is selected.](media/vm-download-power-bi.png 'Get Power BI Desktop')
+
+11. After installation completes, select **Launch** to open Power BI Desktop.
+
+    ![The option to launch Power BI is selected.](media/vm-launch-power-bi.png 'Launch Power BI Desktop')
+
+### Provision Azure Data Lake Storage Gen2
+
+Azure Data Lake Storage Gen2 will be critical for several integration points throughout the hands-on lab.
+
+1. Navigate to the [Azure portal](https://portal.azure.com).
+
+2. Select **+ Create a resource**, type in "storage account" in the search field, then select **Storage account** from the results.
+
+   ![On the new resource page, Storage account is selected.](media/azure-create-storage-account-search.png 'Storage Account')
+
+3. Select **Create** on the Storage account details page.
+
+4. Within the **Storage account** form, complete the following:
+
+   | Field                          | Value                                       |
+   | ------------------------------ | ------------------------------------------  |
+   | Subscription                   | _select the appropriate subscription_       |
+   | Resource group                 | _select `synapse-lab-fraud-detection`_      |
+   | Storage account name           | _`synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`)_ |
+   | Location                       | _select the resource group's location_      |
+   | Pricing tier                   | _select Standard_                           |
+   | Account kind                   | _select StorageV2 (general purpose v2)_     |
+   | Replication                    | _select Locally-redundant storage (LRS)_    |
+   | Access tier                    | _select Hot_                                |
+
+    > **Note**: Please replace the `#SUFFIX#` tag in the storage account name with a suffix you would like to use. Names of storage accounts must be globally unique.
+
+    ![The form fields are completed with the previously described settings.](media/azure-create-storage-account-1.png 'Storage Account Settings')
+
+    Then select **Next : Networking >**.
+
+5. Leave the networking settings at their default values: a connectivity method of **Public endpoint (all networks)** and a network routing preference of **Microsoft network routing (default)**.  Select **Next : Data protection >** and leave these settings at their default values.
+
+6. Select **Next : Advanced >**. In the Data Lake Gen2 section, enable **Hierarchical namespace**.
+
+    ![The Hierarchical namespace option is enabled.](media/azure-create-storage-account-2.png 'Storage Account Advanced Settings')
+
+7. Select **Review + create**. On the review screen, select **Create**.
+
+### Provision an Azure Synapse Analytics Workspace
+
+1. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics (workspaces preview)** from the results.
+
+    ![In the Services search result list, Azure Synapse Analytics (workspaces preview) is selected.](media/azure-create-synapse-search.png 'Azure Synapse Analytics (workspaces preview)')
+
+2. Select **+ Add** on the Azure Synapse Analytics (workspaces preview) page.
+
+3. Within the **Create Synapse workspace** form, complete the following:
+
+   | Field                                                | Value                                            |
+   | ---------------------------------------------------- | ------------------------------------------       |
+   | Subscription                                         | _select the appropriate subscription_            |
+   | Resource group                                       | _select `synapse-lab-fraud-detection`_           |
+   | Workspace name                                       | _`synapselabfraud` + your initials + `asws` (example: `synapselabfraudjdhasws`)_  |
+   | Region                                               | _select the resource group's location_           |
+   | Select Data Lake Storage Gen2                        | _select `From subscription`_                     |
+   | Account name                                         | _select the storage account you created earlier_ |
+   | File system name                                     | _select `Create new` and enter `synapse`_        |
+   | Assign myself the Storage Blob Data Contributor role | _ensure the box is checked_                      |
+
+   ![The form fields are completed with the previously described settings.](media/azure-create-synapse-1.png 'Create Synapse workspace')
+
+   > **Note**: Please replace the `#SUFFIX#` tag in the workspace name with a suffix you would like to use. Names of workspaces must be globally unique.
+
+   You might see the following error after entering a workspace name:  **The Azure Synapse resource provider (Microsoft.Synapse) needs to be registered with the selected subscription.** If you see this error, select **Click here to register**, located between the Subscription and Resource group.
+
+   ![The link to register the Synapse resource provider to a subscription is selected.](media/azure-create-synapse-register.png 'Register Synapse to subscription')
+
+   > **Important**: Be sure to check the box which reads "Assign myself the Storage Blob Data Contributor role on the Data Lake Storage Gen2 account"!  If you do not check this box, you will be unable to complete certain exercises unless you add your account as a Storage Blob Data Contributor later.
+
+4. Select **Next : Security + networking >** to move on to the Security and Networking page.  On the Security and Networking page, enter a valid password you will remember. Leave the other options at their default values.
+
+    ![The Security and Networking page with a valid password entered.](media/azure-create-synapse-2.png 'Security and Networking')
+
+5. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes.
+
+6. Select **Overview** to view the deployment details, then select **Go to resource**.
+
+7. In the Synapse workspace, select **+ New SQL pool** to create a new SQL pool.
+
+    ![The Synapse workspace page with New SQL Pool selected.](media/azure-create-synapse-3.png 'Synapse workspace')
+
+8. Enter a SQL pool name of `modernapp` and select a performance level of DW100c.
+
+    ![The form fields are completed with the previously described settings.](media/azure-create-synapse-4.png 'Create SQL pool')
+
+9. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes. While this is underway, it is safe to continue to the next task.
+
+10. In the Synapse workspace, select **+ New Apache Spark pool** to create a new Spark pool.
+
+    ![The Synapse workspace page with New Spark Pool selected.](media/azure-create-synapse-5.png 'Synapse workspace Spark pool')
+
+11. In the **Create Apache Spark pool** window, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Apache Spark pool name         | _`modernizeapp`_                                   |
+    | Autoscale                      | _select `disabled`_                                |
+    | Node size                      | _select `Small (4 vCPU / 32 GB)`_                  |
+    | Number of nodes                | _select `3`_                                       |
+
+    ![In the Create Apache Spark pool output, form field entries are filled in.](media/azure-synapse-create-spark-pool.png 'Create Apache Spark pool output')
+
+12. Select **Review + create**. On the review screen, select **Create**.  Provisioning may take several minutes, but you do not need to wait for the pool to be provisioned before moving to the next step.
