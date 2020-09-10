@@ -272,8 +272,6 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
    | Replication                    | _select Locally-redundant storage (LRS)_    |
    | Access tier                    | _select Hot_                                |
 
-    > **Note**: Please replace the `#SUFFIX#` tag in the storage account name with a suffix you would like to use. Names of storage accounts must be globally unique.
-
     ![The form fields are completed with the previously described settings.](media/azure-create-storage-account-1.png 'Storage Account Settings')
 
     Then select **Next : Networking >**.
@@ -323,31 +321,70 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 5. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes.
 
-6. Select **Overview** to view the deployment details, then select **Go to resource**.
+### Upload Materials Required for the Hands-On Training
 
-7. In the Synapse workspace, select **+ New SQL pool** to create a new SQL pool.
+1. Navigate to the **synapse-lab-fraud-detection** resource group in the [Azure portal](https://portal.azure.com).
+
+    ![The resource group named azure-synapse-lab-fraud-detection-rg is selected.](media/azure-synapse-lab-fraud-detection-rg.png 'The Synapse fraud detection lab resource group')
+
+    If you do not see the resource group in the Recent resources section, type in "resource groups" in the top search menu and then select **Resource groups** from the results.
+
+    ![In the Services search result list, Resource groups is selected.](media/azure-resource-group-search.png 'Resource groups')
+
+    From there, select the **synapse-lab-fraud-detection** resource group.
+
+2. Select the **synapselabfraud###adls** storage account which you created before the hands-on lab. Note that there may be multiple storage accounts, so be sure to choose the one you created.
+
+    ![The storage account named synapselabfraudjdhadls is selected.](media/azure-storage-account-select.png 'The synapselabfraudjdhadls storage account')
+
+3. In the **Data Lake Storage** section, select **Containers**. Then, select the **synapse** container you created before the hands-on lab.
+
+    ![The Container named synapse is selected.](media/azure-storage-account-synapse.png 'The synapse storage container')
+
+4. Select the **Upload** option. In the Files section, select the folder icon to upload files. Navigate to where you saved **CityList.csv** and choose this file for upload. Then select **Upload** to finish uploading the file.  Repeat the process for **CountryList.csv**, **CreditCard.csv**, and **rf_model.onnx** files.
+
+    ![The historical maintenance record data is uploaded.](media/azure-synapse-upload.png 'Historical maintenance record')
+
+### Create a SQL Pool
+
+1. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics (workspaces preview)** from the results.
+
+    ![In the Services search result list, Azure Synapse Analytics (workspaces preview) is selected.](media/azure-create-synapse-search.png 'Azure Synapse Analytics (workspaces preview)')
+
+2. Select the workspace you created before the hands-on lab.
+
+    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'synapselabfraudjdhasws workspace')
+
+3. Select **Launch Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+4. In the Synapse workspace, select **+ New SQL pool** to create a new SQL pool.
 
     ![The Synapse workspace page with New SQL Pool selected.](media/azure-create-synapse-3.png 'Synapse workspace')
 
-8. Enter a SQL pool name of `modernapp` and select a performance level of DW100c.
+5. Enter a SQL pool name of `synapsesql` and select a performance level of DW100c.
 
     ![The form fields are completed with the previously described settings.](media/azure-create-synapse-4.png 'Create SQL pool')
 
-9. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes. While this is underway, it is safe to continue to the next task.
+6. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes. While this is underway, it is safe to continue to the next task.
 
-10. In the Synapse workspace, select **+ New Apache Spark pool** to create a new Spark pool.
+### Create a Spark Pool
+
+1. In the Synapse workspace, select **+ New Apache Spark pool** to create a new Spark pool.
 
     ![The Synapse workspace page with New Spark Pool selected.](media/azure-create-synapse-5.png 'Synapse workspace Spark pool')
 
-11. In the **Create Apache Spark pool** window, complete the following:
+2. In the **Create Apache Spark pool** window, complete the following:
 
     | Field                          | Value                                              |
     | ------------------------------ | ------------------------------------------         |
-    | Apache Spark pool name         | _`modernizeapp`_                                   |
+    | Apache Spark pool name         | _`synapsespark`_                                   |
     | Autoscale                      | _select `disabled`_                                |
     | Node size                      | _select `Small (4 vCPU / 32 GB)`_                  |
     | Number of nodes                | _select `3`_                                       |
 
     ![In the Create Apache Spark pool output, form field entries are filled in.](media/azure-synapse-create-spark-pool.png 'Create Apache Spark pool output')
 
-12. Select **Review + create**. On the review screen, select **Create**.  Provisioning may take several minutes, but you do not need to wait for the pool to be provisioned before moving to the next step.
+3. Select **Review + create**. On the review screen, select **Create**.  Provisioning may take several minutes.
+
