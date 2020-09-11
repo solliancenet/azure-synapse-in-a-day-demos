@@ -355,19 +355,15 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
     ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'synapselabfraudjdhasws workspace')
 
-3. Select **Launch Synapse Studio** from the Synapse workspace page.
-
-    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
-
-4. In the Synapse workspace, select **+ New SQL pool** to create a new SQL pool.
+3. In the Synapse workspace, select **+ New SQL pool** to create a new SQL pool.
 
     ![The Synapse workspace page with New SQL Pool selected.](media/azure-create-synapse-3.png 'Synapse workspace')
 
-5. Enter a SQL pool name of `synapsesql` and select a performance level of DW100c.
+4. Enter a SQL pool name of `synapsesql` and select a performance level of DW100c.
 
     ![The form fields are completed with the previously described settings.](media/azure-create-synapse-4.png 'Create SQL pool')
 
-6. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes. While this is underway, it is safe to continue to the next task.
+5. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes. While this is underway, it is safe to continue to the next task.
 
 ### Create a Spark Pool
 
@@ -388,3 +384,91 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 3. Select **Review + create**. On the review screen, select **Create**.  Provisioning may take several minutes.
 
+### Create a SQL On-Demand Database
+
+1. Select **Launch Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+2. Select the **Develop** tab from the Synapse studio.
+
+    ![The Develop option is selected.](media/azure-synapse-develop.png 'Develop')
+
+3. From the **+** menu, choose **SQL script** to open a new script.
+
+    ![Create a new SQL script.](media/azure-synapse-develop.png 'SQL script')
+
+4. Ensure that you are connected to the **SQL on-demand** option. Then, enter the following script into the script window and select **Run**.
+
+    ```sql
+    CREATE DATABASE synapse
+    ```
+
+    ![Create a new database.](media/azure-synapse-on-demand-db.png 'Create a synapse database')
+
+5. Change the name of the script in the properties to **CreateOnDemandDB**.
+
+    ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
+
+### Prepare to Call a Machine Learning Model
+
+1. From the **+** menu, choose **SQL script** to open a new script.
+
+    ![Create a new SQL script.](media/azure-synapse-develop.png 'SQL script')
+
+2. Choose the **synapsesql** connection option and the **synapsesql** database from the database drop-down list.
+
+    ![The synapsesql database is selected.](media/azure-synapse-develop-synapsesql.png 'synapsesql database')
+
+3. Change the name of the script in the properties to **CreateONNXModel**.
+
+    ![The script is named CreateONNXModel.](media/azure-synapse-createonnxmodel.png 'CreateONNXModel')
+
+4. Enter the following code into the script window.
+
+    ```sql
+    CREATE EXTERNAL TABLE [synapse].[Models]
+    (
+        [Model] [varbinary](max) NULL
+    )
+    WITH
+    (
+        LOCATION = 'rf_model.onnx',
+        DATA_SOURCE = [CSVDataSource],
+        FILE_FORMAT = [CSVFileFormat],
+        REJECT_TYPE = VALUE,
+        REJECT_VALUE = 0
+    );
+    ```
+
+5. Select the **Publish all** option.
+
+    ![The publish all option is selected.](media/azure-synapse-publish-all.png 'Publish all')
+
+6. Select the **Publish** option to save these scripts.
+
+    ![The Publish option is selected.](media/azure-synapse-publish.png 'Publish')
+
+### Create a Power BI Workspace
+
+1. In a new tab or window, navigate to the Power BI website, [https://powerbi.microsoft.com/](https://powerbi.microsoft.com/).  Select **Sign in** and sign in.
+
+    ![The Sign in option is selected.](media/power-bi-sign-in.png 'Sign in')
+
+2. Select the **Workspaces** menu and then choose **Create workspace**.
+
+    ![The Create a workspace option is selected.](media/power-bi-create-workspace.png 'Create a workspace')
+
+3. In the Create a workspace menu, enter **FraudDetection** as the name and select **Save**.
+
+    ![The FraudDetection workspace is saved.](media/power-bi-create-workspace-1.png 'FraudDetection workspace')
+
+4. Return to the Synapse studio.  Select the **Home** option.
+
+    ![The Home option is selected.](media/azure-synapse-home.png 'Home')
+
+5. Select the **Visualize** option.
+
+    ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
+
+6. 
