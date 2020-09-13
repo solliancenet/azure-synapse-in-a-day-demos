@@ -133,21 +133,18 @@ This hands-on training uses the following developed content by executing queries
 | No | Content ID | Type | Content details |
 | -- | ---------- | ---- | --------------- |
 | 1 | rf_model.onnx | ML model | Upload a machine learning (linear regression) ONNX model that has been trained to detect credit card fraud. |
-| 2 | CreateONNXModel | SQL | A query to deploy an ONNX model that has been put in Azure Storage Gen2 in an SQL pool. |
-| 3 | CreateAzureStorageAccountKey | SQL | The definition file for the storage account and storage account key for reading and writing files in Azure Storage Gen2 using the SQL On-Demand pool. |
-| 4 | CreateCSVDataSource | SQL | The definition file for the endpoint and storage account in Azure Storage Gen2 that are accessed from the SQL On-Demand pool. |
-| 5 | CreateCSVFileFormat | SQL | The definition file for the format of the file format in Azure Storage Gen2 from the SQL On-Demand pool. |
-| 6 | CreateExternalCreditCard | SQL | A query to create an external view for loading a CSV file of the credit card fraud detection dataset put in Azure Storage Gen2 from the SQL pool. |
-| 7 | SelectIntoCreditCard | SQL | A query that outputs data to a new table in the SQL pool by attaching the results of the scoring of the credit card fraud detection dataset with an ML model. |
-| 8 | CreateCreditCardLonLat | SQL | A query that outputs to a new table the result that was created by using SQL On-Demand to integrate the city latitude and longitude list in Azure Storage Gen2 with the country code list dataset and the CSV file output from the new table that was created in Exercise 1 using Data Factory. |
-| 9 | Number of fraud detections in the elapsed time period | Power BI report | A report that generates a graph of the changes in the number of fraud detections for each elapsed time period using T-SQL results. |
-| 10 | Map of fraud detection locations | Power BI report | A report that generates a map of fraud detection locations that are colored based on the size of the amount involved. |
+| 2 | CreateAzureStorageAccountKey | SQL | The definition file for the storage account and storage account key for reading and writing files in Azure Storage Gen2 using the SQL On-Demand pool. |
+| 3 | CreateCSVDataSource | SQL | The definition file for the endpoint and storage account in Azure Storage Gen2 that are accessed from the SQL On-Demand pool. |
+| 4 | CreateCSVFileFormat | SQL | The definition file for the format of the file format in Azure Storage Gen2 from the SQL On-Demand pool. |
+| 5 | CreateExternalCreditCard | SQL | A query to create an external view for loading a CSV file of the credit card fraud detection dataset put in Azure Storage Gen2 from the SQL pool. |
+| 6 | SelectIntoCreditCard | SQL | A query that outputs data to a new table in the SQL pool by attaching the results of the scoring of the credit card fraud detection dataset with an ML model. |
+| 7 | CreateCreditCardLonLat | SQL | A query that outputs to a new table the result that was created by using SQL On-Demand to integrate the city latitude and longitude list in Azure Storage Gen2 with the country code list dataset and the CSV file output from the new table that was created in Exercise 1 using Data Factory. |
+| 8 | Number of fraud detections in the elapsed time period | Power BI report | A report that generates a graph of the changes in the number of fraud detections for each elapsed time period using T-SQL results. |
+| 9 | Map of fraud detection locations | Power BI report | A report that generates a map of fraud detection locations that are colored based on the size of the amount involved. |
 
-## Preparations
+## Before the Hands-On Lab
 
-### What to Do First
-
-#### Create a Resource Group
+### Create a Resource Group
 
 In this task, you will use the Azure Portal to create a new Azure Resource Group for this lab.
 
@@ -414,45 +411,6 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
     ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
 
-### Prepare to Call a Machine Learning Model
-
-1. From the **+** menu, choose **SQL script** to open a new script.
-
-    ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
-
-2. Choose the **synapsesql** connection option and the **synapsesql** database from the database drop-down list.
-
-    ![The synapsesql database is selected.](media/azure-synapse-develop-synapsesql.png 'synapsesql database')
-
-3. Change the name of the script in the properties to **CreateONNXModel**.
-
-    ![The script is named CreateONNXModel.](media/azure-synapse-createonnxmodel.png 'CreateONNXModel')
-
-4. Enter the following code into the script window.
-
-    ```sql
-    CREATE EXTERNAL TABLE [synapse].[Models]
-    (
-        [Model] [varbinary](max) NULL
-    )
-    WITH
-    (
-        LOCATION = 'rf_model.onnx',
-        DATA_SOURCE = [CSVDataSource],
-        FILE_FORMAT = [CSVFileFormat],
-        REJECT_TYPE = VALUE,
-        REJECT_VALUE = 0
-    );
-    ```
-
-5. Select the **Publish all** option.
-
-    ![The publish all option is selected.](media/azure-synapse-publish-all.png 'Publish all')
-
-6. Select the **Publish** option to save these scripts.
-
-    ![The Publish option is selected.](media/azure-synapse-publish.png 'Publish')
-
 ### Create a Power BI Workspace
 
 1. In a new tab or window, navigate to the Power BI website, [https://powerbi.microsoft.com/](https://powerbi.microsoft.com/).  Select **Sign in** and sign in.
@@ -600,11 +558,11 @@ You will use masked data, obtained by applying principal component analysis to c
     ```sql
     CREATE EXTERNAL TABLE synapse.exCreditCard
     (
-            [Time] varchar(20),
+            [Time] float,
             [V1] float,[V2] float,[V3] float,[V4] float,[V5] float,[V6] float,[V7] float,[V8] float,[V9] float,[V10] float,
             [V11] float,[V12] float,[V13] float,[V14] float,[V15] float,[V16] float,[V17] float,[V18] float,[V19] float,[V20] float,
             [V21] float,[V22] float,[V23] float,[V24] float,[V25] float,[V26] float,[V27] float,[V28] float,
-            [Amount] float,[Class] varchar(20),[id] varchar(20)
+            [Amount] float,[Class] bigint,[id] bigint
     )
     WITH
     (
@@ -629,3 +587,130 @@ You will use masked data, obtained by applying principal component analysis to c
     ![The Publish option is selected.](media/azure-synapse-publish-2.png 'Publish')
 
 ### Task 2:  Query Development
+
+1. From the **+** menu, choose **SQL script** to open a new script.
+
+    ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
+
+2. Choose the **synapsesql** connection option and the **synapsesql** database from the database drop-down list.
+
+    ![The synapsesql database is selected.](media/azure-synapse-develop-synapsesql.png 'synapsesql database')
+
+3. Change the name of the script in the properties to **SelectIntoCreditCard**.
+
+    ![The script is named SelectIntoCreditCard.](media/azure-synapse-selectintocreditcard.png 'SelectIntoCreditCard')
+
+4. Open the script named **SelectIntoCreditCard.sql**.  Copy and paste its contents into the script window.  The script will look like the below, but will include a lengthy `@modelexample` binary value.  Run the script and let it insert data into a new `synapse.CreditCard` table.
+
+    ```sql
+    DECLARE @modelexample varbinary(max) = 0x08041208736B6C326F6E6E781 ...
+
+    SELECT
+        d.*, p.*
+    INTO synapse.CreditCard
+    FROM PREDICT(MODEL = @modelexample, DATA = synapse.exCreditCard AS d) WITH (output_label bigint) AS p;
+    ```
+
+    ![The scored credit card prediction table has been created.](media/azure-synapse-script-create-creditcard.png 'Run predictions')
+
+5. In the **Tables** folder for **synapsesql**, select the ellipsis (...) and choose **Refresh** to see the `synapse.CreditCard` table.
+
+    ![The list of tables is refreshed.](media/azure-synapse-refresh-tables.png 'Refresh')
+
+6. In the **synapse.CreditCard** table entry, select the ellipsis (...) and choose **New SQL Script** and then **Select TOP 100 rows** to open a new script pre-populated with a SQL query.
+
+    ![The option to select the top 100 rows in the credit card predictions table is selected.](media/azure-synapse-creditcard-select.png 'Select TOP 100 rows')
+
+### Task 3:  Power BI Report Development
+
+1. Open the RDP file from the Before the Hands-On Lab section and select **Connect** to access the virtual machine.  When prompted for credentials, enter `powerbiuser` for the username and the password you chose.
+
+    ![Connect to a remote host.](media/azure-vm-connect-3.png 'Connect to a remote host')
+
+2. Open a browser in the virtual machine.  In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics (workspaces preview)** from the results.
+
+    ![In the Services search result list, Azure Synapse Analytics (workspaces preview) is selected.](media/azure-create-synapse-search.png 'Azure Synapse Analytics (workspaces preview)')
+
+3. Select the workspace you created before the hands-on lab.
+
+    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'modernizeapp workspace')
+
+4. Select **Launch Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+5. Select **Visualize** from the Synapse studio front page.
+
+    ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
+
+6. Drill down into **Power BI** and then **FraudDetection**.  From there, select the ellpisis (...) and select **Open**.
+
+    ![The Open option is selected.](media/azure-synapse-power-bi-dataset-open.png 'Open')
+
+7. Select **+ New Power BI dataset**.
+
+    ![The New Power BI dataset option is selected.](media/azure-synapse-power-bi-dataset-new.png 'New Power BI dataset')
+
+8. Select **Start** to begin the process.
+
+    ![The option to start is selected.](media/power-bi-new-dataset-1.png 'Start')
+
+9. Select the **synapsesql** SQL pool to use as a data source and then select **Continue**.
+
+    ![The synapse SQL pool is selected.](media/power-bi-new-dataset-2.png 'Synapse SQL Pool')
+
+10. Select **Download** to download the Power BI dataset file.  After download completes, select **Continue**.
+
+    ![The Power BI dataset file is downloaded.](media/power-bi-new-dataset-3.png 'Download pbids file')
+
+11. Open the downloaded Power BI dataset file in Power BI Desktop.  When prompted to enter a username and password, select **Database** and enter the Synapse username and password you created before the hands-on lab.  The username will be **sqladminuser** by default.  Then select **Connect** to connect to the SQL pool.
+
+    ![The credentials for the Synapse admin user are entered.](media/power-bi-new-dataset-4.png 'Connect to SQL Pool')
+
+12. On the Navigator page, select the **CreditCard** table and then select **Load**.
+
+    ![The credit card table are selected.](media/power-bi-new-dataset-5.png 'Navigator')
+
+13. In the Connection settings modal dialog, select **Import** and then select **OK**.
+
+    ![The Import option is selected.](media/power-bi-new-dataset-6.png 'Connection settings')
+
+14. Once the table is loaded, select the **Data** tab and then select the **Time** column.  In the Format section, select the drop-down list and choose **Decimal number**.
+
+    ![The Time column is changed to a decimal data type.](media/power-bi-new-dataset-7.png 'Decimal number')
+
+15. Right-click the Time column and choose **Sort ascending**.
+
+    ![The Sort ascending option is selected.](media/power-bi-new-dataset-8.png 'Sort ascending')
+
+16. Choose the **Report** view and then select the **Clustered column chart** option.  Select and drag the **Time** attribute into the **Axis** field to make time the X axis.  From there, select and drag the **Amount** attribute into the **Values** field to make amount the Y axis.
+
+    ![The amount by time report has been created.](media/power-bi-amount-by-time.png 'Amount by Time')
+
+17. Expand out the **Filters** pane. Select and drag the **Class** attribute into the **Filters on this visual** menu.  Change the filter type to **Basic filtering** and select **1** to filter down to fraudulent transactions.
+
+    ![The amount by time report filter has been added.](media/power-bi-amount-by-time-filter.png 'Amount by Time filter')
+
+18. Save the file as **FraudDetectionReport**.
+
+    ![The Power BI report is saved.](media/power-bi-fraud-detection-report.png 'FraudDetectionReport')
+
+19. In the **File** menu, select **Publish** and then **Publish to Power BI**.
+
+    ![The Publish to Power BI option is selected.](media/power-bi-publish.png 'Publish to Power BI')
+
+20. Sign into your Power BI workspace.
+
+    ![The option to sign into Power BI is selected.](media/power-bi-login.png 'Sign in')
+
+21. Select the **FraudDetection** workspace and then choose **Select**.
+
+    ![The FraudDetection workspace is selected.](media/power-bi-select-destination.png 'Select a destination')
+
+22. After the Power BI report deploys, return to Azure Synapse Analytics Studio and select **Continue** and then **Close and refresh**.  Select the **Power BI reports** menu and then the **FraudDetectionReport** to review the published report.
+
+    ![The fraud detection report is now available.](media/azure-synapse-fraud-detection-report.png 'Fraud Detection Report')
+
+## Exercise 2:  Perform Ad Hoc Queries from the Storage Account
+
+Plot the trends of the cities where unauthorized use of credit cards occurred and the amounts on a map, so that you can ascertain the geographical factors associated with frequent unauthorized use and the cities where large losses frequently occur.
