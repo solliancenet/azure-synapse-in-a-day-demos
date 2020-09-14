@@ -714,3 +714,89 @@ You will use masked data, obtained by applying principal component analysis to c
 ## Exercise 2:  Perform Ad Hoc Queries from the Storage Account
 
 Plot the trends of the cities where unauthorized use of credit cards occurred and the amounts on a map, so that you can ascertain the geographical factors associated with frequent unauthorized use and the cities where large losses frequently occur.
+
+### Task 1:  Create a Dataset
+
+This first task will export credit card predictions from the prior exercise into CSV format.
+
+1. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics (workspaces preview)** from the results.
+
+    ![In the Services search result list, Azure Synapse Analytics (workspaces preview) is selected.](media/azure-create-synapse-search.png 'Azure Synapse Analytics (workspaces preview)')
+
+2. Select the workspace you created before the hands-on lab.
+
+    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'synapselabfraudjdhasws workspace')
+
+3. Select **Launch Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+4. Select the **Data** tab from the Synapse studio.
+
+    ![The Data option is selected.](media/azure-synapse-data.png 'Data')
+
+5. Drill down the SQL pool tables and then select the ellipsis (...) next to the **synapse.CreditCard** table.  From there, select **Data flow** to open a new data flow.
+
+    ![Create a new Data flow.](media/azure-synapse-new-data-flow.png 'Data flow')
+
+6. Name the data flow **DataflowCreditCard** and the Dataset **DatasetSqlPoolCreditCard**.  Then, select **Create** to create the data flow.
+
+    ![Names are provided for the data flow and dataset.](media/azure-synapse-dataflowcreditcard.png 'DataflowCreditCard')
+
+7. Name the source **sourceCreditCard**.
+
+    ![The output stream name is sourceCreditCard.](media/azure-synapse-sourcecreditcard.png 'Output stream name')
+
+8. Select the **+** option next to the source and choose **Select** from the Schema modifier list.
+
+    ![The schema modifier Select is selected.](media/azure-synapse-new-select.png 'Select')
+
+9. Change the name of the new output stream to **SelectCreditCard**.
+
+    ![The output stream name is SelectCreditCard.](media/azure-synapse-selectcreditcard.png 'Output stream name')
+
+10. Select the **+** option next to the source and choose **Sink** from the Destination list.
+
+    ![The destination Sink is selected.](media/azure-synapse-new-sink.png 'Sink')
+
+11. Change the name of the new output stream to **SinkCreditCard**.  Then select the **+ New** option to create a new Dataset.
+
+    ![The new Dataset option is selected.](media/azure-synapse-sinkcreditcard.png 'New Dataset')
+
+12. From the New dataset menu, select **Azure Data Lake Storage Gen2** and then select **Continue**.
+
+    ![The new Dataset option is selected.](media/azure-synapse-sink-dlsgen2.png 'New Dataset')
+
+13. On the Select format menu, choose **DelimitedText** for the output type and then select **Continue**.
+
+    ![The delimited text option is selected.](media/azure-synapse-sink-format.png 'Select format')
+
+14. Enter **outputCreditCardCSV** as the file name.  Then, from the Linked service menu, choose **+ New**.
+
+    ![The new linked service is selected.](media/azure-synapse-sink-properties.png 'Set properties')
+
+15. In the **New linked service** menu, complete the following and then select **Create** to create a new Azure Data Lake Storage Gen2 linked service.
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Name                           | _`synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`)_ |
+    | Authentication method          | _select `Account key`_                             |
+    | Account selection method       | _select `From Azure subscription`_                 |
+    | Azure subscription             | _select your Azure subscription_                   |
+    | Storage account name           | _`synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`)_ |
+
+    ![The new linked service is selected.](media/azure-synapse-linked-service.png 'Set properties')
+
+16. In the Set properties menu, in the File path section, enter **synapse** into the **File System** box.  Then, select the **First row as header** option and select **OK**.
+
+    ![The output properties are set.](media/azure-synapse-linked-service-file-path.png 'File path')
+
+17. Enable data flow debugging by toggling the **Data flow debug** option.
+
+    ![The data flow debug option is selected.](media/azure-synapse-data-flow-debug.png 'Data flow debug')
+
+18. Choose the **AutoResolveIntegrationRuntime** and select **OK**.  It may take several minutes for debugging to complete.
+
+    ![The data flow debug option is selected.](media/azure-synapse-data-flow-ir.png 'Data flow debug')
+
+19. 
