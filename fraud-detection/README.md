@@ -679,7 +679,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
 
-6. Drill down into **Power BI** and then **FraudDetection**.  From there, select the ellpisis (...) and select **Open**.
+6. Drill down into **Power BI** and then **FraudDetection**.  From there, select the ellipsis (...) and select **Open**.
 
     ![The Open option is selected.](media/azure-synapse-power-bi-dataset-open.png 'Open')
 
@@ -992,8 +992,8 @@ This first task will export credit card predictions from the prior exercise into
     FROM
     OPENROWSET(
             BULK 'https://synapselabfraud###adls.blob.core.windows.net/synapse/CreditCardScored.csv',
-            FORMAT = 'CSV', 
-            FIELDTERMINATOR =',', 
+            FORMAT = 'CSV',
+            FIELDTERMINATOR =',',
             FIRSTROW = 2,
             ESCAPECHAR = '\\'
         )
@@ -1007,8 +1007,8 @@ This first task will export credit card predictions from the prior exercise into
     LEFT JOIN
     OPENROWSET(
             BULK 'https://synapselabfraud###adls.dfs.core.windows.net/synapse/CityList.csv',
-            FORMAT = 'CSV', 
-            FIELDTERMINATOR =',', 
+            FORMAT = 'CSV',
+            FIELDTERMINATOR =',',
             FIRSTROW = 2,
             ESCAPECHAR = '\\'
         )
@@ -1021,11 +1021,11 @@ This first task will export credit card predictions from the prior exercise into
             [lat] float
         ) AS [city] ON
         credit.id = city.id
-    LEFT JOIN 
+    LEFT JOIN
     OPENROWSET(
             BULK 'https://synapselabfraud###adls.dfs.core.windows.net/synapse/CountryList.csv',
-            FORMAT = 'CSV', 
-            FIELDTERMINATOR =',', 
+            FORMAT = 'CSV',
+            FIELDTERMINATOR =',',
             FIRSTROW = 2,
             ESCAPECHAR = '\\'
         )
