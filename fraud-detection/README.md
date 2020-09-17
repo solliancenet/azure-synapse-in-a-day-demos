@@ -32,6 +32,9 @@
     - [Task 1:  Create a Dataset](#task-1-create-a-dataset)
     - [Task 2:  Create a View](#task-2-create-a-view)
     - [Task 3:  Power BI Fraud Map Report Development](#task-3-power-bi-fraud-map-report-development)
+  - [After the hands-on lab](#after-the-hands-on-lab)
+    - [Task 1: Delete Lab Resources](#task-1-delete-lab-resources)
+    - [Task 2:  Delete the Power BI Workspace](#task-2-delete-the-power-bi-workspace)
 
 ## Overview
 
@@ -152,7 +155,7 @@ In this hands-on training, we'll use T-SQL to score an ONNX-format machine learn
 
 ## Before the Hands-On Lab
 
-Duration: TODO minutes
+Duration: 90 minutes
 
 ### Listing the Resources Created During the Hands-On Training
 
@@ -182,7 +185,7 @@ The lab files are located in a GitHub repo. You must unzip the file and extract 
 
     ![The extracted files are displayed in Windows Explorer.](media/extracted-files.png "Extracted files")
 
-4. Extract the **csv.zip** files to the current directory.  This will create a folder named `csv`.
+4. Extract the **csv.zip** file into the current directory.  This will create a folder named `csv`.
 
     ![The extract zipped folders dialog is displayed.](media/unzip-1.png "Extract Compressed (Zipped) Folders")
 
@@ -214,9 +217,7 @@ In this task, you will use the Azure Portal to create a new Azure Resource Group
 
 ### Task 3: Prepare a Virtual Machine to Run Power BI Desktop
 
-To proceed with the steps described in this hands-on training, you'll need to use the Power BI Desktop app that is installed in the Windows 10 environment.
-
-In this step, you will create a virtual machine running Windows 10 and then install Power BI.
+To proceed with the steps described in this hands-on training, you'll need to use the Power BI Desktop app for Windows 10.  In this step, you will create a virtual machine running Windows 10 and then install Power BI.
 
 1. In the [Azure portal](https://portal.azure.com), type in "virtual machines" in the top search menu and then select **Virtual machines** from the results.
 
@@ -238,7 +239,6 @@ In this step, you will create a virtual machine running Windows 10 and then inst
    | Size                           | _select `Standard_D2s_v3`_                         |
    | Username                       | _select `powerbiuser`_                             |
    | Password                       | _enter a password you will remember_               |
-   | Key pair name                  | _select `modernize-app-vm_key`_                    |
    | Public inbound ports           | _select `Allow selected ports`_                    |
    | Select inbound ports           | _select `RDP (3389)`_                              |
    | Licensing                      | _select the option to confirm that you have an  eligible Windows 10 license with multi-tenant hosting rights._ |
@@ -261,7 +261,7 @@ In this step, you will create a virtual machine running Windows 10 and then inst
 
     ![Connect to a remote host.](media/azure-vm-connect-3.png 'Connect to a remote host')
 
-8. Launch the Microsoft App Store from the Windows 10 taskbar.
+8. Launch the Microsoft Store from the Windows 10 taskbar.
 
     ![Launch the Microsoft Store.](media/vm-launch-app-store.png 'Microsoft Store')
 
@@ -279,7 +279,7 @@ In this step, you will create a virtual machine running Windows 10 and then inst
 
 ### Task 4: Provision Azure Data Lake Storage Gen2
 
-Azure Data Lake Storage Gen2 will be critical for several integration points throughout the hands-on lab.
+Azure Data Lake Storage Gen2 will be critical for integration throughout the hands-on lab.
 
 1. Navigate to the [Azure portal](https://portal.azure.com).
 
@@ -371,9 +371,9 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
     ![The Container named synapse is selected.](media/azure-storage-account-synapse.png 'The synapse storage container')
 
-4. Select the **Upload** option. In the Files section, select the folder icon to upload files. Navigate to where you saved **CityList.csv** and choose this file for upload. Then select **Upload** to finish uploading the file.  Repeat the process for **CountryList.csv**, **CreditCard.csv**, and **rf_model.onnx** files.
+4. Select the **Upload** option. In the Files section, select the folder icon to upload files. Navigate to `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\csv\` and select **CityList.csv**, as the file for upload. Then select **Upload** to finish uploading the file.  Repeat the process for **CountryList.csv**, **CreditCard.csv**, and **rf_model.onnx** files.  The **rf_model.onnx** file will be in the parent directory, `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\`.
 
-    ![The historical maintenance record data is uploaded.](media/azure-synapse-upload.png 'Historical maintenance record')
+    ![The city list data is uploaded.](media/azure-synapse-upload.png 'Upload blob')
 
 5. In the **Settings** menu, select **Access keys**.  Then, copy the **Storage account name** and **key1 Key** values and paste them into a text editor for later use.
 
@@ -478,7 +478,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 ## Exercise 1:  Scoring predictions from T-SQL using a pre-trained model
 
-Duration: TODO minutes
+Duration: 45 minutes
 
 You will use masked data, obtained by applying principal component analysis to credit card transaction data, to evaluate which transactions are fraudulent and to analyze trends in elapsed time and fraud amounts.
 
@@ -546,11 +546,11 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The database scoped credential has been created.](media/azure-synapse-script-create-dsc.png 'Create Database Scoped Credential')
 
-13. From the **+** menu, choose **SQL script** to open a new script.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
+13. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-14. Change the name of this script to **CreateCSVDataSource**.  Enter the following into the script window, filling in your storage account name and access key.  Then, select **Run** to execute the code.
+14. Change the name of this script to **CreateCSVDataSource**.  Enter the following into the script window, filling in your storage account name and access key.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.  Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL DATA SOURCE CSVDataSource WITH
@@ -563,11 +563,11 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The external data source has been created.](media/azure-synapse-create-data-source.png 'Create External Data Source')
 
-15. From the **+** menu, choose **SQL script** to open a new script.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
+15. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-16. Change the name of this script to **CreateCSVFileFormat**.  Enter the following into the script window, filling in your storage account name and access key.  Then, select **Run** to execute the code.
+16. Change the name of this script to **CreateCSVFileFormat**.  Enter the following into the script window, filling in your storage account name and access key.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.  Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL FILE FORMAT CSVFileFormat
@@ -584,11 +584,11 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The external file format has been created.](media/azure-synapse-script-create-fileformat.png 'Create External File Format')
 
-17. From the **+** menu, choose **SQL script** to open a new script.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
+17. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-18. Change the name of this script to **CreateExternalCreditCard**.  Enter the following into the script window, filling in your storage account name and access key.  Then, select **Run** to execute the code.
+18. Change the name of this script to **CreateExternalCreditCard**.  Enter the following into the script window, filling in your storage account name and access key.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.  Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL TABLE synapse.exCreditCard
@@ -635,9 +635,10 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The script is named SelectIntoCreditCard.](media/azure-synapse-selectintocreditcard.png 'SelectIntoCreditCard')
 
-4. Open the script named **SelectIntoCreditCard.sql**.  Copy and paste its contents into the script window.  The script will look like the below, but will include a lengthy `@modelexample` binary value.  Run the script and let it insert data into a new `synapse.CreditCard` table.
+4. Open the script named **SelectIntoCreditCard.sql** in your local folder, `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\`.  Copy and paste its contents into the script window.  The script will look like the code below, but will include a lengthy `@modelexample` binary value and will not include the `THROW` call.  Run the script and let it insert data into a new `synapse.CreditCard` table.
 
     ```sql
+    THROW 50001, 'Please do not run this code. Open the script named SelectIntoCreditCard.sql instead.', 1;
     DECLARE @modelexample varbinary(max) = 0x08041208736B6C326F6E6E781 ...
 
     SELECT
@@ -668,7 +669,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
 3. Select the workspace you created before the hands-on lab.
 
-    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'modernizeapp workspace')
+    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'synapse-lab-fraud-detection workspace')
 
 4. Select **Launch Synapse Studio** from the Synapse workspace page.
 
@@ -702,7 +703,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The credentials for the Synapse admin user are entered.](media/power-bi-new-dataset-4.png 'Connect to SQL Pool')
 
-12. On the Navigator page, select the **CreditCard** table and then select **Load**.
+12. On the Navigator page, select the **synapse.CreditCard** table and then select **Load**.
 
     ![The credit card table are selected.](media/power-bi-new-dataset-5.png 'Navigator')
 
@@ -748,7 +749,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
 ## Exercise 2:  Perform Ad Hoc Queries from the Storage Account
 
-Duration: TODO minutes
+Duration: 50 minutes
 
 Plot the trends of the cities where unauthorized use of credit cards occurred and the amounts on a map, so that you can ascertain the geographical factors associated with frequent unauthorized use and the cities where large losses frequently occur.
 
@@ -949,7 +950,7 @@ This first task will export credit card predictions from the prior exercise into
 5. Copy and paste the following into the script window.  Change the `synapselabfraud###adls` references to the storage account you created.  Then select **Run** to execute the script.
 
     ```sql
-    CREATE VIEW dbo.CreditCardLonLat AS 
+    CREATE VIEW dbo.CreditCardLonLat AS
     SELECT
             credit.Time,
             city.name,
@@ -988,7 +989,7 @@ This first task will export credit card predictions from the prior exercise into
             credit.Amount,
             credit.Class,
             credit.id
-    FROM 
+    FROM
     OPENROWSET(
             BULK 'https://synapselabfraud###adls.blob.core.windows.net/synapse/CreditCardScored.csv',
             FORMAT = 'CSV', 
@@ -1119,3 +1120,41 @@ This first task will export credit card predictions from the prior exercise into
 20. Select the **FraudDetectionMap** report.  This report allows you to understand the geographical features of the unauthorized use of credit cards and to implement concrete measures to temporarily restrict the use of credit cards in cities that show the beginnings of a concentration of unauthorized uses of credit cards for large amounts.
 
     ![The fraud detection Power BI report is refreshed.](media/azure-synapse-reports-map.png 'Fraud Detection Map')
+
+## After the hands-on lab
+
+Duration: 10 minutes
+
+### Task 1: Delete Lab Resources
+
+1. Log into the [Azure Portal](https://portal.azure.com).
+
+2. On the top-left corner of the portal, select the menu icon to display the menu.
+
+    ![The portal menu icon is displayed.](media/portal-menu-icon.png "Menu icon")
+
+3. In the left-hand menu, select **Resource Groups**.
+
+4. Navigate to and select the `synapse-lab-fraud-detection` resource group.
+
+5. Select **Delete resource group**.
+
+    ![On the synapse-lab-fraud-detection resource group, Delete resource group is selected.](media/azure-delete-resource-group-1.png 'Delete resource group')
+
+6. Type in the resource group name (`synapse-lab-fraud-detection`) and then select **Delete**.
+
+    ![Confirm the resource group to delete.](media/azure-delete-resource-group-2.png 'Confirm resource group deletion')
+
+### Task 2:  Delete the Power BI Workspace
+
+1. Navigate to [Power BI](https://app.powerbi.com) and log in if prompted.
+
+2. In the Workspaces menu, select the **...** menu option for the **FraudDetection** workspace and then choose **Workspace settings**.
+
+    ![The workspace settings option is selected.](media/power-bi-workspace-settings.png 'Workspace settings')
+
+3. In the Settings panel, select **Delete workspace** to delete the workspace.
+
+    ![The option to delete a workspace is selected.](media/power-bi-delete-workspace.png 'Delete workspace')
+
+You should follow all steps provided *after* attending the Hands-on lab.
