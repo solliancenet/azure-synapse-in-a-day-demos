@@ -1,5 +1,38 @@
 # Azure Synapse in a day demos - Fraud detection
 
+- [Azure Synapse in a day demos - Fraud detection](#azure-synapse-in-a-day-demos---fraud-detection)
+  - [Overview](#overview)
+    - [Pre-Requisites](#pre-requisites)
+  - [Hands-On Training Theme](#hands-on-training-theme)
+    - [The Challenge for Businesses](#the-challenge-for-businesses)
+    - [Objectives and Goals](#objectives-and-goals)
+  - [Description of the Datasets in Use](#description-of-the-datasets-in-use)
+    - [Description of the Credit Card Fraud Detection Dataset](#description-of-the-credit-card-fraud-detection-dataset)
+    - [Description of the City Latitude and Longitude List Dataset](#description-of-the-city-latitude-and-longitude-list-dataset)
+    - [Description of the Country Code List Dataset](#description-of-the-country-code-list-dataset)
+  - [About Principal Component Analysis](#about-principal-component-analysis)
+  - [Machine Learning Algorithm Used for Scoring in Exercise 1](#machine-learning-algorithm-used-for-scoring-in-exercise-1)
+  - [Before the Hands-On Lab](#before-the-hands-on-lab)
+    - [Listing the Resources Created During the Hands-On Training](#listing-the-resources-created-during-the-hands-on-training)
+  - [Task 1: Download lab files](#task-1-download-lab-files)
+    - [Task 2: Create a Resource Group](#task-2-create-a-resource-group)
+    - [Task 3: Prepare a Virtual Machine to Run Power BI Desktop](#task-3-prepare-a-virtual-machine-to-run-power-bi-desktop)
+    - [Task 4: Provision Azure Data Lake Storage Gen2](#task-4-provision-azure-data-lake-storage-gen2)
+    - [Task 5: Provision an Azure Synapse Analytics Workspace](#task-5-provision-an-azure-synapse-analytics-workspace)
+    - [Task 6: Upload Materials Required for the Hands-On Training](#task-6-upload-materials-required-for-the-hands-on-training)
+    - [Task 7: Create a SQL Pool](#task-7-create-a-sql-pool)
+    - [Task 8: Create a Spark Pool](#task-8-create-a-spark-pool)
+    - [Task 9: Create a SQL On-Demand Database](#task-9-create-a-sql-on-demand-database)
+    - [Task 10: Create a Power BI Workspace](#task-10-create-a-power-bi-workspace)
+  - [Exercise 1:  Scoring predictions from T-SQL using a pre-trained model](#exercise-1-scoring-predictions-from-t-sql-using-a-pre-trained-model)
+    - [Task 1:  Dataset Creation](#task-1-dataset-creation)
+    - [Task 2:  Query Development](#task-2-query-development)
+    - [Task 3:  Power BI Report Development](#task-3-power-bi-report-development)
+  - [Exercise 2:  Perform Ad Hoc Queries from the Storage Account](#exercise-2-perform-ad-hoc-queries-from-the-storage-account)
+    - [Task 1:  Create a Dataset](#task-1-create-a-dataset)
+    - [Task 2:  Create a View](#task-2-create-a-view)
+    - [Task 3:  Power BI Fraud Map Report Development](#task-3-power-bi-fraud-map-report-development)
+
 ## Overview
 
 ### Pre-Requisites
@@ -14,29 +47,25 @@ To complete this lab, you must meet the following pre-requisites:
 
 3. Prepare an environment and subscription for your intended hands-on Azure environment.
 
-4. The hands-on training content contains a section marked {Participant's ID that was specified at the start of the hands-on training}. We will issue an ID to each participant at the start of the hands-on training. Enter your ID and proceed.
-
-### Hands-On Training Theme
+## Hands-On Training Theme
 
 Over the past few years, there has been a significant worldwide increase in the unauthorized use of credit cards in mail order and online payments, as these are transactions in which no credit card is actually presented to the vendor. Unless some sort of countermeasures are taken, this will cause enormous damage to credit card users and credit card companies.
 
-#### The Challenge for Businesses
+### The Challenge for Businesses
 
 In order to prevent unauthorized use, it is crucial to be able to infer the possibility of unauthorized transactions and to detect fraud from transaction details. We also recognize that the prompt identification of unauthorized transactions is an urgent issue for credit card companies and financial institutions.
 
 They need to be able to quickly understand and analyze the trends of unauthorized spending for each time period and the geographical characteristics of unauthorized use, and to learn how to take concrete preventive measures.
 
-#### Objectives and Goals
+### Objectives and Goals
 
-In this hands-on training, we will learn specific methods for using the SQL On-Demand feature in Azure Synapse Analytics to convert the CSV files of credit card detection data and of geographical characteristics data that have been deployed in Azure Data Lake Storage Gen2 into data, without any program development. You will also learn how to conduct sophisticated analysis of this data using Power BI reports.
+In this hands-on training, we will learn specific methods for using the SQL On-Demand feature in Azure Synapse Analytics to convert credit card fraud detection data and of geographical characteristics data that have been deployed in CSV format into Azure Data Lake Storage Gen2 into data, without any program development. You will also learn how to conduct sophisticated analysis of this data using Power BI reports.
 
 In Exercise 1, we will explore the trends of unauthorized spending for each time period, as observed from the fraud detection results extracted by machine learning.
 
 In Exercise 2, we will explore the geographical characteristics of unauthorized use, as observed from data that combines latitude/longitude information of the cities in which credit cards have been used.
 
-At the end of each exercise, we will check that the goals for the objectives shown above have been attained.
-
-### Description of the Datasets in Use
+## Description of the Datasets in Use
 
 We will use three types of datasets in this hands-on training.
 
@@ -46,7 +75,7 @@ We will use three types of datasets in this hands-on training.
 | Open Weather | List of city latitudes and longitudes | Citylist.csv |
 | ISO3166-1 | List of country codes | Countrylist.csv |
 
-#### Description of the Credit Card Fraud Detection Dataset
+### Description of the Credit Card Fraud Detection Dataset
 
 The credit card fraud detection dataset uses data obtained by converting the data from transactions made by European cardholders in September 2013 that was converted by principal component analysis (PCA). It is considered inappropriate to provide the original features and more background information about the data, due to personal information protection issues associated with GDPR that came into effect in May 2017.
 
@@ -55,12 +84,12 @@ The credit card fraud detection dataset uses data obtained by converting the dat
 | No | Column ID | Column Name | Description |
 | -- | --------- | ----------- | ----------- |
 | 1 | Time | Time | Contains the number of seconds elapsed between each transaction and the first transaction in the dataset. |
-| 2 - 29 | V1, V2,... V28 | PCA conversion results | Data obtained by converting the data in the column that affects the detection of fraud from credit card transaction data using principal component analysis (PCA). |
+| 2 - 29 | V1, V2, ... V28 | PCA conversion results | Data obtained by converting the data in the column that affects the detection of fraud from credit card transaction data using principal component analysis (PCA). |
 | 30 | Amount | Amount | Credit card transaction amount |
 | 31 | Class | Fraudulent/Non-fraudulent | A column that determines whether a transaction is fraudulent or non-fraudulent, as defined for a fraud detection machine learning model. (0=Non-fraudulent, 1=Fraudulent) |
-| 32 | Id | City ID | A columns that associate credit card transactions with city IDs in the city latitude and longitude list (For this hands-on training, columns have been added and data has been processed/edited.) |
+| 32 | Id | City ID | A column which associates credit card transactions with city IDs in the city latitude and longitude list.  For this hands-on training, columns have been added and data has been processed/edited to include these city IDs. |
 
-#### Description of the City Latitude and Longitude List Dataset
+### Description of the City Latitude and Longitude List Dataset
 
 Use CSV data from the city latitude and longitude list that is published in OpenWeather, a company that publishes the latitude and longitude data of cities around the world.
 
@@ -68,47 +97,48 @@ Use CSV data from the city latitude and longitude list that is published in Open
 
 | No | Column ID | Column Name | Description |
 | -- | --------- | ----------- | ----------- |
-| 1 | Id | City ID | Contains the number of seconds elapsed between each transaction and the first transaction in the dataset. |
-| 2 | Name | City name | Data obtained by converting the data in the column that affects the detection of fraud from credit card transaction data using principal component analysis (PCA). |
-| 3 | State | Amount | Credit card transaction amount |
-| 4 | alpha2 | Two-digit country code | ISO3166-1 alpha-2 (two-digit country code) |
+| 1 | Id | City ID | A surrogate key representing the city |
+| 2 | Name | City name | The city name |
+| 3 | State | State | The state name, if applicable |
+| 4 | alpha2 | Two-character country code | ISO3166-1 alpha-2 (two-digit country code) |
 | 5 | Lon | Longitude | Value showing the longitude of the city |
 | 6 | Lat | Latitude | Value showing the latitude of the city |
 
-#### Description of the Country Code List Dataset
+### Description of the Country Code List Dataset
 
 CSV data created from a list of international standards for codes showing ISO3166-1 country names and administrative districts and territories.
 
-(Source: [https://ja.wikipedia.org/wiki/ISO_3166-1](https://ja.wikipedia.org/wiki/ISO_3166-1))
+(Source: [https://jp.wikipedia.org/wiki/ISO_3166-1](https://jp.wikipedia.org/wiki/ISO_3166-1))
 
 | No | Column ID | Column Name | Description |
 | -- | --------- | ----------- | ----------- |
-| 1 | companyjp | City ID | Contains the number of seconds elapsed between each transaction and the first transaction in the dataset. |
-| 2 | companyen | City name | Data obtained by converting the data in the column that affects the detection of fraud from credit card transaction data using principal component analysis (PCA). |
-| 3 | Alpha3 | Three-digit country code | ISO3166-1 alpha-3 (three-digit country code) |
-| 4 | alpha2 | Two-digit country code | ISO3166-1 alpha-2 (two-digit country code) |
-| 5 | Lon | Longitude | Value showing the longitude of the city |
-| 6 | Lat | Latitude | Value showing the latitude of the city |
+| 1 | companyjp | Country Name (Japanese) | Contains the Japanese-language name of the country |
+| 2 | companyen | Country Name (English) | Contains the English-language name of the country |
+| 3 | numeric | Numeric Code | ISO3166-1 numeric code |
+| 4 | alpha3 | Three-character country code | ISO3166-1 alpha-3 (three-character country code) |
+| 5 | alpha2 | Two-character country code | ISO3166-1 alpha-2 (two-character country code) |
+| 6 | location | Location | Contains the Japanese-language location |
+| 7 | subdivision | Subdivision Code | ISO 3166-2 subdivision code |
 
-### About Principal Component Analysis
+## About Principal Component Analysis
 
 Principal component analysis (PCA) is by far the most commonly used dimension reduction algorithm in machine learning.
 
-The credit card fraud detection dataset only uses data whose feature values have been extracted by principal component analysis. It is considered inappropriate to provide the original features and more background information about the raw data that contains things like the individual's name, the store name and the purchased product(s) in the credit card transaction, due to personal information protection issues associated with GDPR that came into effect in May 2017.
-
-Image the results obtained by quantifying the values of each column in the image of the sample source data and calculating each principal component axis with the credit card fraud detection dataset.
-
-Principal component analysis is a common algorithm that is also available in Azure ML Studio.
-
 ![Feature extraction using principal component analysis.](media/pca-feature-extraction.png "Feature extraction using principal component analysis")
+
+The credit card fraud detection dataset only uses data whose feature values have been extracted by principal component analysis. It is considered inappropriate to provide the original features and more background information about the raw data that contains things like the individual's name, the store name and the purchased product(s) in the credit card transaction, due to personal information protection issues associated with GDPR that came into effect in May 2017.
 
 ![The process of principal component analysis.](media/pca-process.png "The process of principal component analysis")
 
+Following is a hypothetical image of credit card transactions prior to calculating each principal component axis.
+
 ![Sample source data prior to principal component analysis.](media/pca-sample-data.png "Sample source data prior to principal component analysis")
 
-### Machine Learning Algorithm Used for Scoring in Exercise 1
+Principal component analysis is a common algorithm that is also available in Azure ML Studio.
 
-The machine learning algorithm that we'll use in Exercise 1 to do the scoring by calling the learned model from T-SQL will be the linear regression algorithm from Python's `scikit-learn` machine learning library.
+## Machine Learning Algorithm Used for Scoring in Exercise 1
+
+The machine learning algorithm that we will use in Exercise 1 to do the scoring by calling the learned model from T-SQL will be the linear regression algorithm from Python's `scikit-learn` machine learning library.
 
 Linear regression is a machine learning model that predicts response variables from the values of explanatory variables using a regression equation.
 
@@ -120,31 +150,47 @@ Azure Synapse Analytics Studio also offers libraries other than scikit-learn tha
 
 In this hands-on training, we'll use T-SQL to score an ONNX-format machine learning model that has been developed and trained with scikit-learn by deploying it in a SQL pool in Azure Synapse Analytics Studio.
 
-### Description of the Scenario
-
-This is an image of the overall picture of the scenario architecture. Users will perform the hands-on training for Exercises 1 and 2. These exercises will cover integration with T-SQL, SQL On-Demand, and Power BI in Azure Synapse Analytics, as well as their advanced security features.
-
-TODO:  overall picture of the scenario architecture image...
-
-### List of Content Used in the Hands-On Training
-
-This hands-on training uses the following developed content by executing queries about it and deploying it.
-
-| No | Content ID | Type | Content details |
-| -- | ---------- | ---- | --------------- |
-| 1 | rf_model.onnx | ML model | Upload a machine learning (linear regression) ONNX model that has been trained to detect credit card fraud. |
-| 2 | CreateAzureStorageAccountKey | SQL | The definition file for the storage account and storage account key for reading and writing files in Azure Storage Gen2 using the SQL On-Demand pool. |
-| 3 | CreateCSVDataSource | SQL | The definition file for the endpoint and storage account in Azure Storage Gen2 that are accessed from the SQL On-Demand pool. |
-| 4 | CreateCSVFileFormat | SQL | The definition file for the format of the file format in Azure Storage Gen2 from the SQL On-Demand pool. |
-| 5 | CreateExternalCreditCard | SQL | A query to create an external view for loading a CSV file of the credit card fraud detection dataset put in Azure Storage Gen2 from the SQL pool. |
-| 6 | SelectIntoCreditCard | SQL | A query that outputs data to a new table in the SQL pool by attaching the results of the scoring of the credit card fraud detection dataset with an ML model. |
-| 7 | CreateCreditCardLonLat | SQL | A query that outputs to a new table the result that was created by using SQL On-Demand to integrate the city latitude and longitude list in Azure Storage Gen2 with the country code list dataset and the CSV file output from the new table that was created in Exercise 1 using Data Factory. |
-| 8 | Number of fraud detections in the elapsed time period | Power BI report | A report that generates a graph of the changes in the number of fraud detections for each elapsed time period using T-SQL results. |
-| 9 | Map of fraud detection locations | Power BI report | A report that generates a map of fraud detection locations that are colored based on the size of the amount involved. |
-
 ## Before the Hands-On Lab
 
-### Create a Resource Group
+Duration: TODO minutes
+
+### Listing the Resources Created During the Hands-On Training
+
+The following are the resources you will create over the course of this hands-on training.
+
+| No | Name | Type | Resource details |
+| -- | ---- | ---- | ---------------- |
+| 1 | `synapselabfraud` + your initials + `asws` (example: `synapselabfraudjdhasws`) | Synapse workspace | Create an Azure Synapse Analytics workspace. |
+| 2 | `synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`) | Storage account | Create a StorageV2 (general-purpose v2) storage account. |
+| 3 | `sqllabfraud` | SQL pool | Create an SQL pool. |
+| 4 | `sparklabfraud` | Apache Spark Pool | Create an Apache Spark pool. |
+| 5 | PowerBI | Virtual machine | Prepare a virtual environment for running the Power BI Desktop app. |
+
+> **Note**: We will create the resources throughout the hands-on training, so do not create any of these resources yet.
+
+## Task 1: Download lab files
+
+The lab files are located in a GitHub repo. You must unzip the file and extract it to your desktop so you can access them throughout the lab.
+
+1. Download the ZIP file for the lab from <https://github.com/solliancenet/azure-synapse-in-a-day-demos/archive/master.zip>.
+
+2. Extract the files to **`C:\`**. This will create a folder named `azure-synapse-in-a-day-demos-master` at the root of your C: drive.
+
+    ![The extract zipped folders dialog is displayed.](media/unzip.png "Extract Compressed (Zipped) Folders")
+
+3. Navigate to `C:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources` to view the files.
+
+    ![The extracted files are displayed in Windows Explorer.](media/extracted-files.png "Extracted files")
+
+4. Extract the **csv.zip** files to the current directory.  This will create a folder named `csv`.
+
+    ![The extract zipped folders dialog is displayed.](media/unzip-1.png "Extract Compressed (Zipped) Folders")
+
+5. Navigate to `C:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\csv` to view the files.
+
+    ![The extracted files are displayed in Windows Explorer.](media/extracted-files-1.png "Extracted files")
+
+### Task 2: Create a Resource Group
 
 In this task, you will use the Azure Portal to create a new Azure Resource Group for this lab.
 
@@ -160,26 +206,13 @@ In this task, you will use the Azure Portal to create a new Azure Resource Group
 
    ![Add Resource Group Menu](media/add-resource-group-menu.png 'Resource Group Menu')
 
-5. Create a new resource group with the name **synapse-lab-fraud-detection**, ensuring that the proper subscription and region nearest you are selected. **Please note** that currently, the only regions available for deploying to the Azure Database for PostgreSQL Hyperscale (Citus) deployment option are East US, East US 2, West US 2, North Central US, Canada Central, Australia East, Southeast Asia, North Europe, UK South, and West Europe. It is therefore recommended that you choose one of these regions for your resource group and all created resources. Once you have chosen a location, select **Review + Create**.
+5. Create a new resource group with the name **synapse-lab-fraud-detection**, ensuring that the proper subscription and region nearest you are selected. Once you have chosen a location, select **Review + Create**.
 
    ![Create Resource Group](media/create-resource-group.png 'Resource Group')
 
 6. On the Summary blade, select **Create** to provision your resource group.
 
-### Listing the Resources Created During the Hands-On Training
-
-The following are the resources you will create over the course of this hands-on training.
-
-| No | Name | Type | Resource details |
-| 1 | `synapselabfraud` + your initials + `asws` (example: `synapselabfraudjdhasws`) | Synapse workspace | Creates an Azure Synapse Analytics workspace. |
-| 2 | `synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`) | Storage account | Creates a StorageV2 (general-purpose v2) storage account. |
-| 3 | `sqllabfraud` | SQL pool | Creates an SQL pool. |
-| 4 | `sparklabfraud` | Apache Spark Pool | Creates an Apache Spark pool. |
-| 5 | PowerBI | Virtual machine | Prepares a virtual environment for running the Power BI Desktop app. |
-
-> **Note**: We will create the resources throughout the hands-on training, so do not create any of these resources yet.
-
-### Prepare a Virtual Machine to Run Power BI Desktop
+### Task 3: Prepare a Virtual Machine to Run Power BI Desktop
 
 To proceed with the steps described in this hands-on training, you'll need to use the Power BI Desktop app that is installed in the Windows 10 environment.
 
@@ -244,7 +277,7 @@ In this step, you will create a virtual machine running Windows 10 and then inst
 
     ![The option to launch Power BI is selected.](media/vm-launch-power-bi.png 'Launch Power BI Desktop')
 
-### Provision Azure Data Lake Storage Gen2
+### Task 4: Provision Azure Data Lake Storage Gen2
 
 Azure Data Lake Storage Gen2 will be critical for several integration points throughout the hands-on lab.
 
@@ -281,7 +314,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 7. Select **Review + create**. On the review screen, select **Create**.
 
-### Provision an Azure Synapse Analytics Workspace
+### Task 5: Provision an Azure Synapse Analytics Workspace
 
 1. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics (workspaces preview)** from the results.
 
@@ -304,7 +337,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
    ![The form fields are completed with the previously described settings.](media/azure-create-synapse-1.png 'Create Synapse workspace')
 
-   > **Note**: Please replace the `#SUFFIX#` tag in the workspace name with a suffix you would like to use. Names of workspaces must be globally unique.
+   > **Note**: Names of workspaces must be globally unique.
 
    You might see the following error after entering a workspace name:  **The Azure Synapse resource provider (Microsoft.Synapse) needs to be registered with the selected subscription.** If you see this error, select **Click here to register**, located between the Subscription and Resource group.
 
@@ -318,7 +351,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 5. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes.
 
-### Upload Materials Required for the Hands-On Training
+### Task 6: Upload Materials Required for the Hands-On Training
 
 1. Navigate to the **synapse-lab-fraud-detection** resource group in the [Azure portal](https://portal.azure.com).
 
@@ -346,7 +379,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
     ![The storage account name and access key are copied.](media/azure-storage-access-keys.png 'Access keys')
 
-### Create a SQL Pool
+### Task 7: Create a SQL Pool
 
 1. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics (workspaces preview)** from the results.
 
@@ -366,7 +399,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 5. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes. While this is underway, it is safe to continue to the next task.
 
-### Create a Spark Pool
+### Task 8: Create a Spark Pool
 
 1. In the Synapse workspace, select **+ New Apache Spark pool** to create a new Spark pool.
 
@@ -385,7 +418,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
 3. Select **Review + create**. On the review screen, select **Create**.  Provisioning may take several minutes.
 
-### Create a SQL On-Demand Database
+### Task 9: Create a SQL On-Demand Database
 
 1. Select **Launch Synapse Studio** from the Synapse workspace page.
 
@@ -411,7 +444,7 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
 
     ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
 
-### Create a Power BI Workspace
+### Task 10: Create a Power BI Workspace
 
 1. In a new tab or window, navigate to the Power BI website, [https://powerbi.microsoft.com/](https://powerbi.microsoft.com/).  Select **Sign in** and sign in.
 
@@ -444,6 +477,8 @@ Azure Data Lake Storage Gen2 will be critical for several integration points thr
     ![In the Connect to Power BI tab, form field entries are filled in.](media/azure-synapse-connect-power-bi.png 'Connect to Power BI')
 
 ## Exercise 1:  Scoring predictions from T-SQL using a pre-trained model
+
+Duration: TODO minutes
 
 You will use masked data, obtained by applying principal component analysis to credit card transaction data, to evaluate which transactions are fraudulent and to analyze trends in elapsed time and fraud amounts.
 
@@ -713,6 +748,8 @@ You will use masked data, obtained by applying principal component analysis to c
 
 ## Exercise 2:  Perform Ad Hoc Queries from the Storage Account
 
+Duration: TODO minutes
+
 Plot the trends of the cities where unauthorized use of credit cards occurred and the amounts on a map, so that you can ascertain the geographical factors associated with frequent unauthorized use and the cities where large losses frequently occur.
 
 ### Task 1:  Create a Dataset
@@ -889,7 +926,7 @@ This first task will export credit card predictions from the prior exercise into
 
 38. Ensure that the **CreditCardScored.csv** file has the correct shape.
 
-    ![The scored credit card file has .](media/azure-synapse-preview.png 'CreditCardScored.csv')
+    ![The scored credit card file has been loaded with the appropriate column names.](media/azure-synapse-preview-file.png 'CreditCardScored.csv')
 
 ### Task 2:  Create a View
 
@@ -1003,7 +1040,7 @@ This first task will export credit card predictions from the prior exercise into
         city.alpha2 = country.alpha2
     ```
 
-### Task 3:  Power BI Report Development
+### Task 3:  Power BI Fraud Map Report Development
 
 1. Open the RDP file from the Before the Hands-On Lab section and select **Connect** to access the virtual machine.  When prompted for credentials, enter `powerbiuser` for the username and the password you chose.
 
@@ -1015,7 +1052,7 @@ This first task will export credit card predictions from the prior exercise into
 
 3. Select the workspace you created before the hands-on lab.
 
-    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'modernizeapp workspace')
+    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'The fraud detection Synapse workspace')
 
 4. Select **Launch Synapse Studio** from the Synapse workspace page.
 
@@ -1039,7 +1076,7 @@ This first task will export credit card predictions from the prior exercise into
 
 9. Open the downloaded Power BI dataset file in Power BI Desktop. On the Navigator page, select the **CreditCardLonLat** view and then select **Load**.
 
-    ![The credit card longitude and latitude view is selected.](media/power-bi-new-lonlat-1.png 'Navigator')
+    ![The credit card longitude and latitude view is selected.](media/power-bi-lonlat-1.png 'Navigator')
 
 10. In the Connection settings modal dialog, select **Import** and then select **OK**.
 
