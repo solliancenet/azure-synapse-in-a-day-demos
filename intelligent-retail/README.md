@@ -43,7 +43,7 @@ In a supermarket where the CTC Smart Shelf is located, real-time links to Synaps
 
 ![The data flow is shown.](media/story-diagram1.png "Story diagram 1")
 
-![A description of the CTC smart shelf is displayed.](media/story-smart-shelf-description.png "What is CTC Smart Shelf?")
+![A smart shelf is a next-generation display case equipped with an AI camera and a weight sensor on the shelf itself. The AI camera acquires customer attributes, such as age, gender, and length of stay (age and gender are estimated by Cognitive Service Face API). The weight sensor acquires customer behavior, such as picking up and returning goods to the shelf. Based on this information, analysis of the behavior and attributes of customers that pick up and return home with products (= customers who make purchases) is performed, making next-generation in-store analysis possible. Based on customer information and sales information, information is distributed interactively to the display and electronic shelf tags mounted on the shelf to enable promotions, such as dynamic pricing and personalized marketing.](media/story-smart-shelf-description.png "What is CTC Smart Shelf?")
 
 ## Hands-on environment
 
