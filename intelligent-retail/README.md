@@ -19,6 +19,7 @@
     - [Task 5: Create an Apache Spark pool](#task-5-create-an-apache-spark-pool)
     - [Task 6: Install Power BI Desktop](#task-6-install-power-bi-desktop)
     - [Task 7: Log in to Synapse Studio](#task-7-log-in-to-synapse-studio)
+  - [Exercise 2: Data collection](#exercise-2-data-collection)
 
 ## Overview
 
@@ -219,13 +220,21 @@ Data access permissions on the data lake must be set separately from the resourc
 
 ### Task 6: Install Power BI Desktop
 
+1. From the following URL, go to the Power BI Desktop download site and select **Download free**: Power BI Desktop: <https://powerbi.microsoft.com/desktop/>
+
+    ![The download page is displayed.](media/pbi-desktop-download.png "Power BI Desktop download")
+
+2. Install the software from the Microsoft store.
+
+    ![The desktop software is installing in the Microsoft Store.](media/pbi-desktop-install.png "Power BI Desktop")
+
 ### Task 7: Log in to Synapse Studio
 
 1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
 
     ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
 
-2. In the **Overview** blade, select the **Workspace web URL** to navigate to Synapse Studio for this workspace.
+2. In the **Overview** blade, select the **Workspace web URL** or **Launch Synapse Studio** to navigate to Synapse Studio for this workspace.
 
     ![The workspace web URL is highlighted.](media/synapse-workspace-url.png "Workspace web URL")
 
@@ -236,3 +245,21 @@ Data access permissions on the data lake must be set separately from the resourc
 3. If you see the Getting started dialog, select **Close**.
 
     ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
+
+## Exercise 2: Data collection
+
+Time required: 20 minutes
+
+In data collection, you will collect and process stream data flowing from IoT devices in real time and store it in the data lake.
+
+You will learn:
+
+- **Data Lake Storage construction**: Build a data lake to store collected data.
+
+- **IoT Hub construction**: Build a gateway to connect devices in Azure end-to-end and enable secure two-way communication.
+
+- **Stream Analytics construction**: Build workload to analyze and process streaming data flowing through IoT Hub in real time.
+
+- **Send streaming data from IoT devices**: Using IoT Hub client, implement processing to send messages from a device to IoT Hub.
+
+![Data flows from an smart shelf IoT device to IoT Hub. Stream Analytics processes the data and saves it to Azure Data Lake Storage Gen2.](media/diagram-data-collection.png "Data collection diagram")
