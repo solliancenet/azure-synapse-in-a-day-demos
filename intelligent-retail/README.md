@@ -22,6 +22,16 @@
   - [Exercise 2: Data collection](#exercise-2-data-collection)
     - [Task 1: Deploy ARM template](#task-1-deploy-arm-template)
     - [Task 2: Create Azure Data Lake Storage Gen2 account](#task-2-create-azure-data-lake-storage-gen2-account)
+    - [Task 3: Register an IoT device](#task-3-register-an-iot-device)
+    - [Task 4: Save IoT device connection information](#task-4-save-iot-device-connection-information)
+    - [Task 5: Register another IoT device](#task-5-register-another-iot-device)
+    - [Task 6: Save sensor IoT device connection information](#task-6-save-sensor-iot-device-connection-information)
+    - [Task 7: Stream Analytics (for AI cameras) input settings](#task-7-stream-analytics-for-ai-cameras-input-settings)
+    - [Task 8: Stream Analytics (for AI cameras) output settings](#task-8-stream-analytics-for-ai-cameras-output-settings)
+    - [Task 9: Stream Analytics (for AI cameras) query settings](#task-9-stream-analytics-for-ai-cameras-query-settings)
+    - [Task 10: Stream Analytics (for weight sensors) input settings](#task-10-stream-analytics-for-weight-sensors-input-settings)
+    - [Task 11: Stream Analytics (for weight sensors) output settings](#task-11-stream-analytics-for-weight-sensors-output-settings)
+    - [Task 12: Stream Analytics (for weight sensors) query settings](#task-12-stream-analytics-for-weight-sensors-query-settings)
 
 ## Overview
 
@@ -630,3 +640,283 @@ The ARM template deploys the following resources:
 > **What is Azure Data Lake Storage Gen2?**
 >
 > Azure Data Lake Storage Gen2 is an inexpensive data lake storage made available by adding an HDFS interface to Azure Blob Storage. Throughput in gigabits and large-scale petabyte data usage are available, making it extremely cost-effective.
+
+### Task 3: Register an IoT device
+
+1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
+
+    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
+
+2. Within the resource group, select the **`handson-iothub + <unique suffix>`** IoT Hub account.
+
+    ![The handson-iothub account is highlighted.](media/resource-group-iothub.png "IoT Hub")
+
+3. Select **IoT devices** on the left-hand menu, then select **+ New**.
+
+    ![The new button is highlighted.](media/iothub-devices-new.png "IoT devices - New")
+
+4. In the **Create a device** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Device ID                   | _enter `TestDevice`_              |
+   | Authentication type                 | _select `Symmetric key`_                      |
+   | Auto-generate keys           | _check the box_      |
+   | Connect this device to an IoT hub | _select `Enable`_             |
+
+   ![The form is configured as described.](media/iothub-devices-new-testdevice.png "Create a device")
+
+5. Select **Save**.
+
+### Task 4: Save IoT device connection information
+
+1. Select the **TestDevice** that you just added.
+
+    ![The TestDevice is highlighted.](media/testdevice.png "TestDevice")
+
+2. Copy the **Primary Connection String** and save it to a text editor, such as Notepad. This connection string is used to send stream data from IoT devices in subsequent work.
+
+    ![The primary connection string is highlighted.](media/testdevice-connection-string.png "TestDevice")
+
+### Task 5: Register another IoT device
+
+1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
+
+    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
+
+2. Within the resource group, select the **`handson-iothub-sensor + <unique suffix>`** IoT Hub account.
+
+    ![The handson-iothub-sensor account is highlighted.](media/resource-group-iothub-sensor.png "IoT Hub - Sensor")
+
+3. Select **IoT devices** on the left-hand menu, then select **+ New**.
+
+    ![The new button is highlighted.](media/iothub-sensor-devices-new.png "IoT devices - New")
+
+4. In the **Create a device** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Device ID                   | _enter `TestDevice`_              |
+   | Authentication type                 | _select `Symmetric key`_                      |
+   | Auto-generate keys           | _check the box_      |
+   | Connect this device to an IoT hub | _select `Enable`_             |
+
+   ![The form is configured as described.](media/iothub-devices-new-testdevice.png "Create a device")
+
+5. Select **Save**.
+
+### Task 6: Save sensor IoT device connection information
+
+1. Select the **TestDevice** that you just added.
+
+    ![The TestDevice is highlighted.](media/testdevice-sensor.png "TestDevice")
+
+2. Copy the **Primary Connection String** and save it to a text editor, such as Notepad. This connection string is used to send stream data from IoT devices in subsequent work.
+
+    ![The primary connection string is highlighted.](media/testdevice-sensor-connection-string.png "TestDevice")
+
+> **What is device registration?**
+>
+> Issue device IDs and connection keys by registering devices in IoT Hub. Using the issued IDs and keys enables secure communication between devices and the IoT Hub.
+
+### Task 7: Stream Analytics (for AI cameras) input settings
+
+1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
+
+    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
+
+2. Within the resource group, select the **`handson-SAJ + <unique suffix>`** Stream Analytics job.
+
+    ![The handson-SAJ Stream Analytics job is selected.](media/resource-group-saj.png "Stream Analytics job")
+
+3. Select **Inputs** on the left-hand menu, select **+ Add stream input**, then select **IoT Hub** from the list.
+
+    ![The IoT Hub input option is highlighted.](media/stream-analytics-add-iot-input.png "Add IoT Hub input")
+
+4. In the **IoT Hub** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Input alias                   | _enter `input`_              |
+   | IoT Hub                 | _select `handson-iothub + <unique suffix>`_                      |
+   | Endpoint           | _select `Messaging`_      |
+   | Shared access policy name | _select `iothubowner`_             |
+   | Consumer group | _select `handson-cg` (this was created for you by the ARM template)_ |
+   | Event serialization format | _select `JSON`_ |
+   | Encoding | _select `UTF-8`_ |
+   | Event compression type | _select `None`_ |
+
+   ![The form is configured as described.](media/stream-analytics-add-iot-input-form.png "IoT Hub")
+
+5. Select **Save**.
+
+### Task 8: Stream Analytics (for AI cameras) output settings
+
+1. Select **Outputs** on the left-hand menu, select **+ Add**, then select **Blob storage/ADLS Gen2** from the list.
+
+    ![The blob storage/ADLS Gen2 option is highlighted.](media/stream-analytics-add-blob-output.png "Add storage output")
+
+2. In the **Blob storage/ADLS Gen2** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Input alias                   | _enter `output`_              |
+   | Storage account                 | _select `handsonretaildl + <unique suffix>`_                      |
+   | Container           | _select `Use existing`, then select `shelfdata`_      |
+   | Path pattern | _enter `tran/face/{datetime:yyyy}/{datetime:MM}/{datetime:dd}`_             |
+   | Event serialization format | _select `JSON`_ |
+   | Encoding | _select `UTF-8`_ |
+   | Format | _select `Line separated`_ |
+   | Minimum rows | _enter `100`_ |
+   | Maximum time | _enter `1 minute`_ |
+   | Authentication mode | _select `Connection string`_ |
+
+   ![The form is configured as described.](media/stream-analytics-add-blob-output-form.png "IoT Hub")
+
+   > **Minimum rows and maximum time**
+   >
+   > Must be specified when Parquet is selected in Event serialization format.
+   >
+   > **Minimum rows**: Minimum number of rows per batch. A new file is created for each batch.
+   >
+   > **Maximum time**: After a set amount of time and even if the minimum row count requirements are not met, the batch is written to the output.
+
+3. Select **Save**.
+
+### Task 9: Stream Analytics (for AI cameras) query settings
+
+1. Select **Query** on the left-hand menu.
+
+2. Enter the following query, then select **Save query**:
+
+    ```sql
+    SELECT
+    face_id, date_time, age, gender
+    INTO
+    [output]
+    FROM
+    [input] TIMESTAMP BY date_time
+    ```
+
+    ![The query is highlighted.](media/stream-analytics-query.png "Query")
+
+3. Select **Overview** on the left-hand menu, then select **Start**.
+
+    ![The start button is highlighted.](media/stream-analytics-start.png "Start")
+
+4. Select **Now** for the job output start time, then select **Start**.
+
+    ![The Start button is highlighted.](media/stream-analytics-start-now.png "Start job")
+
+### Task 10: Stream Analytics (for weight sensors) input settings
+
+1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
+
+    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
+
+2. Within the resource group, select the **`handson-SAJ-sensor + <unique suffix>`** Stream Analytics job.
+
+    ![The handson-SAJ-sensor Stream Analytics job is selected.](media/resource-group-saj-sensor.png "Stream Analytics job")
+
+3. Select **Inputs** on the left-hand menu, select **+ Add stream input**, then select **IoT Hub** from the list.
+
+    ![The IoT Hub input option is highlighted.](media/stream-analytics-add-iot-input.png "Add IoT Hub input")
+
+4. In the **IoT Hub** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Input alias                   | _enter `input`_              |
+   | IoT Hub                 | _select `handson-iothub-sensor + <unique suffix>`_                      |
+   | Endpoint           | _select `Messaging`_      |
+   | Shared access policy name | _select `iothubowner`_             |
+   | Consumer group | _select `handson-cg` (this was created for you by the ARM template)_ |
+   | Event serialization format | _select `JSON`_ |
+   | Encoding | _select `UTF-8`_ |
+   | Event compression type | _select `None`_ |
+
+   ![The form is configured as described.](media/stream-analytics-add-iot-sensor-input-form.png "IoT Hub")
+
+5. Select **Save**.
+
+6. Select **+ Add reference input**.
+
+    ![The blob storage/ADLS Gen2 item is highlighted.](media/stream-analytics-add-blob-input.png "Add reference input")
+
+7. In the **IoT Hub** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Input alias                   | _enter `rf-m-item`_              |
+   | Storage account                 | _select `synapselabretail` + your initials + `adls` (example: `synapselabretailjdhadls`) This is the ADLS Gen2 account you created along with the Synapse Analytics workspace_                      |
+   | Container           | _select `Use existing`, then select `datalake`_      |
+   | Path pattern | _enter `master/m_item/m_item.csv`_             |
+   | Event serialization format | _select `CSV`_ |
+   | Delimiter | _select `comma (,)`_ |
+   | Encoding | _select `UTF-8`_ |
+
+   ![The form is configured as described.](media/stream-analytics-add-blob-input-form.png "IoT Hub")
+
+8. Select **Save**.
+
+### Task 11: Stream Analytics (for weight sensors) output settings
+
+1. Select **Outputs** on the left-hand menu, select **+ Add**, then select **Blob storage/ADLS Gen2** from the list.
+
+    ![The blob storage/ADLS Gen2 option is highlighted.](media/stream-analytics-add-blob-output.png "Add storage output")
+
+2. In the **Blob storage/ADLS Gen2** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Input alias                   | _enter `output`_              |
+   | Storage account                 | _select `handsonretaildl + <unique suffix>`_                      |
+   | Container           | _select `Use existing`, then select `shelfdata`_      |
+   | Path pattern | _enter `tran/sensor/{datetime:yyyy}/{datetime:MM}/{datetime:dd}`_             |
+   | Event serialization format | _select `JSON`_ |
+   | Encoding | _select `UTF-8`_ |
+   | Format | _select `Line separated`_ |
+   | Minimum rows | _enter `100`_ |
+   | Maximum time | _enter `1 minute`_ |
+   | Authentication mode | _select `Connection string`_ |
+
+   ![The form is configured as described.](media/stream-analytics-add-blob-sensor-output-form.png "IoT Hub")
+
+3. Select **Save**.
+
+### Task 12: Stream Analytics (for weight sensors) query settings
+
+1. Select **Query** on the left-hand menu.
+
+2. Enter the following query, then select **Save query**:
+
+    ```sql
+    SELECT
+      [input].face_id
+    , [input].shelf_id
+    , [input].sensor_no
+    , [input].date_time
+    , [input].sensor_weight
+    , [input].diff_weight
+    , [rf-m-item].item_genre
+    , [rf-m-item].item_name
+    , [rf-m-item].item_price
+    INTO
+        [output]
+    FROM
+        [input] TIMESTAMP BY date_time
+    JOIN
+        [rf-m-item]
+        ON [input].shelf_id = [rf-m-item].shelf_id
+        AND [input].sensor_no = [rf-m-item].sensor_no
+    ```
+
+    ![The query is highlighted.](media/stream-analytics-query-sensor.png "Query")
+
+3. Select **Overview** on the left-hand menu, then select **Start**.
+
+    ![The start button is highlighted.](media/stream-analytics-start.png "Start")
+
+4. Select **Now** for the job output start time, then select **Start**.
+
+    ![The Start button is highlighted.](media/stream-analytics-sensor-start-now.png "Start job")
