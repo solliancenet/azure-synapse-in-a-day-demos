@@ -81,7 +81,10 @@ To perform this hands-on training, you will prepare the following items in this 
 - Create an Azure Synapse workspace
 - Create a SQL pool
 - Create an Apache Spark pool
-- Install Power BI Desktop
+- Create an Azure VM
+  - Install Power BI Desktop
+  - Install Node.js
+- Download lab files
 
 ### Task 1: Create an Azure Synapse workspace
 
