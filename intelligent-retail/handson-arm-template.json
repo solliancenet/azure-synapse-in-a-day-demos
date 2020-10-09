@@ -2,25 +2,35 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "HandsonUserId": {
-            "defaultValue": "",
-            "type": "String"
+        "UniqueSuffix": {
+            "type": "String",
+            "metadata": {
+                "description": "Suffix added to all resource names to make them unique. Enter between 4 and 8 characters"
+            }
+        },
+        "Region": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for the IoT Hub and Stream Analytics services."
+            }
         }
     },
     "variables": {
-        "CameraIotHubName": "[concat('handson-iothub', parameters('HandsonUserId'))]",
-        "SensorIotHubName": "[concat('handson-iothub-sensor', parameters('HandsonUserId'))]",
-        "CameraSAJName": "[concat('handson-SAJ', parameters('HandsonUserId'))]",
-        "SensorSAJName": "[concat('handson-SAJ-sensor', parameters('HandsonUserId'))]",
-        "CameraCGName": "[concat('handson-iothub', parameters('HandsonUserId'), '/events/handson-cg')]",
-        "SensorCGName": "[concat('handson-iothub-sensor', parameters('HandsonUserId'), '/events/handson-cg')]"
+        "name_suffix": "[take(toLower(parameters('UniqueSuffix')), 8)]",
+        "CameraIotHubName": "[concat('handson-iothub', variables('name_suffix'))]",
+        "SensorIotHubName": "[concat('handson-iothub-sensor', variables('name_suffix'))]",
+        "CameraSAJName": "[concat('handson-SAJ', variables('name_suffix'))]",
+        "SensorSAJName": "[concat('handson-SAJ-sensor', variables('name_suffix'))]",
+        "CameraCGName": "[concat('handson-iothub', variables('name_suffix'), '/events/handson-cg')]",
+        "SensorCGName": "[concat('handson-iothub-sensor', variables('name_suffix'), '/events/handson-cg')]"
     },
     "resources": [
         {
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
             "name": "[variables('CameraIotHubName')]",
-            "location": "japaneast",
+            "location": "[parameters('Region')]",
             "sku": {
                 "name": "S1",
                 "tier": "Standard",
@@ -84,7 +94,7 @@
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
             "name": "[variables('SensorIotHubName')]",
-            "location": "japaneast",
+            "location": "[parameters('Region')]",
             "sku": {
                 "name": "S1",
                 "tier": "Standard",
@@ -148,7 +158,7 @@
             "type": "Microsoft.StreamAnalytics/streamingjobs",
             "apiVersion": "2016-03-01",
             "name": "[variables('CameraSAJName')]",
-            "location": "Japan East",
+            "location": "[parameters('Region')]",
             "properties": {
                 "sku": {
                     "name": "Standard"
@@ -165,7 +175,7 @@
             "type": "Microsoft.StreamAnalytics/streamingjobs",
             "apiVersion": "2016-03-01",
             "name": "[variables('SensorSAJName')]",
-            "location": "Japan East",
+            "location": "[parameters('Region')]",
             "properties": {
                 "sku": {
                     "name": "Standard"

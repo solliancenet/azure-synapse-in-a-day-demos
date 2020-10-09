@@ -20,6 +20,8 @@
     - [Task 7: Download lab files](#task-7-download-lab-files)
     - [Task 8: Log in to Synapse Studio](#task-8-log-in-to-synapse-studio)
   - [Exercise 2: Data collection](#exercise-2-data-collection)
+    - [Task 1: Deploy ARM template](#task-1-deploy-arm-template)
+    - [Task 2: Create Azure Data Lake Storage Gen2 account](#task-2-create-azure-data-lake-storage-gen2-account)
 
 ## Overview
 
@@ -287,6 +289,8 @@ To proceed with the steps described in this hands-on training, you need to insta
 
     ![The command prompt is displayed.](media/install-nodejs-command-prompt.png "Install Additional Tools for Node.js")
 
+    > After pressing a key for this and the prompt that follows, let the install process continue to run in the background in PowerShell. You may continue with the lab steps that follow.
+
 ### Task 7: Download lab files
 
 1. From your lab VM, navigate to <https://solliancepublicdata.blob.core.windows.net/synapse-in-a-day/retail/handson.zip> to download the ZIP file for this lab.
@@ -338,3 +342,291 @@ You will learn:
 - **Send streaming data from IoT devices**: Using IoT Hub client, implement processing to send messages from a device to IoT Hub.
 
 ![Data flows from an smart shelf IoT device to IoT Hub. Stream Analytics processes the data and saves it to Azure Data Lake Storage Gen2.](media/diagram-data-collection.png "Data collection diagram")
+
+### Task 1: Deploy ARM template
+
+The ARM template deploys the following resources:
+
+- Two IoT Hubs
+- Two Stream Analytics jobs
+
+1. Navigate to the Azure portal (<https://portal.azure.com>).
+
+2. In the search menu, type **template deployment**, then select **Deploy a custom template**.
+
+    ![Template deployment is highlighted in the search box, and the deploy a custom template item in the results is highlighted.](media/search-template.png "Template search")
+
+3. Select **Build your own template in the editor**.
+
+    ![The link is highlighted.](media/template-build-link.png "Custom deployment")
+
+4. **Replace** the contents of the template with the following:
+
+    ```json
+    {
+        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+            "UniqueSuffix": {
+                "type": "String",
+                "metadata": {
+                    "description": "Suffix added to all resource names to make them unique. Enter between 4 and 8 characters"
+                }
+            },
+            "Region": {
+                "type": "string",
+                "defaultValue": "[resourceGroup().location]",
+                "metadata": {
+                    "description": "Location for the IoT Hub and Stream Analytics services."
+                }
+            }
+        },
+        "variables": {
+            "name_suffix": "[take(toLower(parameters('UniqueSuffix')), 8)]",
+            "CameraIotHubName": "[concat('handson-iothub', variables('name_suffix'))]",
+            "SensorIotHubName": "[concat('handson-iothub-sensor', variables('name_suffix'))]",
+            "CameraSAJName": "[concat('handson-SAJ', variables('name_suffix'))]",
+            "SensorSAJName": "[concat('handson-SAJ-sensor', variables('name_suffix'))]",
+            "CameraCGName": "[concat('handson-iothub', variables('name_suffix'), '/events/handson-cg')]",
+            "SensorCGName": "[concat('handson-iothub-sensor', variables('name_suffix'), '/events/handson-cg')]"
+        },
+        "resources": [
+            {
+                "type": "Microsoft.Devices/IotHubs",
+                "apiVersion": "2020-03-01",
+                "name": "[variables('CameraIotHubName')]",
+                "location": "[parameters('Region')]",
+                "sku": {
+                    "name": "S1",
+                    "tier": "Standard",
+                    "capacity": 1
+                },
+                "properties": {
+                    "ipFilterRules": [],
+                    "eventHubEndpoints": {
+                        "events": {
+                            "retentionTimeInDays": 1,
+                            "partitionCount": 4
+                        }
+                    },
+                    "routing": {
+                        "endpoints": {
+                            "serviceBusQueues": [],
+                            "serviceBusTopics": [],
+                            "eventHubs": [],
+                            "storageContainers": []
+                        },
+                        "routes": [],
+                        "fallbackRoute": {
+                            "name": "$fallback",
+                            "source": "DeviceMessages",
+                            "condition": "true",
+                            "endpointNames": [
+                                "events"
+                            ],
+                            "isEnabled": true
+                        }
+                    },
+                    "messagingEndpoints": {
+                        "fileNotifications": {
+                            "lockDurationAsIso8601": "PT1M",
+                            "ttlAsIso8601": "PT1H",
+                            "maxDeliveryCount": 10
+                        }
+                    },
+                    "enableFileUploadNotifications": false,
+                    "cloudToDevice": {
+                        "maxDeliveryCount": 10,
+                        "defaultTtlAsIso8601": "PT1H",
+                        "feedback": {
+                            "lockDurationAsIso8601": "PT1M",
+                            "ttlAsIso8601": "PT1H",
+                            "maxDeliveryCount": 10
+                        }
+                    },
+                    "features": "None"
+                }
+            },
+            {
+                "type": "Microsoft.Devices/iotHubs/eventhubEndpoints/ConsumerGroups",
+                "apiVersion": "2018-04-01",
+                "name": "[variables('CameraCGName')]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Devices/IotHubs', variables('CameraIotHubName'))]"
+                ]
+            },
+            {
+                "type": "Microsoft.Devices/IotHubs",
+                "apiVersion": "2020-03-01",
+                "name": "[variables('SensorIotHubName')]",
+                "location": "[parameters('Region')]",
+                "sku": {
+                    "name": "S1",
+                    "tier": "Standard",
+                    "capacity": 1
+                },
+                "properties": {
+                    "ipFilterRules": [],
+                    "eventHubEndpoints": {
+                        "events": {
+                            "retentionTimeInDays": 1,
+                            "partitionCount": 4
+                        }
+                    },
+                    "routing": {
+                        "endpoints": {
+                            "serviceBusQueues": [],
+                            "serviceBusTopics": [],
+                            "eventHubs": [],
+                            "storageContainers": []
+                        },
+                        "routes": [],
+                        "fallbackRoute": {
+                            "name": "$fallback",
+                            "source": "DeviceMessages",
+                            "condition": "true",
+                            "endpointNames": [
+                                "events"
+                            ],
+                            "isEnabled": true
+                        }
+                    },
+                    "messagingEndpoints": {
+                        "fileNotifications": {
+                            "lockDurationAsIso8601": "PT1M",
+                            "ttlAsIso8601": "PT1H",
+                            "maxDeliveryCount": 10
+                        }
+                    },
+                    "enableFileUploadNotifications": false,
+                    "cloudToDevice": {
+                        "maxDeliveryCount": 10,
+                        "defaultTtlAsIso8601": "PT1H",
+                        "feedback": {
+                            "lockDurationAsIso8601": "PT1M",
+                            "ttlAsIso8601": "PT1H",
+                            "maxDeliveryCount": 10
+                        }
+                    },
+                    "features": "None"
+                }
+            },
+            {
+                "type": "Microsoft.Devices/iotHubs/eventhubEndpoints/ConsumerGroups",
+                "apiVersion": "2018-04-01",
+                "name": "[variables('SensorCGName')]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Devices/IotHubs', variables('SensorIotHubName'))]"
+                ]
+            },
+            {
+                "type": "Microsoft.StreamAnalytics/streamingjobs",
+                "apiVersion": "2016-03-01",
+                "name": "[variables('CameraSAJName')]",
+                "location": "[parameters('Region')]",
+                "properties": {
+                    "sku": {
+                        "name": "Standard"
+                    },
+                    "eventsOutOfOrderPolicy": "Adjust",
+                    "outputErrorPolicy": "Stop",
+                    "eventsOutOfOrderMaxDelayInSeconds": 0,
+                    "eventsLateArrivalMaxDelayInSeconds": 5,
+                    "dataLocale": "en-US",
+                    "compatibilityLevel": "1.1"
+                }
+            },
+                    {
+                "type": "Microsoft.StreamAnalytics/streamingjobs",
+                "apiVersion": "2016-03-01",
+                "name": "[variables('SensorSAJName')]",
+                "location": "[parameters('Region')]",
+                "properties": {
+                    "sku": {
+                        "name": "Standard"
+                    },
+                    "eventsOutOfOrderPolicy": "Adjust",
+                    "outputErrorPolicy": "Stop",
+                    "eventsOutOfOrderMaxDelayInSeconds": 0,
+                    "eventsLateArrivalMaxDelayInSeconds": 5,
+                    "dataLocale": "en-US",
+                    "compatibilityLevel": "1.1"
+                }
+            }
+        ]
+    }
+    ```
+
+5. Select **Save** to save the ARM template.
+
+    ![The template contents are highlighted, as well as the Save button.](media/arm-template.png "Edit template")
+
+6. In the **Basics** tab, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Subscription                   | _select the appropriate subscription_              |
+    | Resource group                 | _select `synapse-lab-retail`_                      |
+    | Unique Suffix                  | _enter a random value between 4 and 8 letters and numbers with no spaces. This is used to append to the end of the Azure resources to ensure uniqueness._      |
+    | Region                         | _leave unchanged_             |
+
+    ![The form is completed as defined.](media/arm-template-form.png "Custom deployment")
+
+7. Select **Review + create**.
+
+8. Select **Create** on the Review + create tab.
+
+    ![The Create button is highlighted.](media/arm-template-review.png "Custom deployment")
+
+### Task 2: Create Azure Data Lake Storage Gen2 account
+
+1. In the search menu, type **storage**, then select **Storage accounts**.
+
+    ![Storage is highlighted in the search box, and the Storage accounts item in the results is highlighted.](media/search-storage.png "Storage search")
+
+2. In the Storage accounts blade, select **+ Add**.
+
+    ![The add button is highlighted.](media/storage-add.png "Storage accounts")
+
+3. In the **Basics** tab, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Subscription                   | _select the appropriate subscription_              |
+   | Resource group                 | _select `synapse-lab-retail`_                      |
+   | Virtual machine name           | _`handsonretaildl` + `<unique suffix>` (make the name unique)_      |
+   | Location                       | _select the resource group's location_             |
+   | Performance           | _select `Standard`_   |
+   | Account kind                          | _select `StorageV2 (general purpose v2)`_     |
+   | Replication            | _select `Read-access geo-redundant storage (RA-GRS)`_                                      |
+   | Blob access tier (default)                           | _select `Hot`_                         |
+
+   ![The form fields are completed with the previously described settings.](media/azure-create-storage-1.png "Create storage account")
+
+4. Select **Next: Networking >**.
+
+5. Keep default settings. Select **Next: Data protection >**.
+
+6. Keep default settings. Select **Next: Advanced >**.
+
+7. Scroll down and select **Enabled** next to **Hierarchical namespace**, then select **Review + create**.
+
+    ![Hierarchical namespace is enabled.](media/azure-create-storage-2.png "Create storage - Advanced")
+
+8. Select **Create** on the review screen.
+
+9. Wait for the deployment to complete, then select **Go to resource**.
+
+    ![Your deployment is complete.](media/azure-create-storage-3.png "Go to resource")
+
+10. Select **Containers** on the overview blade of your new storage account.
+
+    ![The Containers link is highlighted.](media/storage-containers.png "Containers")
+
+11. Select **+ Container** to add a new container. Enter **`shelfdata`** for the container name and set the public access level to **Private**. Select **Create** to create the container.
+
+    ![The container form is completed as described.](media/storage-new-container-shelfdata.png "New container")
+
+> **What is Azure Data Lake Storage Gen2?**
+>
+> Azure Data Lake Storage Gen2 is an inexpensive data lake storage made available by adding an HDFS interface to Azure Blob Storage. Throughput in gigabits and large-scale petabyte data usage are available, making it extremely cost-effective.
