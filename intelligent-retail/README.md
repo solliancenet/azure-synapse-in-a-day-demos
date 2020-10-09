@@ -10,7 +10,6 @@
     - [Part 5: Data visualization](#part-5-data-visualization)
   - [Hands-on lab story description](#hands-on-lab-story-description)
   - [Hands-on environment](#hands-on-environment)
-  - [Exercise 0: Download lab files](#exercise-0-download-lab-files)
   - [Exercise 1: Environment setup](#exercise-1-environment-setup)
     - [Task 1: Create an Azure Synapse workspace](#task-1-create-an-azure-synapse-workspace)
     - [Task 2: Set up blob data owner](#task-2-set-up-blob-data-owner)
@@ -73,11 +72,9 @@ The following is a diagram of the data analytics infrastructure that you will bu
 
 ![The lab diagram is shown.](media/lab-diagram.png "Lab diagram")
 
-## Exercise 0: Download lab files
-
 ## Exercise 1: Environment setup
 
-Time required: 20 minutes
+Time required: 40 minutes
 
 To perform this hands-on training, you will prepare the following items in this exercise:
 
@@ -272,6 +269,20 @@ To proceed with the steps described in this hands-on training, you need to insta
 9. Install the software from the Microsoft store.
 
     ![The desktop software is installing in the Microsoft Store.](media/pbi-desktop-install.png "Power BI Desktop")
+
+10. Navigate to <https://nodejs.org/en/download/>.
+
+11. Select the **LTS** tab, then select the **64-bit** _Windows Installer (.msi)_ version. Download and run the installer.
+
+    ![The 64-bit Windows Installer LTS version is highlighted.](media/install-nodejs-windows.png "Downloads")
+
+12. Select all default options in the install dialog. When prompted whether to automatically install the necessary tools for Native Modules, **Check the box** next to `Automatically install the necessary tools...`.
+
+    ![The check box is checked.](media/install-nodejs-tools.png "Tools for Native Modules")
+
+13. When the installation is completed, a Command Prompt window will appear to install the additional tools for Node.js. When you see this, press any key to continue.
+
+    ![The command prompt is displayed.](media/install-nodejs-command-prompt.png "Install Additional Tools for Node.js")
 
 ### Task 7: Download lab files
 
