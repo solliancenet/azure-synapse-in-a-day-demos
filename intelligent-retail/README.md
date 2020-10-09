@@ -17,8 +17,9 @@
     - [Task 3: Set up user access administrator](#task-3-set-up-user-access-administrator)
     - [Task 4: Create a SQL pool](#task-4-create-a-sql-pool)
     - [Task 5: Create an Apache Spark pool](#task-5-create-an-apache-spark-pool)
-    - [Task 6: Install Power BI Desktop](#task-6-install-power-bi-desktop)
-    - [Task 7: Log in to Synapse Studio](#task-7-log-in-to-synapse-studio)
+    - [Task 6: Prepare a Virtual Machine to run data generator and Power BI Desktop](#task-6-prepare-a-virtual-machine-to-run-data-generator-and-power-bi-desktop)
+    - [Task 7: Download lab files](#task-7-download-lab-files)
+    - [Task 8: Log in to Synapse Studio](#task-8-log-in-to-synapse-studio)
   - [Exercise 2: Data collection](#exercise-2-data-collection)
 
 ## Overview
@@ -218,17 +219,77 @@ Data access permissions on the data lake must be set separately from the resourc
 
     ![The Create button is highlighted.](media/synapse-spark-pools-new-review.png "Review + create")
 
-### Task 6: Install Power BI Desktop
+### Task 6: Prepare a Virtual Machine to run data generator and Power BI Desktop
 
-1. From the following URL, go to the Power BI Desktop download site and select **Download free**: Power BI Desktop: <https://powerbi.microsoft.com/desktop/>
+To proceed with the steps described in this hands-on training, you need to install Node.js for the data generator, and need to use the Power BI Desktop app for Windows 10. In this step, you will create a virtual machine running Windows 10, install Node.js, then install Power BI.
+
+1. In the [Azure portal](https://portal.azure.com), type in "virtual machines" in the top search menu and then select **Virtual machines** from the results.
+
+    ![In the Services search result list, Virtual machines is selected.](media/azure-create-vm-search.png "Virtual machines")
+
+2. Select **+ Add** on the Virtual machines page and then select the **Virtual machine** option.
+
+3. In the **Basics** tab, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Subscription                   | _select the appropriate subscription_              |
+   | Resource group                 | _select `synapse-lab-retail`_                      |
+   | Virtual machine name           | _`powerbi` (or unique name if not available)_      |
+   | Region                         | _select the resource group's location_             |
+   | Availability options           | _select `No infrastructure redundancy required`_   |
+   | Image                          | _select `Windows 10 Pro, Version 1809 - Gen1`_     |
+   | Azure Spot instance            | _select `No`_                                      |
+   | Size                           | _select `Standard_D2s_v3`_                         |
+   | Username                       | _select `powerbiuser`_                             |
+   | Password                       | _enter a password you will remember_               |
+   | Public inbound ports           | _select `Allow selected ports`_                    |
+   | Select inbound ports           | _select `RDP (3389)`_                              |
+   | Licensing                      | _select the option to confirm that you have an  eligible Windows 10 license with multi-tenant hosting rights._ |
+
+   ![The form fields are completed with the previously described settings.](media/azure-create-vm-1.png "Create a virtual machine")
+
+4. Select **Review + create**. On the review screen, select **Create**. After the deployment completes, select **Go to resource** to go to the virtual machine.
+
+    ![The Go to resource option is selected.](media/azure-create-vm-2.png "Go to resource")
+
+5. Select **Connect** from the actions menu and choose **RDP**.
+
+    ![The option to connect to the virtual machine via RDP is selected.](media/azure-vm-connect.png "Connect via RDP")
+
+6. On the **Connect** tab, select **Download RDP File**.
+
+    ![Download the RDP file to connect to the Power BI virtual machine.](media/azure-vm-connect-2.png "Download RDP File")
+
+7. Open the RDP file and select **Connect** to access the virtual machine. When prompted for credentials, enter `powerbiuser` for the username and the password you chose. Select the option to allow the security certificate when prompted.
+
+    ![Connect to a remote host.](media/azure-vm-connect-3.png "Connect to a remote host")
+
+8. From the following URL, go to the Power BI Desktop download site and select **Download free**: Power BI Desktop: <https://powerbi.microsoft.com/desktop/>
 
     ![The download page is displayed.](media/pbi-desktop-download.png "Power BI Desktop download")
 
-2. Install the software from the Microsoft store.
+9. Install the software from the Microsoft store.
 
     ![The desktop software is installing in the Microsoft Store.](media/pbi-desktop-install.png "Power BI Desktop")
 
-### Task 7: Log in to Synapse Studio
+### Task 7: Download lab files
+
+1. From your lab VM, navigate to <https://solliancepublicdata.blob.core.windows.net/synapse-in-a-day/retail/handson.zip> to download the ZIP file for this lab.
+
+2. Navigate to the folder to which you downloaded the file. Right-click on the `handson.zip` file, then select **Extract All...**.
+
+    ![The file is highlighted and Extract All is selected.](media/file-extract-all.png "Extract all")
+
+3. Change the destination folder path to **`C:\handson`**, then click **Extract**.
+
+    ![The folder destination is configured.](media/file-extract-destination.png "Select a Destination and Extract Files")
+
+4. You should see three folders in the `C:\handson` directory after extracting the files.
+
+    ![The three folders are displayed.](media/extracted-lab-files.png "Extracted lab files")
+
+### Task 8: Log in to Synapse Studio
 
 1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
 
