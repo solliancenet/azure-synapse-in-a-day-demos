@@ -33,7 +33,7 @@
     - [Task 10: Stream Analytics (for weight sensors) input settings](#task-10-stream-analytics-for-weight-sensors-input-settings)
     - [Task 11: Stream Analytics (for weight sensors) output settings](#task-11-stream-analytics-for-weight-sensors-output-settings)
     - [Task 12: Stream Analytics (for weight sensors) query settings](#task-12-stream-analytics-for-weight-sensors-query-settings)
-    - [Additional information: Using reference data in Stream Analytics](#additional-information-using-reference-data-in-stream-analytics)
+      - [Additional information: Using reference data in Stream Analytics](#additional-information-using-reference-data-in-stream-analytics)
     - [Task 13: Prepare to send data](#task-13-prepare-to-send-data)
     - [Task 14: Send data](#task-14-send-data)
     - [Task 15: Verify sent data](#task-15-verify-sent-data)
@@ -974,7 +974,7 @@ The ARM template deploys the following resources:
 
     ![The Start button is highlighted.](media/stream-analytics-sensor-start-now.png "Start job")
 
-### Additional information: Using reference data in Stream Analytics
+#### Additional information: Using reference data in Stream Analytics
 
 Browse data stored in a SQL Database or Blob storage (including Azure Data Lake Storage Gen2) with Stream Analytics.
 
