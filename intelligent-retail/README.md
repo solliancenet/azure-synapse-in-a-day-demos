@@ -37,6 +37,7 @@
     - [Task 13: Prepare to send data](#task-13-prepare-to-send-data)
     - [Task 14: Send data](#task-14-send-data)
     - [Task 15: Verify sent data](#task-15-verify-sent-data)
+  - [Exercise 3: Data aggregation](#exercise-3-data-aggregation)
 
 ## Overview
 
@@ -1092,3 +1093,21 @@ To verify that the IoT Hub devices are successfully retrieving the data, and tha
     ![The JSON file for face data is displayed.](media/datalake-face-data.png "Storage Explorer: face data")
 
     > ※ YYYY/MM/DD contains the current date.
+
+## Exercise 3: Data aggregation
+
+Time required: 40 minutes
+
+In the data aggregation, after data collected in the data lake in various formats is processed with an ETL designed in the GUI, you will ingest it at high speed with distributed processing using Apache Spark and process it to the point where you create a data mart.
+
+In this exercise, you will learn:
+
+- **Apache Spark implementation**: Create a Synapse notebook within Synapse Studio, and implement data aggregation processing using Apache Spark.
+
+- **Data flow construction**: Visually build an ETL pipeline in a code-free way in Synapse Studio to make subsequent processing of various data format files stored in the data lake easier.
+
+- **Pipeline construction**: Build a data pipeline to periodically run a flow from data extraction, conversion, and loading to aggregation.
+
+The diagram below shows the Synapse Studio elements that help us build the data pipeline:
+
+![The diagram shows the Synapse Studio elements that help us build the data pipeline.](media/data-pipeline-diagram.png "Data pipeline creation diagram")
