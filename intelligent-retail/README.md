@@ -18,20 +18,25 @@
     - [Task 5: Create an Apache Spark pool](#task-5-create-an-apache-spark-pool)
     - [Task 6: Prepare a Virtual Machine to run data generator and Power BI Desktop](#task-6-prepare-a-virtual-machine-to-run-data-generator-and-power-bi-desktop)
     - [Task 7: Download lab files](#task-7-download-lab-files)
-    - [Task 8: Log in to Synapse Studio](#task-8-log-in-to-synapse-studio)
+    - [Task 8: Install Azure Storage Explorer and upload lab files](#task-8-install-azure-storage-explorer-and-upload-lab-files)
+    - [Task 9: Log in to Synapse Studio](#task-9-log-in-to-synapse-studio)
   - [Exercise 2: Data collection](#exercise-2-data-collection)
     - [Task 1: Deploy ARM template](#task-1-deploy-arm-template)
     - [Task 2: Create Azure Data Lake Storage Gen2 account](#task-2-create-azure-data-lake-storage-gen2-account)
-    - [Task 3: Register an IoT device](#task-3-register-an-iot-device)
-    - [Task 4: Save IoT device connection information](#task-4-save-iot-device-connection-information)
-    - [Task 5: Register another IoT device](#task-5-register-another-iot-device)
-    - [Task 6: Save sensor IoT device connection information](#task-6-save-sensor-iot-device-connection-information)
+    - [Task 3: Register an IoT device (for AI camera)](#task-3-register-an-iot-device-for-ai-camera)
+    - [Task 4: Save IoT device connection information (for AI camera)](#task-4-save-iot-device-connection-information-for-ai-camera)
+    - [Task 5: Register another IoT device (for weight sensor)](#task-5-register-another-iot-device-for-weight-sensor)
+    - [Task 6: Save IoT device connection information (for weight sensor)](#task-6-save-iot-device-connection-information-for-weight-sensor)
     - [Task 7: Stream Analytics (for AI cameras) input settings](#task-7-stream-analytics-for-ai-cameras-input-settings)
     - [Task 8: Stream Analytics (for AI cameras) output settings](#task-8-stream-analytics-for-ai-cameras-output-settings)
     - [Task 9: Stream Analytics (for AI cameras) query settings](#task-9-stream-analytics-for-ai-cameras-query-settings)
     - [Task 10: Stream Analytics (for weight sensors) input settings](#task-10-stream-analytics-for-weight-sensors-input-settings)
     - [Task 11: Stream Analytics (for weight sensors) output settings](#task-11-stream-analytics-for-weight-sensors-output-settings)
     - [Task 12: Stream Analytics (for weight sensors) query settings](#task-12-stream-analytics-for-weight-sensors-query-settings)
+    - [Additional information: Using reference data in Stream Analytics](#additional-information-using-reference-data-in-stream-analytics)
+    - [Task 13: Prepare to send data](#task-13-prepare-to-send-data)
+    - [Task 14: Send data](#task-14-send-data)
+    - [Task 15: Verify sent data](#task-15-verify-sent-data)
 
 ## Overview
 
@@ -317,7 +322,55 @@ To proceed with the steps described in this hands-on training, you need to insta
 
     ![The three folders are displayed.](media/extracted-lab-files.png "Extracted lab files")
 
-### Task 8: Log in to Synapse Studio
+### Task 8: Install Azure Storage Explorer and upload lab files
+
+There are files you need to upload to the primary ADLS Gen2 account for your Synapse workspace. To do this, you will use Azure Storage Explorer. If you already have Azure Storage Explorer installed, you can skip ahead to step 10 below.
+
+1. Navigate to <https://aka.ms/portalfx/downloadstorageexplorer>.
+
+2. Select **Download now**.
+
+    ![The download now button is highlighted.](media/ase-download-now.png "Azure Storage Explorer: Download now")
+
+3. When prompted, run the installer.
+
+4. Select **Install for me only (recommended)**.
+
+    ![Install for me only is highlighted.](media/ase-install-for-me.png "Select install mode")
+
+5. Complete the install, choosing the default options.
+
+6. When the install completes, select **Launch Microsoft Azure Storage Explorer**, then click **Finish**.
+
+    ![The box is checked.](media/ase-finished.png "Install Finished")
+
+7. When Azure Storage Explorer launches for the first time, you will be prompted to connect to Azure Storage. Select **Add an Azure Account**, then click **Next**.
+
+    ![Add an Azure Account is selected.](media/ase-connect-1.png "Connect to Azure Storage")
+
+8. Sign into the Azure account you are using for the lab, when prompted.
+
+9. After signing into your account, select all your Azure subscriptions, then click **Apply**.
+
+    ![All subscriptions are selected and the Apply button is highlighted.](media/ase-apply-subs.png "Select subscriptions")
+
+10. Expand the Azure subscription you are using for this lab, then expand **Storage Accounts**. Locate and expand the primary ADLS Gen2 account you created when you provisioned your Synapse Analytics workspace. It will be named `synapselabretail` + your initials + `adls` (example: `synapselabretailjdhadls`). Right-click **Blob Containers** for the account, then select **Create Blob Container**.
+
+    ![The storage account is expanded.](media/ase-create-blob-container.png "Create Blob Container")
+
+11. Type **`sampledata`** for the container name, then hit Enter.
+
+    ![The sampledata container is highlighted.](media/ase-sampledata.png "sampledata")
+
+12. Open Windows Explorer and navigate to **`C:\handson\sampledata`**. Select all three folders and drag them into the **sampledata** container to upload them.
+
+    ![The three folders are highlighted and an arrow points to the sampledata container in Azure Storage Explorer.](media/ase-drag-folders.png "Drag folders into sampledata")
+
+13. After about 1 minute, you should see that all three folders successfully uploaded, along with 406 items, to the `sampledata` container.
+
+    ![The files successfully uploaded to the sampledata container.](media/ase-sampledata-uploaded.png "Files successfully uploaded")
+
+### Task 9: Log in to Synapse Studio
 
 1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
 
@@ -604,7 +657,7 @@ The ARM template deploys the following resources:
    | ------------------------------ | ------------------------------------------         |
    | Subscription                   | _select the appropriate subscription_              |
    | Resource group                 | _select `synapse-lab-retail`_                      |
-   | Virtual machine name           | _`handsonretaildl` + `<unique suffix>` (make the name unique)_      |
+   | Storage account name           | _`handsonretaildl` + `<unique suffix>` (make the name unique)_      |
    | Location                       | _select the resource group's location_             |
    | Performance           | _select `Standard`_   |
    | Account kind                          | _select `StorageV2 (general purpose v2)`_     |
@@ -641,7 +694,7 @@ The ARM template deploys the following resources:
 >
 > Azure Data Lake Storage Gen2 is an inexpensive data lake storage made available by adding an HDFS interface to Azure Blob Storage. Throughput in gigabits and large-scale petabyte data usage are available, making it extremely cost-effective.
 
-### Task 3: Register an IoT device
+### Task 3: Register an IoT device (for AI camera)
 
 1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
 
@@ -668,7 +721,7 @@ The ARM template deploys the following resources:
 
 5. Select **Save**.
 
-### Task 4: Save IoT device connection information
+### Task 4: Save IoT device connection information (for AI camera)
 
 1. Select the **TestDevice** that you just added.
 
@@ -678,7 +731,7 @@ The ARM template deploys the following resources:
 
     ![The primary connection string is highlighted.](media/testdevice-connection-string.png "TestDevice")
 
-### Task 5: Register another IoT device
+### Task 5: Register another IoT device (for weight sensor)
 
 1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
 
@@ -705,7 +758,7 @@ The ARM template deploys the following resources:
 
 5. Select **Save**.
 
-### Task 6: Save sensor IoT device connection information
+### Task 6: Save IoT device connection information (for weight sensor)
 
 1. Select the **TestDevice** that you just added.
 
@@ -849,7 +902,7 @@ The ARM template deploys the following resources:
    | ------------------------------ | ------------------------------------------         |
    | Input alias                   | _enter `rf-m-item`_              |
    | Storage account                 | _select `synapselabretail` + your initials + `adls` (example: `synapselabretailjdhadls`) This is the ADLS Gen2 account you created along with the Synapse Analytics workspace_                      |
-   | Container           | _select `Use existing`, then select `datalake`_      |
+   | Container           | _select `Use existing`, then select **`sampledata`**_      |
    | Path pattern | _enter `master/m_item/m_item.csv`_             |
    | Event serialization format | _select `CSV`_ |
    | Delimiter | _select `comma (,)`_ |
@@ -920,3 +973,122 @@ The ARM template deploys the following resources:
 4. Select **Now** for the job output start time, then select **Start**.
 
     ![The Start button is highlighted.](media/stream-analytics-sensor-start-now.png "Start job")
+
+### Additional information: Using reference data in Stream Analytics
+
+Browse data stored in a SQL Database or Blob storage (including Azure Data Lake Storage Gen2) with Stream Analytics.
+
+Imagine a use case where static or infrequently modified data is stored as reference data, which is combined with associated stream data from IoT devices.
+
+The concept of this use is expressed in this hands-on training, as follows.
+
+> ※ Direct output of Stream Analytics jobs at up to 200 MB/s to Azure Synapse dedicated SQL pools is now possible due to new Synapse features. In this scenario, you will output to the data lake.
+
+![This diagram displays the smart shelf sending data to IoT Hub, which is ingested into Stream Analytics, transformed, and written to ADLS Gen2.](media/diagram-stream-analytics.png "Stream Analytics to ADLS Gen2 diagram")
+
+**Stream data (weight sensor)**
+
+| face_id | shelf_id | sensor_no | date_time | sensor_weight | diff_weight |
+| --- | --- | --- | --- | --- | --- |
+| XXX | **01** | **02** | XXX | XXX | XXX |
+
+**Product master**
+
+| shelf_id | sensor_no | item_genre | item_name | item_price |
+| --- | --- | --- | --- | --- |
+| **01** | **02** | Produce | Apple | 100 |
+
+**Post-processing data** ※ *Combines stream data and product master with shelf_id and sensor_no as the keys*
+
+| face_id | shelf_id | sensor_no | date_time | sensor_weight | diff_weight | item_genre | item_name | item_price |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| XXX | **01** | **02** | XXX |	XXX | XXX | Produce | Apple | 100 |
+
+### Task 13: Prepare to send data
+
+1. Log in to your lab VM.
+
+2. Open Windows Explorer and navigate to **`C:\handson\program\`**.
+
+3. Open **SendFaceData.js** in Notepad and replace the `connectionString` value between the single quotes (`'REPLACE-WITH-YOUR-CONNECTION-STRING'`) on **line 7** with the IoT device connection string that you copied in Task 4 (for AI camera).
+
+    ![The connection string line is highlighted.](media/edit-sendfacedata.png "SendFaceData in Notepad")
+
+4. **Save** the file.
+
+5. Open **SendSensorData.js** in Notepad and replace the `connectionString` value between the single quotes (`'REPLACE-WITH-YOUR-CONNECTION-STRING'`) on **line 7** with the IoT device connection string that you copied in Task 6 (for weight sensor).
+
+    ![The connection string line is highlighted.](media/edit-sendsensordata.png "SendFaceData in Notepad")
+
+6. **Save** the file.
+
+> **Connecting from an IoT device**
+>
+> Install IoT Hub Client (SDK) on the IoT device. Specify the connection string issued to the device when the device ID is registered via IoT Hub.
+>
+> ![The IoT Hub client is connected to the IoT device in IoT Hub, which sends data to Stream Analytics.](media/connect-device-iot-hub.png "Connect device to IoT Hub")
+
+### Task 14: Send data
+
+1. On your lab VM, open the **Command Prompt**. You can do this by clicking Start and entering `cmd` to find and select the Command Prompt app.
+
+    ![The cmd search and Command Prompt result are both highlighted.](media/open-command-prompt.png "Open Command Prompt")
+
+2. In the Command Prompt, execute `cd C:\handson\program` to change directories.
+
+3. Install the required `azure-iot-device-mqtt` and `azure-iot-device` Node.js modules by executing the following command:
+
+    ```cmd
+    npm install
+    ```
+
+4. Send AI camera data by running the following command at the command prompt:
+
+    ```cmd
+    node SendFaceData.js
+    ```
+
+    In a few moments, the simulated IoT device will start sending telemetry to IoT Hub:
+
+    ![The face data is being sent to IoT Hub.](media/cmd-sendfacedata.png "Command Prompt")
+
+5. Allow the simulator to continue to run in the background. Open a **new Command Prompt** window.
+
+6. In the new Command Prompt, execute `cd C:\handson\program` to change directories.
+
+7. Send weight sensor data by running the following command at the command prompt:
+
+    ```cmd
+    node SendSensorData.js
+    ```
+
+    Just as happened in the other command prompt, the simulated IoT device will start sending telemetry to IoT Hub:
+
+    ![The weight sensor data is being sent to IoT Hub.](media/cmd-sendsensordata.png "Command Prompt")
+
+8. Allow the simulator to continue to run in the background while you continue the following steps.
+
+### Task 15: Verify sent data
+
+To verify that the IoT Hub devices are successfully retrieving the data, and that the Stream Analytics jobs are retrieving, processing, and writing the data to storage, perform the following steps:
+
+1. Navigate to the `synapse-lab-retail` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-retail`, then select the **synapse-lab-retail** resource group in the search results under **Resource Groups**.
+
+    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
+
+2. Within the resource group, select the ADLS Gen2 account you created in Task 2, named **`handsonretaildl` + `<unique suffix>`**.
+
+    ![The handsonretaildl storage account is selected.](media/resource-group-dl.png "Storage account")
+
+3. Select **Storage Explorer (preview)** in the left-hand menu **(1)**, expand Containers and select **shelfdata (2)**, then open the **tran** folder **(3)**. Verify that you see the **`face`** and **`sensor`** folders **(4)**. These are created by the two Stream Analytics jobs. If you don't see both folders, try refreshing the list after about a minute.
+
+    ![The two folders are displayed in the tran folder.](media/datalake-tran-data.png "Storage Explorer")
+
+4. Confirm that a JSON file has been created in the following folders in the data lake:
+
+    - AI camera data: `shelfdata/tran/face/YYYY/MM//DD/`
+    - Weight sensor data: `shelfdata/tran/sensor/YYYY/MM//DD/`
+
+    ![The JSON file for face data is displayed.](media/datalake-face-data.png "Storage Explorer: face data")
+
+    > ※ YYYY/MM/DD contains the current date.
