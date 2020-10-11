@@ -38,6 +38,10 @@
     - [Task 14: Send data](#task-14-send-data)
     - [Task 15: Verify sent data](#task-15-verify-sent-data)
   - [Exercise 3: Data aggregation](#exercise-3-data-aggregation)
+    - [Task 1: Create notebooks](#task-1-create-notebooks)
+      - [Apache Spark overview](#apache-spark-overview)
+        - [About Spark SQL Analytics connectors](#about-spark-sql-analytics-connectors)
+        - [Check job execution status](#check-job-execution-status)
 
 ## Overview
 
@@ -1111,3 +1115,123 @@ In this exercise, you will learn:
 The diagram below shows the Synapse Studio elements that help us build the data pipeline:
 
 ![The diagram shows the Synapse Studio elements that help us build the data pipeline.](media/data-pipeline-diagram.png "Data pipeline creation diagram")
+
+### Task 1: Create notebooks
+
+1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
+
+    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
+
+2. In the **Overview** blade, select the **Workspace web URL** or **Launch Synapse Studio** to navigate to Synapse Studio for this workspace.
+
+    ![The workspace web URL is highlighted.](media/synapse-workspace-url.png "Workspace web URL")
+
+3. In Synapse Studio, navigate to the **Data hub** in the left-hand menu.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+4. Select the **Linked** tab **(1)**, expand `Azure Data Lake Storage Gen2`, expand the primary storage account, then select the **sampledata** container **(2)**. Navigate to **`tran\sensor\2020\04\01` (3)**, right-click on the JSON file **(4)**, select **New notebook (5)**, then select **Load to DataFrame (6)**.
+
+    ![The file is highlighted with the menu options.](media/new-notebook-load-sensor.png "New notebook - Load to DataFrame")
+
+5. In the new notebook, notice that Cell 1 is automatically populated with Python code that loads the JSON file into a new DataFrame, then displays the first 10 rows. Select **Run all** to execute the notebook.
+
+    ![The notebook is displayed.](media/notebook1-run-all.png "Run all")
+
+    > Please note that it takes several minutes to execute the notebook for the first time. This is because the Spark pool needs to start and allocate resources.
+
+    You should see an output similar to the following:
+
+    ![The cell output is displayed.](media/notebook1-cell1-output.png "Notebook 1 cell 1 output")
+
+6. Hover below the cell and select **{} Add code** to add a new cell.
+
+    ![The add code button is highlighted.](media/notebook-add-code.png "Add code")
+
+7. Execute the following code to load the DataFrame into a temporary table:
+
+    ```python
+    df = df.select("face_id","shelf_id","sensor_no","item_genre","item_name","date_time","sensor_weight","diff_weight")
+    df.registerTempTable( "be_df_table" )
+    ```
+
+    > You can execute **Ctrl+Enter** to run the cell, or **Shift+Enter** to run the cell and create a new one below.
+
+8. Execute the following in a new cell to aggregate data stored in the temporary view:
+
+    ```python
+    df = spark.sql("""
+        SELECT
+        SUBSTRING(date_time, 1, 10) as date
+        ,shelf_id
+        ,count(*) as count
+        FROM be_df_table
+        GROUP BY SUBSTRING(date_time, 1, 10), shelf_id
+        ORDER BY SUBSTRING(date_time, 1, 10), shelf_id
+        """
+                )            
+    df.registerTempTable( "af_df_table" )
+    ```
+
+9. Execute the following in a new cell to set the cell language to SQL and view the aggregation results:
+
+    ```python
+    %%sql
+    SELECT * FROM af_df_table limit 5
+    ```
+
+    Your output should look similar to the following:
+
+    ![The aggregation results are displayed.](media/notebook1-cell4-output.png "Cell 4 output")
+
+10. Execute the following in a new cell to write the aggregated data to the dedicated SQL pool, using the Spark SQL Analytics connector:
+
+    ```scala
+    %%spark
+    val s_df = spark.sql("SELECT * FROM af_df_table")
+    s_df.write.
+        sqlanalytics("SqlPool.dbo.t_shelf_count", Constants.INTERNAL)
+    ```
+
+    > Spark SQL Analytics connector is only available in Scala, so we switch to Scala with `%%spark`.
+
+11. After the cell finishes executing, navigate to the **Data hub**.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+12. Select the **Workspace** tab **(1)**, expand **SqlPool** under Databases **(2)**, then expand the Tables list. If you do not see the `t_shelf_count` table, refresh the list. **Right-click** on the **`t_shelf_count`** table **(3)**, select **New SQL script (4)**, then **Select TOP 100 rows (5)**.
+
+    ![The table is highlighted.](media/select-top-shelf-count.png "Select TOP 100 rows")
+
+    You should see an output that looks similar to the following:
+
+    ![The query output is displayed.](media/select-top-shelf-count-output.png "Select TOP 100 rows output")
+
+#### Apache Spark overview
+
+Apache Spark is a distributed processing framework for high-speed processing of large-scale data. In contrast, with a similar distributed processing framework, Hadoop, which must frequently access the disk for IO, Spark is in-memory processing that saves data to the memory, so the IO overhead is smaller, and the overall execution speed is improved.
+
+Spark on Synapse can be developed in Scala, Python, .NET, and SQL.
+
+![The Spark process is displayed.](media/spark-process-diagram.png "Spark process diagram")
+
+##### About Spark SQL Analytics connectors
+
+Typically, when using JDBC, the data is transferred serially.
+The risk of bottlenecks exists, but the import/export between the serverless Spark pool and dedicated SQL pool using PolyBase enables data to be transferred efficiently.
+
+In addition, because authentication between systems uses a security token provided by Azure AD, it is not necessary to specify the authentication information in the program code.
+
+##### Check job execution status
+
+When you execute processing on the Synapse notebook, you can check the execution status and execution results on cell-by-cell basis.
+
+Expand the job execution pane under the cell after execution completes to view the list of job executions:
+
+![The cell's job execution status is displayed.](media/notebook-job-executions.png "Notebook job status")
+
+You can check more details by selecting **View in monitoring**, and you can also check the Spark execution log.
+
+> Select Synapse Studio > Monitor > Activities > Apache Spark applications to open the same screen.
+
+![The Spark job details are displayed.](media/spark-dag.png "Spark details")
