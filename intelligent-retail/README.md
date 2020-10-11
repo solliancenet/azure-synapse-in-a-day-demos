@@ -42,6 +42,10 @@
       - [Apache Spark overview](#apache-spark-overview)
         - [About Spark SQL Analytics connectors](#about-spark-sql-analytics-connectors)
         - [Check job execution status](#check-job-execution-status)
+    - [Task 2: Implement processing](#task-2-implement-processing)
+      - [File path to be aggregated (JSON format)](#file-path-to-be-aggregated-json-format)
+      - [Summary conditions: Number of visitors by gender and age group (per day)](#summary-conditions-number-of-visitors-by-gender-and-age-group-per-day)
+      - [Table name of the aggregate data output destination: `t_face_count`](#table-name-of-the-aggregate-data-output-destination-t_face_count)
 
 ## Overview
 
@@ -1235,3 +1239,105 @@ You can check more details by selecting **View in monitoring**, and you can also
 > Select Synapse Studio > Monitor > Activities > Apache Spark applications to open the same screen.
 
 ![The Spark job details are displayed.](media/spark-dag.png "Spark details")
+
+### Task 2: Implement processing
+
+By aggregating personal attributes of visitors acquired by AI cameras installed in a certain supermarket, you would like to investigate the number of visitors by gender and age.
+
+Create a notebook (`face_count`) and implement the aggregation process for the reference below. When finished, run all cells to ensure that they are successful.
+
+> The table created (`t_face_count`) will be used in data visualization in a later exercise.
+
+#### File path to be aggregated (JSON format)
+
+`abfss://sampledata@synapsehandson.dfs.core.windows.net/tran/face/2020/04/01/`
+
+Sample data (data items: `face_id`, `date_time`, `age`, and `gender`):
+
+```json
+{"face_id":"051a09cb-822b-4baf-9cf6-dbdbc66c01e3","date_time":"2020-04-01T14:34:10.0000000","age":"70","gender":"female"}
+{"face_id":"109f5625-0b2c-48a1-abb0-35f2c6d36ed6","date_time":"2020-04-01T14:34:05.0000000","age":"60","gender":"female"}
+{"face_id":"1e21ac27-81fc-4456-bb09-cf9fa41f9e43","date_time":"2020-04-01T14:33:39.0000000","age":"40","gender":"female"}
+```
+
+#### Summary conditions: Number of visitors by gender and age group (per day)
+
+- Use the GROUP BY function to aggregate with `date_time`, `gender`, and `age`.
+
+    > In order to aggregate per day, date_time is converted to a format using the following SUBSTRING function: `⇒ SUBSTRING (date_time, 1, 10)`
+
+- Use the COUNT function to count the number of records aggregated by `date`, `gender`, and `age`.
+- Use the ORDER BY function to sort `date`, `gender`, and `age` in ascending order.
+
+#### Table name of the aggregate data output destination: `t_face_count`
+
+Sample data (data items: `date`, `gender`, `age`, and `count`):
+
+| date | gender | age | count |
+| --- | --- | --- | --- |
+| 2020/04/01 | female | 10 | 7 |
+| 2020/04/01 | female | 20 | 8 |
+| 2020/04/01 | female | 30 | 14 |
+
+1. Navigate to the **Develop hub**.
+
+    ![Develop hub.](media/develop-hub.png "Develop hub")
+
+2. Select **+**, then select **Notebook**.
+
+    ![The new notebook menu item is highlighted.](media/new-notebook.png "New notebook")
+
+3. Set the notebook name to **item_count** under the Properties.
+
+    ![The name value is configured.](media/item_count_notebook_name.png "Name set to item_count")
+
+4. Select **{} Add code** to add a new cell to the notebook.
+
+5. Paste the following into the cell. Replace **`YOUR_DATA_LAKE_NAME`** with the name of the primary ADLS Gen2 account for your Synapse workspace (ex. `synapselabretail` + your initials + `adls`):
+
+    ```python
+    file_path = 'abfss://sampledata@YOUR_DATA_LAKE_NAME.dfs.core.windows.net/out/join/'
+    ```
+
+    > Running the notebook at this point will result in an error. Please Publish without running, after adding the remaining cells.
+
+6. Add the following to a new cell to load the file to a new Spark DataFrame and store the data in a new Spark temporary view:
+
+    ```python
+    df = spark.read.load(file_path, format='parquet')
+    df = df.select("face_id","shelf_id","sensor_no","item_genre","item_name","date_time","sensor_weight","diff_weight","age","gender")
+    df.registerTempTable( "be_df_table" )
+    ```
+
+7. Add the following to a new cell to aggregate the data stored in the temporary view:
+
+    ```python
+    grp_df = spark.sql("""
+        SELECT
+        SUBSTRING(date_time, 1, 10) AS date
+        ,gender
+        ,age
+        ,item_genre
+        ,item_name
+        ,count(*) as item_count
+        FROM be_df_table
+        GROUP BY SUBSTRING(date_time, 1, 10), gender, age, item_genre, item_name
+        ORDER BY SUBSTRING(date_time, 1, 10), gender, age, item_genre, item_name
+        """
+                )
+    ```
+
+8. Add the following to a new cell to output to the data lake in Parquet format. Replace **`YOUR_DATA_LAKE_NAME`** with the name of the primary ADLS Gen2 account for your Synapse workspace, which is the same value you added to Cell 1:
+
+    ```python
+    output_path = "abfss://sampledata@YOUR_DATA_LAKE_NAME.dfs.core.windows.net/out/item_count/"
+    grp_df.write.mode("overwrite").parquet(output_path)
+    ```
+
+    Your completed notebook should look similar to the following:
+
+    ![The completed notebook is displayed.](media/item_count_notebook_completed.png "Completed notebook")
+
+9. Select **Publish all**, then **Publish** to save your notebook.
+
+    ![The publish all button is highlighted.](media/publish-all.png "Publish all")
