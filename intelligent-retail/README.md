@@ -19,8 +19,12 @@
     - [Task 6: Prepare a Virtual Machine to run data generator and Power BI Desktop](#task-6-prepare-a-virtual-machine-to-run-data-generator-and-power-bi-desktop)
     - [Task 7: Download lab files](#task-7-download-lab-files)
     - [Task 8: Install Azure Storage Explorer and upload lab files](#task-8-install-azure-storage-explorer-and-upload-lab-files)
-    - [Task 9: Log in to Synapse Studio](#task-9-log-in-to-synapse-studio)
-  - [Exercise 2: Data collection](#exercise-2-data-collection)
+  - [Exercise 2: Security](#exercise-2-security)
+    - [Task 1: Synapse workspace connection restrictions with IP firewalls](#task-1-synapse-workspace-connection-restrictions-with-ip-firewalls)
+    - [Task 2: Log in to Synapse Studio](#task-2-log-in-to-synapse-studio)
+    - [Task 3: Enable private endpoint on the data lake](#task-3-enable-private-endpoint-on-the-data-lake)
+    - [Task 4: Managed identity](#task-4-managed-identity)
+  - [Exercise 3: Data collection](#exercise-3-data-collection)
     - [Task 1: Deploy ARM template](#task-1-deploy-arm-template)
     - [Task 2: Create Azure Data Lake Storage Gen2 account](#task-2-create-azure-data-lake-storage-gen2-account)
     - [Task 3: Register an IoT device (for AI camera)](#task-3-register-an-iot-device-for-ai-camera)
@@ -37,7 +41,7 @@
     - [Task 13: Prepare to send data](#task-13-prepare-to-send-data)
     - [Task 14: Send data](#task-14-send-data)
     - [Task 15: Verify sent data](#task-15-verify-sent-data)
-  - [Exercise 3: Data aggregation](#exercise-3-data-aggregation)
+  - [Exercise 4: Data aggregation](#exercise-4-data-aggregation)
     - [Task 1: Create notebooks](#task-1-create-notebooks)
       - [Apache Spark overview](#apache-spark-overview)
         - [About Spark SQL Analytics connectors](#about-spark-sql-analytics-connectors)
@@ -46,6 +50,8 @@
       - [File path to be aggregated (JSON format)](#file-path-to-be-aggregated-json-format)
       - [Summary conditions: Number of visitors by gender and age group (per day)](#summary-conditions-number-of-visitors-by-gender-and-age-group-per-day)
       - [Table name of the aggregate data output destination: `t_face_count`](#table-name-of-the-aggregate-data-output-destination-t_face_count)
+    - [Task 3: Create a table for the pipeline](#task-3-create-a-table-for-the-pipeline)
+    - [Task 4: Create a linked service](#task-4-create-a-linked-service)
 
 ## Overview
 
@@ -379,25 +385,125 @@ There are files you need to upload to the primary ADLS Gen2 account for your Syn
 
     ![The files successfully uploaded to the sampledata container.](media/ase-sampledata-uploaded.png "Files successfully uploaded")
 
-### Task 9: Log in to Synapse Studio
+## Exercise 2: Security
+
+Time required: 10 minutes
+
+### Task 1: Synapse workspace connection restrictions with IP firewalls
+
+Based on the source IP address of each request, you can allow or deny access to the Synapse workspace and all public endpoints of the workspace (SQL pool, SQL on-demand, development). For example, prevent unauthorized access from unspecified locations by allowing only access from the working environment.
 
 1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
 
     ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
 
-2. In the **Overview** blade, select the **Workspace web URL** or **Launch Synapse Studio** to navigate to Synapse Studio for this workspace.
+2. Select **Firewalls** on the left-hand menu **(1)**. Verify that the "Allow Azure services and resources to access this workspace" setting is turned **Off (2)**. **Delete** the `showAll` IP address rule **(3)**, then **Save** your settings **(4)**.
+
+    ![The firewall settings are configured.](media/synapse-firewalls-setting.png "Firewalls")
+
+### Task 2: Log in to Synapse Studio
+
+1. Select the **Overview** blade in the left-hand menu, then select the **Workspace web URL** or **Launch Synapse Studio** to navigate to Synapse Studio for this workspace.
 
     ![The workspace web URL is highlighted.](media/synapse-workspace-url.png "Workspace web URL")
 
-    After authenticating your account, you should see the Synapse Studio home page for your workspace.
+2. You should see a message stating that you need permission to access the workspace, due to the firewall settings you changed:
+
+    ![Access to the workspace is denied.](media/synapse-workspace-denied.png "Access denied")
+
+3. Open the workspace **Firewalls (1)** configuration once again, then turn  the "Allow Azure services and resources to access this workspace" setting to **On (2)**. Add a new client IP address rule named **`showAll`** with a Start IP of **`0.0.0.0`** and End IP of **`255.255.255.255` (3)**. Select **Save (4)**.
+
+    ![The firewall settings are configured as described.](media/synapse-firewalls-setting-enable.png "Firewalls")
+
+4. Return to Synapse Studio and refresh the page. After authenticating your account, you should see the Synapse Studio home page for your workspace.
 
     ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
 
-3. If you see the Getting started dialog, select **Close**.
+5. If you see the Getting started dialog, select **Close**.
 
     ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
 
-## Exercise 2: Data collection
+### Task 3: Enable private endpoint on the data lake
+
+Managed private endpoint uses a private IP address from within the Synapse workspace's Managed Virtual Network to connect to an Azure resource or your own private link service. Connections using managed private endpoints provide access to Azure resources or private link services.
+
+When you created the Synapse workspace earlier in this lab, you enabled the managed virtual network (VNet) option. This setting allows the workspace to be network-isolated and to be linked from the VNet privately to the SQL pool, Spark pool, and other Azure services, such as ADLS Gen2 and Azure Cosmos DB.
+
+The use of private links protects traffic from the risk of data breaches because it passes through Microsoft's backbone network.
+
+![The diagram is displayed.](media/managed-vnet-private-link-diagram.png "Managed VNet and private link diagram")
+
+When you create datasets with the ADLS Gen2 account's Synapse linked service later in this lab, you will not be able to connect to the service unless you configure a managed endpoint.
+
+In this task, you create a new managed private endpoint for the ADLS Gen2 account.
+
+1. In Synapse Studio, select the **Manage hub**.
+
+    ![Manage hub.](media/manage-hub.png "Manage hub")
+
+2. Select **Managed private endpoints** on the left-hand menu, then select **+ New**.
+
+    ![The new button is highlighted.](media/managed-private-endpoints-new.png "Managed private endpoints")
+
+3. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![The ADLS Gen2 option is selected.](media/managed-private-endpoints-new-type.png "New managed private endpoint")
+
+4. On the new managed private endpoint form, enter **`data-lake`** for the name. Select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`), then select **Create**.
+
+    ![The form is configured as described.](media/managed-private-endpoint-new-form.png "New managed private endpoint")
+
+5. Return to the `synapse-lab-infrastructure` resource group and select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`) within.
+
+    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
+
+6. Select **Private endpoint connections** on the left-hand menu **(1)**. You should see the new private endpoint connection in a Pending status. Before you can use it, you must approve the request. **Check** the pending request **(2)**, then select **Approve**.
+
+    ![The pending connection requet is checked and the Approve button is highlighted.](media/adls-approve-private-endpoint.png "Private endpoint connections")
+
+7. Enter a description for the approval, such as "Synapse data lake", then select **Yes** to complete the approval.
+
+    ![The form is displayed as described.](media/adls-approve-connection.png "Approve connection")
+
+8. Return to Synapse studio and select the **Manage hub**.
+
+    ![Manage hub.](media/manage-hub.png "Manage hub")
+
+9. Select **Managed private endpoints** on the left-hand menu. You should see the new **data-lake** private endpoint. It will take about 1 minute for the approval status to refresh. Select the **Refresh** button periodically until the approval status shows as Approved.
+
+    ![The new data-lake private endpoint is highlighted.](media/managed-private-endpoints.png "Managed private endpoints")
+
+### Task 4: Managed identity
+
+When accessing other services in the Azure Synapse workspace, authentication is now possible using a system allocated ID. This allows authentication in conjunction with Azure AD without using the credentials issued within each service (such as a Data Lake Storage access key).
+
+1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
+
+    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
+
+2. On the **Overview** blade, observe the **Managed Identity object ID** value.
+
+    ![The managed identity object ID is highlighted.](media/synapse-overview-managed-identity.png "Overview")
+
+3. Return to Synapse Studio, then select the **Manage hub**.
+
+    ![Manage hub.](media/manage-hub.png "Manage hub")
+
+4. Select **Linked services** in the left-hand menu, then select **+ New**.
+
+    ![The new button is highlighted.](media/new-linked-service-button.png "New linked service")
+
+5. Select **Azure Data Lake Storage Gen2**, then **Continue**.
+
+    ![ADLS Gen2 is highlighted.](media/new-linked-service-adls-gen2.png "New linked service")
+
+6. On the new linked service form, select **Managed Identity** for the authentication method, select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`). You will see the `data-lake` **Managed private endpoint** selected with the **Approved** status, and the Managed identity name and object ID values displayed below **(3)**.
+
+    ![The new linked service form is displayed.](media/new-linked-service-managed-identity.png "New linked service")
+
+7. Select **Cancel**. We do not need to create this linked service.
+
+## Exercise 3: Data collection
 
 Time required: 20 minutes
 
@@ -1102,7 +1208,7 @@ To verify that the IoT Hub devices are successfully retrieving the data, and tha
 
     > ※ YYYY/MM/DD contains the current date.
 
-## Exercise 3: Data aggregation
+## Exercise 4: Data aggregation
 
 Time required: 40 minutes
 
@@ -1341,3 +1447,55 @@ Sample data (data items: `date`, `gender`, `age`, and `count`):
 9. Select **Publish all**, then **Publish** to save your notebook.
 
     ![The publish all button is highlighted.](media/publish-all.png "Publish all")
+
+### Task 3: Create a table for the pipeline
+
+1. Navigate to the **Data hub**.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+2. Select the **Workspace** tab **(1)**, expand Databases and right-click on **SqlPool (2)**. Select **New SQL script (3)**, then **Empty script (4)**.
+
+    ![The new empty script option is displayed.](media/new-empty-sql-script.png "New empty SQL script")
+
+3. Paste the following script and **Run** it to create a new `t_item_count` table:
+
+    ```sql
+    CREATE TABLE [dbo].[t_item_count]
+    (
+        [date] [nvarchar](4000)  NULL,
+        [gender] [nvarchar](4000)  NULL,
+        [age] [nvarchar](4000)  NULL,
+        [item_genre] [nvarchar](4000)  NULL,
+        [item_name] [nvarchar](4000)  NULL,
+        [item_count] [bigint]  NULL
+    )
+    ```
+
+### Task 4: Create a linked service
+
+1. Navigate to the **Manage hub**.
+
+    ![Manage hub.](media/manage-hub.png "Manage hub")
+
+2. Select **Linked services** in the left-hand menu, then select **+ New**.
+
+    ![The new button is highlighted.](media/new-linked-service-button.png "New linked service")
+
+3. Select **Azure Data Lake Storage Gen2**, then **Continue**.
+
+    ![ADLS Gen2 is highlighted.](media/new-linked-service-adls-gen2.png "New linked service")
+
+4. Enter **`datalake_keylink`** for the linked service name. Select the **Edit** button next to the `AutoResolveIntegrationRuntime`. We need to enable interactive authoring, which is currently disabled.
+
+    ![The name and edit button are both highlighted.](media/new-linked-service-keylink-edit.png "New linked service")
+
+5. Select **Enable** next to `Interactive authoring`, then **Apply**.
+
+    ![The interactive authoring option is enabled.](media/enable-interactive-authoring.png "Edit integration runtime")
+
+    > It takes about 1 to 2 minutes to turn on interactive authoring.
+
+6. On the new linked service form, select **Account key** for the authentication method, select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`), then select **Create**.
+
+    ![The completed form is displayed.](media/new-linked-service-keylink.png "New linked service")
