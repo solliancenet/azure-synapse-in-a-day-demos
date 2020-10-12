@@ -42,7 +42,7 @@
     - [Task 14: Send data](#task-14-send-data)
     - [Task 15: Verify sent data](#task-15-verify-sent-data)
   - [Exercise 4: Data aggregation](#exercise-4-data-aggregation)
-    - [Task 1: Create notebooks](#task-1-create-notebooks)
+    - [Task 1: Create notebook](#task-1-create-notebook)
       - [Apache Spark overview](#apache-spark-overview)
         - [About Spark SQL Analytics connectors](#about-spark-sql-analytics-connectors)
         - [Check job execution status](#check-job-execution-status)
@@ -52,6 +52,11 @@
       - [Table name of the aggregate data output destination: `t_face_count`](#table-name-of-the-aggregate-data-output-destination-t_face_count)
     - [Task 3: Create a table for the pipeline](#task-3-create-a-table-for-the-pipeline)
     - [Task 4: Enable interactive authoring on the integration runtime](#task-4-enable-interactive-authoring-on-the-integration-runtime)
+    - [Task 5: Create a dataset for weight sensor data](#task-5-create-a-dataset-for-weight-sensor-data)
+    - [Task 6: Create a dataset for AI camera data](#task-6-create-a-dataset-for-ai-camera-data)
+    - [Task 7: Create a dataset for intermediate output](#task-7-create-a-dataset-for-intermediate-output)
+    - [Task 8: Create a data flow](#task-8-create-a-data-flow)
+    - [Task 9: Create a pipeline](#task-9-create-a-pipeline)
 
 ## Overview
 
@@ -1226,7 +1231,7 @@ The diagram below shows the Synapse Studio elements that help us build the data 
 
 ![The diagram shows the Synapse Studio elements that help us build the data pipeline.](media/data-pipeline-diagram.png "Data pipeline creation diagram")
 
-### Task 1: Create notebooks
+### Task 1: Create notebook
 
 1. Return to the `synapse-lab-retail` resource group and select the Azure Synapse Analytics workspace within.
 
@@ -1489,3 +1494,136 @@ The interactive authoring capability is used during authoring for functionalitie
     ![The interactive authoring option is enabled.](media/enable-interactive-authoring.png "Edit integration runtime")
 
     > It takes about 1 to 2 minutes to turn on interactive authoring.
+
+### Task 5: Create a dataset for weight sensor data
+
+1. Navigate to the **Data hub**.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+2. Select **+**, then **Integration dataset**.
+
+    ![The new button and integration dataset are highlighted.](media/new-integration-dataset.png "Integration dataset")
+
+3. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![The ADLS Gen2 option is highlighted.](media/new-dataset-adls.png "New integration dataset")
+
+4. Select **Json** on the format selection screen, then select **Continue**.
+
+    ![The JSON format is highlighted.](media/new-dataset-json-format.png "Select format")
+
+5. In the dataset properties form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Name | _enter `input_sensor`_ |
+   | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+   | File path | _enter `sampledata` for the file system, then enter `tran/sensor/2020/04/01` for the directory_ |
+   | Import schema | _select `From connection/store`_ |
+
+   ![The dataset properties are configured.](media/new-dataset-inputsensor-form.png "Set properties")
+
+6. Select **OK**.
+
+7. After the dataset creation completes, open it and select **Test connection** to verify that the connection is successful. You may also choose to preview the data here.
+
+    ![The test connection button is highlighted.](media/inputsensor-dataset-test.png "input_sensor dataset")
+
+### Task 6: Create a dataset for AI camera data
+
+1. Navigate to the **Data hub**.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+2. Select **+**, then **Integration dataset**.
+
+    ![The new button and integration dataset are highlighted.](media/new-integration-dataset.png "Integration dataset")
+
+3. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![The ADLS Gen2 option is highlighted.](media/new-dataset-adls.png "New integration dataset")
+
+4. Select **Json** on the format selection screen, then select **Continue**.
+
+    ![The JSON format is highlighted.](media/new-dataset-json-format.png "Select format")
+
+5. In the dataset properties form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Name | _enter `input_face`_ |
+   | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+   | File path | _enter `sampledata` for the file system, then enter `tran/face/2020/04/01` for the directory_ |
+   | Import schema | _select `From connection/store`_ |
+
+   ![The dataset properties are configured.](media/new-dataset-inputface.png "Set properties")
+
+6. Select **OK**.
+
+### Task 7: Create a dataset for intermediate output
+
+1. Navigate to the **Data hub**.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+2. Select the **Linked** tab **(1)**, expand Azure Data Lake Storage Gen2, expand the linked service for the primary storage account, then select **sampledata (2)**. Select **+ New folder**.
+
+    ![The new folder button is highlighted.](media/adlsgen2-linked-service-new-folder.png "New folder")
+
+3. Enter **`out`** for the new folder name, then select **Create**.
+
+    ![The new folder form is displayed.](media/new-folder-out.png "New folder")
+
+4. Open the new `out` folder, then select **+ New folder** to create a sub-folder.
+
+    ![The new folder button is highlighted.](media/adlsgen2-linked-service-new-folder2.png "New folder")
+
+5. Enter **`join`** for the new folder name, then select **Create**.
+
+    ![The new folder form is displayed.](media/new-folder-join.png "New folder")
+
+6. Select **+**, then **Integration dataset**.
+
+    ![The new button and integration dataset are highlighted.](media/new-integration-dataset.png "Integration dataset")
+
+7. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![The ADLS Gen2 option is highlighted.](media/new-dataset-adls.png "New integration dataset")
+
+8. Select **Parquet** on the format selection screen, then select **Continue**.
+
+    ![The Parquet format is highlighted.](media/new-dataset-parquet-format.png "Select format")
+
+9. In the dataset properties form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Name | _enter `output_data`_ |
+   | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+   | File path | _enter `sampledata` for the file system, then enter `out/join` for the directory_ |
+   | Import schema | _select `From connection/store`_ |
+
+   ![The dataset properties are configured.](media/new-dataset-outputdata.png "Set properties")
+
+10. Select **OK**.
+
+11. Select **Publish all**, then **Publish** to save all of your datasets.
+
+    ![The publish all button is highlighted.](media/publish-all.png "Publish all")
+
+### Task 8: Create a data flow
+
+1. Navigate to the **Develop hub**.
+
+    ![Develop hub.](media/develop-hub.png "Develop hub")
+
+2. Select **+**, then **Data flow**.
+
+    ![The data flow menu item is highlighted.](media/new-data-flow.png "New data flow")
+
+3. Enter **JoinSensorFace** for the name under Properties, then select the **Properties** button to hide the pane.
+
+    ![The properties pane is displayed.](media/df-joinsensorface-name.png "JoinSensorFace property name")
+
+### Task 9: Create a pipeline
