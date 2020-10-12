@@ -51,7 +51,7 @@
       - [Summary conditions: Number of visitors by gender and age group (per day)](#summary-conditions-number-of-visitors-by-gender-and-age-group-per-day)
       - [Table name of the aggregate data output destination: `t_face_count`](#table-name-of-the-aggregate-data-output-destination-t_face_count)
     - [Task 3: Create a table for the pipeline](#task-3-create-a-table-for-the-pipeline)
-    - [Task 4: Create a linked service](#task-4-create-a-linked-service)
+    - [Task 4: Enable interactive authoring on the integration runtime](#task-4-enable-interactive-authoring-on-the-integration-runtime)
 
 ## Overview
 
@@ -1472,30 +1472,20 @@ Sample data (data items: `date`, `gender`, `age`, and `count`):
     )
     ```
 
-### Task 4: Create a linked service
+### Task 4: Enable interactive authoring on the integration runtime
+
+The interactive authoring capability is used during authoring for functionalities like testing the connection, browsing and previewing data, and importing a schema inside a managed Virtual Network.
 
 1. Navigate to the **Manage hub**.
 
     ![Manage hub.](media/manage-hub.png "Manage hub")
 
-2. Select **Linked services** in the left-hand menu, then select **+ New**.
+2. Select **Integration runtimes** in the left-hand menu, then select the **AutoResolveIntegrationRuntime**.
 
-    ![The new button is highlighted.](media/new-linked-service-button.png "New linked service")
+    ![The integration runtime is selected.](media/integration-runtimes.png "Integration runtimes")
 
-3. Select **Azure Data Lake Storage Gen2**, then **Continue**.
-
-    ![ADLS Gen2 is highlighted.](media/new-linked-service-adls-gen2.png "New linked service")
-
-4. Enter **`datalake_keylink`** for the linked service name. Select the **Edit** button next to the `AutoResolveIntegrationRuntime`. We need to enable interactive authoring, which is currently disabled.
-
-    ![The name and edit button are both highlighted.](media/new-linked-service-keylink-edit.png "New linked service")
-
-5. Select **Enable** next to `Interactive authoring`, then **Apply**.
+3. Select **Enable** next to `Interactive authoring`, then **Apply**.
 
     ![The interactive authoring option is enabled.](media/enable-interactive-authoring.png "Edit integration runtime")
 
     > It takes about 1 to 2 minutes to turn on interactive authoring.
-
-6. On the new linked service form, select **Account key** for the authentication method, select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`), then select **Create**.
-
-    ![The completed form is displayed.](media/new-linked-service-keylink.png "New linked service")
