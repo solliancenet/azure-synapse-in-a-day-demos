@@ -1626,4 +1626,160 @@ The interactive authoring capability is used during authoring for functionalitie
 
     ![The properties pane is displayed.](media/df-joinsensorface-name.png "JoinSensorFace property name")
 
+4. Select **Add Source** on the data flow canvas.
+
+    ![The Add Source button is highlighted.](media/add-source.png "Add Source")
+
+5. In the **Source settings** form, complete the following:
+
+   | Field                          | Value                                              |
+   | ------------------------------ | ------------------------------------------         |
+   | Output stream name | _enter `sensor`_ |
+   | Source type | _select `Dataset`_ |
+   | Options | _uncheck all_ |
+   | Sampling | _select `Disable`_ |
+
+   ![The form is completed as described.](media/df-sensor-settings.png "Source settings")
+
+6. Turn on **Data flow debug** at the top of the data flow screen.
+
+    > It will take about 3-4 minutes for the debug to turn on.
+
+    ![The button is highlighted.](media/df-debug.png "Data flow debug")
+
+    **Tip:** Handling schema errors:
+
+    In a data flow, when the fields in the input data (Source) frequently change, build in generic data conversion logic to ingest errors flexibly. Select Allow Schema drift in Options when adding a Source or Sink, to import and write all fields sent and received in addition to the column and type defined in the Data flow in advance.
+
+    Moreover, when you select Infer drifted column types in Options, the data type of columns not defined in advance (errors) will be assumed automatically.
+
+    ![The allow schema drift checkbox is checked.](media/df-infer-schema.png "Allow schema drift")
+
+    **Tip:** Concept of partitioning:
+
+    In Data flow, Optimize allows you to set partitioning. The default Use current partitioning is recommended in most cases, and the native partitioning scheme is used for data flows running on Apache Spark. As an exception, if you want to output data to a single file in the data lake, select Single partition.
+
+    You can also select Set Partitioning to select the best partition from `PartitionType`. For more information about each partition, see the following URL: <https://docs.microsoft.com/azure/data-factory/concepts-data-flow-overview>.
+
+    ![The partition types are displayed.](media/df-source-partitions.png "Optimize")
+
+7. After the data flow debugger turns on, select the **Data preview** tab to ensure that you can see the source sensor data.
+
+    ![The sensor data preview is displayed.](media/df-sensor-preview.png "Data preview")
+
+8. Select **Add Source** on the data flow design canvas to add another data source.
+
+    ![The Add Source button is highlighted.](media/df-add-source2.png "Add Source")
+
+9. In the **Source settings** form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Output stream name | _enter `sensor`_ |
+    | Source type | _select `Dataset`_ |
+    | Options | _uncheck all_ |
+    | Sampling | _select `Disable`_ |
+
+    ![The form is completed as described.](media/df-face-settings.png "Face settings")
+
+10. Select the **Data preview** tab to ensure that you can see the source face data.
+
+    ![The face data preview is displayed.](media/df-face-preview.png "Data preview")
+
+11. On the data flow canvas, select **+** on the lower-right corner of `sensor`, then select **Join** from the context menu.
+
+    ![The plus button and Join menu items are highlighted.](media/df-sensor-add-join.png "Add Join")
+
+12. In the **Join settings** form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Output stream name | _enter `JoinData`_ |
+    | Left stream | _select `sensor`_ |
+    | Right stream | _select `face`_ |
+    | Join type | _select `Left outer`_ |
+    | Join conditions | _Left: sensor's column: `face_id` `==` Right: face's column: `face_id`_ |
+
+    ![The join settings form is displayed.](media/df-joindata-settings.png "Join settings")
+
+13. Select the **Data preview** tab to verify the data merge.
+
+    ![The JoinData data preview is displayed.](media/df-joindata-preview.png "Data preview")
+
+14. On the data flow canvas, select **+** on the lower-right corner of `JoinData`, then select **Select** from the context menu.
+
+    ![The plus button and Select menu items are highlighted.](media/df-joindata-add-select.png "Add Select")
+
+15. In the **Select settings** form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Output stream name | _enter `SelectColumn`_ |
+    | Incoming stream | _select `JoinData`_ |
+    | Skip duplicate input columns | _checked_ |
+    | Skip duplicate output columns | _checked_ |
+    | Auto mapping | _off_ |
+    | Input columns | _all checked_ |
+
+    ![The select settings form is displayed.](media/df-select-settings.png "Select settings")
+
+16. Select the **Data preview** tab to verify the data merge.
+
+    ![The SelectColumn data preview is displayed.](media/df-selectcolumn-preview.png "Data preview")
+
+17. On the data flow canvas, select **+** on the lower-right corner of `SelectColumn`, then select **Sink** from the context menu.
+
+    ![The plus button and Sink menu items are highlighted.](media/df-selectcolumn-add-sink.png "Add Sink")
+
+18. In the **Sink** form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Output stream name | _enter `OutputData`_ |
+    | Incoming stream | _select `SelectColumn`_ |
+    | Sink type | _select `Dataset`_ |
+    | Dataset | _select `output_data`_ |
+    | Allow schema drift | _checked_ |
+    | Validate schema | _unchecked_ |
+
+    ![The sink form is displayed.](media/df-sink.png "Sink")
+
+19. Select the **Settings** tab. In the **Settings** form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Clear the folder | _unchecked_ |
+    | File name option | _select `Pattern`_ |
+    | Pattern | _enter `sensor_face_join[n].parquet`_ |
+
+    > The `[n]` token gets replaced with the partition number.
+
+    ![The sink settings form is displayed.](media/df-sink-settings.png "Sink settings")
+
+20. Select the **Mapping** tab. In the **Mapping** form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Skip duplicate input columns | _unchecked_ |
+    | Skip duplicate output columns | _unchecked_ |
+    | Auto mapping | _on_ |
+
+    ![The sink mapping form is displayed.](media/df-sink-mapping.png "Sink mapping")
+
+    The completed data flow should look like the following:
+
+    ![The completed data flow is shown.](media/df-completed.png "Completed data flow")
+
+21. Select **Publish all**, then **Publish** to save your data flow.
+
+    ![The publish all button is highlighted.](media/publish-all.png "Publish all")
+
 ### Task 9: Create a pipeline
+
+1. Navigate to the **Integrate hub**.
+
+    ![Integrate hub.](media/integrate-hub.png "Integrate hub")
+
+2. Select **+**, then select **Pipeline**.
+
+    ![The new pipeline menu item is highlighted.](media/new-pipeline.png "New pipeline")
