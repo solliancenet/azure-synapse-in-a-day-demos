@@ -58,6 +58,7 @@
     - [Task 7: Create a dataset for intermediate output](#task-7-create-a-dataset-for-intermediate-output)
     - [Task 8: Create a data flow](#task-8-create-a-data-flow)
     - [Task 9: Create a pipeline](#task-9-create-a-pipeline)
+    - [Task 10: Confirm pipeline run](#task-10-confirm-pipeline-run)
 
 ## Overview
 
@@ -1909,9 +1910,15 @@ The interactive authoring capability is used during authoring for functionalitie
 
 21. Select **OK**.
 
-22. Verify that `output_item_count` is the selected sink dataset.
+22. Verify that `output_item_count` is the selected sink dataset, then set the `Copy method` to **Bulk insert** and paste the following SQL script into the **Pre-copy script** field:
+
+    ```sql
+    TRUNCATE TABLE [dbo].[t_item_count]`
+    ```
 
     ![The new dataset is selected.](media/pipeline-copy-sink.png "Sink")
+
+    > If we wanted to use PolyBase instead, we would be required to perform some additional steps since we are using VNet service endpoints. Namely, we would need to execute a PowerShell script to assign an identity to Azure Active Directory for the Synapse workspace. Reference: <https://docs.microsoft.com/azure/azure-sql/database/vnet-service-endpoint-rule-overview#impact-of-using-vnet-service-endpoints-with-azure-storage>
 
 23. On the pipeline canvas, draw a green arrow from the `ItemCount` notebook activity to the `CopyData` activity. This configures the copy data activity as a successor to the notebook activity.
 
@@ -1929,8 +1936,44 @@ The interactive authoring capability is used during authoring for functionalitie
 
     ![The trigger now option is highlighted.](media/trigger-now.png "Trigger now")
 
-27. Run the pipeline by selected **OK**.
+27. Run the pipeline by selecting **OK**.
 
     > It will take about 10 minutes to complete the pipeline run.
 
     ![The OK button is highlighted.](media/pipeline-run.png "Pipeline run")
+
+### Task 10: Confirm pipeline run
+
+1. Navigate to the **Monitor hub**.
+
+    ![Monitor hub.](media/monitor-hub.png "Monitor hub")
+
+2. Select **Pipeline runs**. Verify that the status of the `SensorFacePipeline` is running (In progress). You may need to refresh the list to see the pipeline.
+
+    > Data created by running the pipeline will be used in the data visualization exercise.
+
+    ![The pipeline run is displayed.](media/pipeline-runs.png "Pipeline runs")
+
+3. Select the **SensorFacePipeline** name to view the status details.
+
+    ![The pipeline name is highlighted.](media/pipeline-runs-name.png "Pipeline runs")
+
+4. You can view the status of each pipeline activity in this view.
+
+    ![The details are displayed.](media/pipeline-run-details.png "Pipeline run details")
+
+5. Hover over the **JoinSensorFace** activity (if it is completed), then select the **Output** icon.
+
+    ![The output icon is highlighted.](media/joinsensorface-output.png "Output")
+
+6. You can view the output details in JSON format.
+
+    ![The output details are displayed.](media/joinsensorface-output-details.png "Output details")
+
+7. Hover over the **JoinSensorFace** activity, then select the **Data flow details** icon.
+
+    ![The data flow details icon is highlighted.](media/joinsensorface-details.png "Data flow details")
+
+8. Select each activity to view its details, including the run time and number of processes for each operation. In the screenshot below, we have selected the **OLutputData** activity, and see the data mapping details, data statistics, and partition information.
+
+    ![The data flow details are displayed.](media/joinsensorface-details-view.png "JoinSensorFace details")
