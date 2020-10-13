@@ -23,7 +23,8 @@
     - [Task 1: Synapse workspace connection restrictions with IP firewalls](#task-1-synapse-workspace-connection-restrictions-with-ip-firewalls)
     - [Task 2: Log in to Synapse Studio](#task-2-log-in-to-synapse-studio)
     - [Task 3: Enable private endpoint on the data lake](#task-3-enable-private-endpoint-on-the-data-lake)
-    - [Task 4: Managed identity](#task-4-managed-identity)
+    - [Task 4: Add the workspace managed identity to database role](#task-4-add-the-workspace-managed-identity-to-database-role)
+    - [Task 5: Managed identity](#task-5-managed-identity)
   - [Exercise 3: Data collection](#exercise-3-data-collection)
     - [Task 1: Deploy ARM template](#task-1-deploy-arm-template)
     - [Task 2: Create Azure Data Lake Storage Gen2 account](#task-2-create-azure-data-lake-storage-gen2-account)
@@ -478,7 +479,30 @@ In this task, you create a new managed private endpoint for the ADLS Gen2 accoun
 
     ![The new data-lake private endpoint is highlighted.](media/managed-private-endpoints.png "Managed private endpoints")
 
-### Task 4: Managed identity
+### Task 4: Add the workspace managed identity to database role
+
+Later on in this lab, you will create a data pipeline that includes a copy activity which copies data into the dedicated SQL pool. This will fail unless you add the managed identity account to the `db_owner` database role.
+
+1. Navigate to the **Data hub**.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+2. Select the **Workspace** tab **(1)**, expand Databases and right-click on **SqlPool (2)**. Select **New SQL script (3)**, then **Empty script (4)**.
+
+    ![The new empty script option is displayed.](media/new-empty-sql-script.png "New empty SQL script")
+
+3. Paste the following script and **Run** it to create a new user for your workspace's managed identity, and to add it to the `db_owner` role. **Replace** `YOUR_SYNAPSE_WORKSPACE_NAME` with the name of your Synapse Analytics workspace. You can find this value at the top of Synapse Studio, as shown in the screenshot below.
+
+    ```sql
+    CREATE USER [YOUR_SYNAPSE_WORKSPACE_NAME] FROM EXTERNAL PROVIDER;
+    EXEC sp_addrolemember N'db_owner', N'YOUR_SYNAPSE_WORKSPACE_NAME'
+    ```
+
+    The screenshot below shows where to find the Synapse workspace name.
+
+    ![The script is displayed as described.](media/sql-create-user-add-to-role.png "Create user and add to role")
+
+### Task 5: Managed identity
 
 When accessing other services in the Azure Synapse workspace, authentication is now possible using a system allocated ID. This allows authentication in conjunction with Azure AD without using the credentials issued within each service (such as a Data Lake Storage access key).
 
@@ -1583,19 +1607,27 @@ The interactive authoring capability is used during authoring for functionalitie
 
     ![The new folder form is displayed.](media/new-folder-join.png "New folder")
 
-6. Select **+**, then **Integration dataset**.
+6. Select **+ New folder** again to create a new folder under the `out` folder.
+
+    ![The new folder button is highlighted.](media/adlsgen2-linked-service-new-folder3.png "New folder")
+
+7. Enter **`item_count`** for the new folder name, then select **Create**.
+
+    ![The new folder form is displayed.](media/new-folder-itemcount.png "New folder")
+
+8. Select **+**, then **Integration dataset**.
 
     ![The new button and integration dataset are highlighted.](media/new-integration-dataset.png "Integration dataset")
 
-7. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+9. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
 
     ![The ADLS Gen2 option is highlighted.](media/new-dataset-adls.png "New integration dataset")
 
-8. Select **Parquet** on the format selection screen, then select **Continue**.
+10. Select **Parquet** on the format selection screen, then select **Continue**.
 
     ![The Parquet format is highlighted.](media/new-dataset-parquet-format.png "Select format")
 
-9. In the dataset properties form, complete the following:
+11. In the dataset properties form, complete the following:
 
    | Field                          | Value                                              |
    | ------------------------------ | ------------------------------------------         |
@@ -1606,9 +1638,9 @@ The interactive authoring capability is used during authoring for functionalitie
 
    ![The dataset properties are configured.](media/new-dataset-outputdata.png "Set properties")
 
-10. Select **OK**.
+11. Select **OK**.
 
-11. Select **Publish all**, then **Publish** to save all of your datasets.
+12. Select **Publish all**, then **Publish** to save all of your datasets.
 
     ![The publish all button is highlighted.](media/publish-all.png "Publish all")
 
@@ -1783,3 +1815,122 @@ The interactive authoring capability is used during authoring for functionalitie
 2. Select **+**, then select **Pipeline**.
 
     ![The new pipeline menu item is highlighted.](media/new-pipeline.png "New pipeline")
+
+3. Set the pipeline name to **SensorFacePipeline** in the Properties settings, then select the **Properties** button to hide the pane.
+
+    ![The pipeline properties are displayed.](media/pipeline-properties.png "Pipeline properties")
+
+4. Expand **Move & transform** in the Activities list, then drag the **Data flow** activity onto the design canvas.
+
+    ![The data flow activity is highlighted and an arrow points from it onto the design canvas.](media/pipeline-add-df-activity.png "Add data flow activity")
+
+5. In the `Adding data flow` form, select **Use existing data flow**, then select the **JoinSensorFace** data flow. Select **OK**.
+
+    ![The existing data flow is selected.](media/pipeline-add-df-form.png "Adding data flow")
+
+6. Expand **Synapse** in the Activities list, then drag the **Notebook** activity to the right of the data flow activity.
+
+    ![The notebook activity is highlighted and an arrow points from it onto the design canvas.](media/pipeline-add-notebook-activity.png "Add notebook activity")
+
+7. Select the Notebook activity, then set the Name to **ItemCount**.
+
+    ![The notebook name is highlighted.](media/pipeline-notebook-name.png "Notebook name")
+
+8. Select the **Settings** tab, then set the Notebook to **item_count**.
+
+    ![The settings tab is highlighted.](media/pipeline-notebook-settings.png "Notebook settings")
+
+9. On the pipeline canvas, draw a green arrow from the `JoinSensorFace` activity to the `ItemCount` activity. This configures the notebook activity as a successor to the data flow activity.
+
+    ![The green arrow is highlighted.](media/pipeline-df-to-notebook.png "Data flow to notebook")
+
+10. Expand **Move & transform** in the Activities list, then drag the **Copy data** activity to the right of the notebook activity.
+
+    ![The copy data activity is highlighted and an arrow points from it onto the design canvas.](media/pipeline-add-copy-activity.png "Add copy data activity")
+
+11. Select the copy data activity, then set the Name to **CopyData**.
+
+    ![The name field is highlighted.](media/pipeline-copy-name.png "Copy data name")
+
+12. Select the **Source** tab, then select **+ New** next to the source dataset.
+
+    ![The source tab is highlighted.](media/pipeline-copy-source-new.png "New source dataset")
+
+13. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![The ADLS Gen2 option is highlighted.](media/new-dataset-adls2.png "New integration dataset")
+
+14. Select **Parquet** on the format selection screen, then select **Continue**.
+
+    ![The Parquet format is highlighted.](media/new-dataset-parquet-format.png "Select format")
+
+15. In the dataset properties form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Name | _enter `input_item_count`_ |
+    | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+    | File path | _enter `sampledata` for the file system, then enter `out/item_count` for the directory_ |
+    | Import schema | _select `From connection/store`_ |
+
+    ![The dataset properties are configured.](media/new-dataset-itemcount.png "Set properties")
+
+    > The `sampledata/out/item_count` files will be created by the `item_count` notebook.
+
+16. Select **OK**.
+
+17. With the new `input_item_count` source dataset selected, configure the following settings in the **Source** tab:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | File path type | _select `Wildcard file path`_ |
+    | Wildcard paths | _enter `out/item_count` for the wildcard folder path, then enter `*.*` for the wildcard file name_ |
+
+    ![The wildcard paths are displayed.](media/pipeline-copy-source-wildcard.png "Source settings")
+
+18. Select the **Sink** tab, then select **+ New** next to the sink dataset.
+
+    ![The sink tab is highlighted.](media/pipeline-copy-sink-new.png "New sink dataset")
+
+19. Select **SQL Analytics pool**, then select **Continue**.
+
+    ![SQL Analytics pool is highlighted.](media/new-dataset-sql-pool.png "New dataset")
+
+20. In the dataset properties form, complete the following:
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Name | _enter `output_item_count`_ |
+    | SQL Analytics pool | _select `SqlPool`_ |
+    | Table name | _select `dbo.t_item_count`_ |
+    | Import schema | _select `From connection/store`_ |
+
+    ![The dataset properties are configured.](media/new-dataset-outputitemcount.png "Set properties")
+
+21. Select **OK**.
+
+22. Verify that `output_item_count` is the selected sink dataset.
+
+    ![The new dataset is selected.](media/pipeline-copy-sink.png "Sink")
+
+23. On the pipeline canvas, draw a green arrow from the `ItemCount` notebook activity to the `CopyData` activity. This configures the copy data activity as a successor to the notebook activity.
+
+    ![The green arrow is highlighted.](media/pipeline-notebook-to-copy.png "Notebook to copy data")
+
+24. Select **Publish all** in the top-left corner of Synapse Studio.
+
+    ![The publish all button is highlighted.](media/publish-all3.png "Publish all")
+
+25. Make sure the new pipeline and two new datasets are included, then select **Publish**.
+
+    ![The pipeline and datasets are displayed.](media/publish-pipeline.png "Publish")
+
+26. Select **Add trigger**, then **Trigger now** above the pipeline canvas.
+
+    ![The trigger now option is highlighted.](media/trigger-now.png "Trigger now")
+
+27. Run the pipeline by selected **OK**.
+
+    > It will take about 10 minutes to complete the pipeline run.
+
+    ![The OK button is highlighted.](media/pipeline-run.png "Pipeline run")
