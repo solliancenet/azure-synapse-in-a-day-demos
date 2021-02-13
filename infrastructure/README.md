@@ -1,13 +1,12 @@
 # Azure Synapse in a day demos - Infrastructure
 
 - [Azure Synapse in a day demos - Infrastructure](#azure-synapse-in-a-day-demos---infrastructure)
+  - [Pre-requisites](#pre-requisites)
   - [Overview](#overview)
-    - [Pre-requisites](#pre-requisites)
   - [Building analytic solutions with Azure Synapse Analytics (Basic)](#building-analytic-solutions-with-azure-synapse-analytics-basic)
     - [About the latest data analysis infrastructure](#about-the-latest-data-analysis-infrastructure)
     - [Scenario](#scenario)
     - [Hands-on architecture](#hands-on-architecture)
-  - [Exercise 0: Download lab files](#exercise-0-download-lab-files)
   - [Exercise 1: Moving data to the data lake using Copy activity](#exercise-1-moving-data-to-the-data-lake-using-copy-activity)
     - [About Synapse Pipeline](#about-synapse-pipeline)
     - [Task 1: Log in to Synapse Studio](#task-1-log-in-to-synapse-studio)
@@ -58,17 +57,17 @@
     - [Task 2: Stop Stream Analytics](#task-2-stop-stream-analytics)
     - [Task 3: Stop Virtual Devices application](#task-3-stop-virtual-devices-application)
 
-## Overview
-
-This is a hands-on lab for infrastructure, telecommunications, transportation, and manufacturing using Azure Synapse Analytics. It provides step-by-step procedures for basic analysis platform construction, IoT sensor data visualization, and predictive maintenance features.
-
-### Pre-requisites
+## Pre-requisites
 
 **Please note**: If you are not running this lab in a hosted environment, complete the [lab setup instructions](Setup.md) before continuing.
 
 - [Power BI Pro license](https://powerbi.microsoft.com/power-bi-pro/) (can start a trial version of Pro).
 
     > If you have permission to publish reports to your Workspace (≠My Workspace), you can create Power BI Reports on Synapse. (Required: Power BI Pro license). If not, you can create a Report solely with Power BI Desktop.
+
+## Overview
+
+This is a hands-on lab for infrastructure, telecommunications, transportation, and manufacturing using Azure Synapse Analytics. It provides step-by-step procedures for basic analysis platform construction, IoT sensor data visualization, and predictive maintenance features.
 
 ## Building analytic solutions with Azure Synapse Analytics (Basic)
 
@@ -120,22 +119,6 @@ To build the architecture, complete the following tasks:
 4. Create distributed ETL processing in the GUI with Mapping Data Flow
 5. Visualize flight delay
 
-## Exercise 0: Download lab files
-
-Time required: 5 minutes
-
-The lab files are located in a GitHub repo. You must unzip the file and extract it to your desktop so you can access them throughout the lab.
-
-1. Download the ZIP file for the lab from <https://github.com/solliancenet/azure-synapse-in-a-day-demos/archive/master.zip>.
-
-2. Extract the files to **`C:\`**. This will create a folder named `azure-synapse-in-a-day-demos-master` at the root of your C: drive.
-
-    ![The extract zipped folders dialog is displayed.](media/unzip.png "Extract Compressed (Zipped) Folders")
-
-3. Navigate to `C:\azure-synapse-in-a-day-demos-master\infrastructure\source` to view the files.
-
-    ![The extracted files are displayed in Windows Explorer.](media/extracted-files.png "Extracted files")
-
 ## Exercise 1: Moving data to the data lake using Copy activity
 
 Time required: 30 minutes
@@ -167,7 +150,9 @@ Synapse Studio is the web-based interface for working with your Azure Synapse An
 
     ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
 
-3. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
+3. Select the Synapse Workspace that you created for this lab, or that was provided for you in the lab environment.
+
+4. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
 
     ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
 
@@ -175,7 +160,7 @@ Synapse Studio is the web-based interface for working with your Azure Synapse An
 
     ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
 
-4. If you see the Getting started dialog, select **Close**.
+5. If you see the Getting started dialog, select **Close**.
 
     ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
 

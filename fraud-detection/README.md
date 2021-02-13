@@ -1,9 +1,8 @@
 # Azure Synapse in a day demos - Fraud detection
 
 - [Azure Synapse in a day demos - Fraud detection](#azure-synapse-in-a-day-demos---fraud-detection)
+  - [Pre-Requisites](#pre-requisites)
   - [Overview](#overview)
-    - [Pre-Requisites](#pre-requisites)
-  - [Hands-On Training Theme](#hands-on-training-theme)
     - [The Challenge for Businesses](#the-challenge-for-businesses)
     - [Objectives and Goals](#objectives-and-goals)
   - [Description of the Datasets in Use](#description-of-the-datasets-in-use)
@@ -25,15 +24,13 @@
     - [Task 1: Delete Lab Resources](#task-1-delete-lab-resources)
     - [Task 2:  Delete the Power BI Workspace](#task-2--delete-the-power-bi-workspace)
 
-## Overview
-
-### Pre-Requisites
+## Pre-Requisites
 
 **Please note**: If you are not running this lab in a hosted environment, complete the [lab setup instructions](Setup.md) before continuing.
 
 - Power BI Pro or Premium license. You may try Pro free for 60 days if you have not previously signed up for a free trial.
 
-## Hands-On Training Theme
+## Overview
 
 Over the past few years, there has been a significant worldwide increase in the unauthorized use of credit cards in mail order and online payments, as these are transactions in which no credit card is actually presented to the vendor. Unless some sort of countermeasures are taken, this will cause enormous damage to credit card users and credit card companies.
 
