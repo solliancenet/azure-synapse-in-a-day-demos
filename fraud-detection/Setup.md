@@ -14,7 +14,7 @@
     - [Task 7: Create a Synapse dedicated SQL Pool](#task-7-create-a-synapse-dedicated-sql-pool)
     - [Task 8: Create a Spark Pool](#task-8-create-a-spark-pool)
     - [Task 9: Create a Synapse serverless SQL Database](#task-9-create-a-synapse-serverless-sql-database)
-    - [Task 10: Create a Power BI Workspace](#task-10-create-a-power-bi-workspace)
+  - [Lab guide](#lab-guide)
 
 ## Overview
 
@@ -321,34 +321,6 @@ Azure Data Lake Storage Gen2 will be critical for integration throughout the han
 
     ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
 
-### Task 10: Create a Power BI Workspace
+## Lab guide
 
-1. In a new tab or window, navigate to the Power BI website, [https://powerbi.microsoft.com/](https://powerbi.microsoft.com/).  Select **Sign in** and sign in.
-
-    ![The Sign in option is selected.](media/power-bi-sign-in.png 'Sign in')
-
-2. Select the **Workspaces** menu and then choose **Create workspace**.
-
-    ![The Create a workspace option is selected.](media/power-bi-create-workspace.png 'Create a workspace')
-
-3. In the Create a workspace menu, enter **FraudDetection** as the name and select **Save**.
-
-    ![The FraudDetection workspace is saved.](media/power-bi-create-workspace-1.png 'FraudDetection workspace')
-
-4. Return to the Synapse studio.  Select the **Home** option.
-
-    ![The Home option is selected.](media/azure-synapse-home.png 'Home')
-
-5. Select the **Visualize** option.
-
-    ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
-
-6. In the **Connect to Power BI** tab, complete the following and then select **Connect** to create a new Power BI connection.
-
-    | Field                          | Value                                              |
-    | ------------------------------ | ------------------------------------------         |
-    | Name                           | _`FraudDetectionWorkspace`_                        |
-    | Tenant                         | _select your Power BI tenant_                      |
-    | Workspace name                 | _select the `FraudDetection` workspace_            |
-
-    ![In the Connect to Power BI tab, form field entries are filled in.](media/azure-synapse-connect-power-bi.png 'Connect to Power BI')
+Now that you have completed the lab setup, continue to the [step-by-step lab guide](README.md).

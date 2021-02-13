@@ -12,6 +12,7 @@
     - [Description of the Country Code List Dataset](#description-of-the-country-code-list-dataset)
   - [About Principal Component Analysis](#about-principal-component-analysis)
   - [Machine Learning Algorithm Used for Scoring in Exercise 1](#machine-learning-algorithm-used-for-scoring-in-exercise-1)
+  - [Lab pre-requisite: Create a Power BI Workspace](#lab-pre-requisite-create-a-power-bi-workspace)
   - [Exercise 1:  Scoring predictions from T-SQL using a pre-trained model](#exercise-1--scoring-predictions-from-t-sql-using-a-pre-trained-model)
     - [Task 1:  Dataset Creation](#task-1--dataset-creation)
     - [Task 2:  Query Development](#task-2--query-development)
@@ -29,6 +30,8 @@
 ### Pre-Requisites
 
 **Please note**: If you are not running this lab in a hosted environment, complete the [lab setup instructions](Setup.md) before continuing.
+
+- Power BI Pro or Premium license. You may try Pro free for 60 days if you have not previously signed up for a free trial.
 
 ## Hands-On Training Theme
 
@@ -132,6 +135,41 @@ To deploy a model in `scikit-learn` format in an SQL pool in Azure Synapse Analy
 Azure Synapse Analytics Studio also offers libraries other than scikit-learn that support conversion to the ONNX model. For more details, visit [https://github.com/onnx/tutorials#converting-to-onnx-format](https://github.com/onnx/tutorials#converting-to-onnx-format).
 
 In this hands-on training, we'll use T-SQL to score an ONNX-format machine learning model that has been developed and trained with scikit-learn by deploying it in a SQL pool in Azure Synapse Analytics Studio.
+
+## Lab pre-requisite: Create a Power BI Workspace
+
+1. In a new tab or window, navigate to the Power BI website, [https://powerbi.microsoft.com/](https://powerbi.microsoft.com/).  Select **Sign in** and sign in.
+
+    ![The Sign in option is selected.](media/power-bi-sign-in.png 'Sign in')
+
+2. Select the **Workspaces** menu and then choose **Create workspace**.
+
+    ![The Create a workspace option is selected.](media/power-bi-create-workspace.png 'Create a workspace')
+
+3. If you are prompted to upgrade to Power BI Pro, select **Try free**. Select **Got it** to confirm the pro subscription.
+
+4. In the Create a workspace menu, enter **FraudDetection** as the name and select **Save**.
+
+    ![The FraudDetection workspace is saved.](media/power-bi-create-workspace-1.png 'FraudDetection workspace')
+
+5. Return to the Synapse studio.  Select the **Home** option.
+
+    ![The Home option is selected.](media/azure-synapse-home.png 'Home')
+
+6. Select the **Visualize** option.
+
+    ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
+
+7. In the **Connect to Power BI** tab, complete the following and then select **Connect** to create a new Power BI connection.
+
+    | Field                          | Value                                              |
+    | ------------------------------ | ------------------------------------------         |
+    | Name                           | _`FraudDetectionWorkspace`_                        |
+    | Tenant                         | _select your Power BI tenant_                      |
+    | Workspace name                 | _select the `FraudDetection` workspace_            |
+
+    ![In the Connect to Power BI tab, form field entries are filled in.](media/azure-synapse-connect-power-bi.png 'Connect to Power BI')
+
 
 ## Exercise 1:  Scoring predictions from T-SQL using a pre-trained model
 
