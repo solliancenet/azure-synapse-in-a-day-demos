@@ -8,19 +8,15 @@
     - [Scenario](#scenario)
     - [Hands-on architecture](#hands-on-architecture)
   - [Exercise 0: Download lab files](#exercise-0-download-lab-files)
-  - [Exercise 1: Deploy Azure Synapse Analytics](#exercise-1-deploy-azure-synapse-analytics)
-    - [Task 1: Create Azure Synapse Analytics workspace](#task-1-create-azure-synapse-analytics-workspace)
-    - [Task 2: Set up blob data owner](#task-2-set-up-blob-data-owner)
-    - [Task 3: Set up user access administrator](#task-3-set-up-user-access-administrator)
-    - [Task 4: Log in to Synapse Studio](#task-4-log-in-to-synapse-studio)
-  - [Exercise 2: Moving data to the data lake using Copy activity](#exercise-2-moving-data-to-the-data-lake-using-copy-activity)
+  - [Exercise 1: Moving data to the data lake using Copy activity](#exercise-1-moving-data-to-the-data-lake-using-copy-activity)
     - [About Synapse Pipeline](#about-synapse-pipeline)
+    - [Task 1: Log in to Synapse Studio](#task-1-log-in-to-synapse-studio)
     - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
     - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
-  - [Exercise 3: Create a SQL Pool and table](#exercise-3-create-a-sql-pool-and-table)
+  - [Exercise 2: Create a SQL Pool and table](#exercise-2-create-a-sql-pool-and-table)
     - [Task 1: Create a SQL Pool](#task-1-create-a-sql-pool)
     - [Task 2: Create table](#task-2-create-table)
-  - [Exercise 4: Implement Spark ETL with the GUI](#exercise-4-implement-spark-etl-with-the-gui)
+  - [Exercise 3: Implement Spark ETL with the GUI](#exercise-3-implement-spark-etl-with-the-gui)
     - [Task 1: Create ADLS Gen2 Linked Service](#task-1-create-adls-gen2-linked-service)
     - [Task 2: Create mapping data flow sources](#task-2-create-mapping-data-flow-sources)
     - [Task 3: Create a filter](#task-3-create-a-filter)
@@ -31,7 +27,7 @@
     - [Task 8: Data output](#task-8-data-output)
     - [Task 9: Create and run Pipeline](#task-9-create-and-run-pipeline)
     - [Task 10: View the transformed data](#task-10-view-the-transformed-data)
-  - [Exercise 5: Visualize with Power BI](#exercise-5-visualize-with-power-bi)
+  - [Exercise 4: Visualize with Power BI](#exercise-4-visualize-with-power-bi)
     - [Task 1: Connect Power BI Desktop](#task-1-connect-power-bi-desktop)
     - [Task 2: Create a report](#task-2-create-a-report)
     - [Task 3: Save Power BI Desktop report](#task-3-save-power-bi-desktop-report)
@@ -42,22 +38,22 @@
     - [About Lambda Architecture](#about-lambda-architecture)
     - [Scenario](#scenario-1)
     - [Hands-on architecture](#hands-on-architecture-1)
-  - [Exercise 6: Create stream processing](#exercise-6-create-stream-processing)
-    - [Task 1: IoT Hub resource creation](#task-1-iot-hub-resource-creation)
+  - [Exercise 5: Create stream processing](#exercise-5-create-stream-processing)
+    - [Task 1: Configure IoT Hub resource](#task-1-configure-iot-hub-resource)
     - [Task 2: Event source settings](#task-2-event-source-settings)
-    - [Task 3: Create and configure Stream Analytics resources](#task-3-create-and-configure-stream-analytics-resources)
-  - [Exercise 7: Explore Data with Query-as-a-Service](#exercise-7-explore-data-with-query-as-a-service)
+    - [Task 3: Configure Stream Analytics resources](#task-3-configure-stream-analytics-resources)
+  - [Exercise 6: Explore Data with Query-as-a-Service](#exercise-6-explore-data-with-query-as-a-service)
     - [Task 1: Query for Parquet files](#task-1-query-for-parquet-files)
     - [Task 2: Create a view](#task-2-create-a-view)
     - [Task 3: Create near-real-time dashboards](#task-3-create-near-real-time-dashboards)
-  - [Exercise 8: Create a structured process for large amounts of data with Spark](#exercise-8-create-a-structured-process-for-large-amounts-of-data-with-spark)
+  - [Exercise 7: Create a structured process for large amounts of data with Spark](#exercise-7-create-a-structured-process-for-large-amounts-of-data-with-spark)
     - [Task 1: Create a Spark pool](#task-1-create-a-spark-pool)
     - [Task 2: Develop Spark ETL](#task-2-develop-spark-etl)
-  - [Exercise 9: Spark ML learning/inference and SQL pool load](#exercise-9-spark-ml-learninginference-and-sql-pool-load)
+  - [Exercise 8: Spark ML learning/inference and SQL pool load](#exercise-8-spark-ml-learninginference-and-sql-pool-load)
     - [Task 1: Import and execute notebook](#task-1-import-and-execute-notebook)
-  - [Exercise 10: Visualize with Power BI](#exercise-10-visualize-with-power-bi)
+  - [Exercise 9: Visualize with Power BI](#exercise-9-visualize-with-power-bi)
     - [Task 1: Create connections and relationships](#task-1-create-connections-and-relationships)
-  - [Exercise 11: End processing](#exercise-11-end-processing)
+  - [Exercise 10: End processing](#exercise-10-end-processing)
     - [Task 1: Pause the SQL pool](#task-1-pause-the-sql-pool)
     - [Task 2: Stop Stream Analytics](#task-2-stop-stream-analytics)
     - [Task 3: Stop Virtual Devices application](#task-3-stop-virtual-devices-application)
@@ -68,17 +64,9 @@ This is a hands-on lab for infrastructure, telecommunications, transportation, a
 
 ### Pre-requisites
 
-To complete this lab, you must meet the following pre-requisites:
+**Please note**: If you are not running this lab in a hosted environment, complete the [lab setup instructions](Setup.md) before continuing.
 
-1. Microsoft Azure subscription must be pay-as-you-go or MSDN.
-
-    a. Trial subscriptions will not work.
-
-2. Install [Power BI Desktop](https://aka.ms/pbidesktopstore).
-
-3. Windows desktop machine (or Azure VM with a Windows 10 image) for the IoT Device emulator.
-
-4. [Power BI Pro license](https://powerbi.microsoft.com/power-bi-pro/) (can start a trial version of Pro).
+- [Power BI Pro license](https://powerbi.microsoft.com/power-bi-pro/) (can start a trial version of Pro).
 
     > If you have permission to publish reports to your Workspace (≠My Workspace), you can create Power BI Reports on Synapse. (Required: Power BI Pro license). If not, you can create a Report solely with Power BI Desktop.
 
@@ -148,108 +136,7 @@ The lab files are located in a GitHub repo. You must unzip the file and extract 
 
     ![The extracted files are displayed in Windows Explorer.](media/extracted-files.png "Extracted files")
 
-## Exercise 1: Deploy Azure Synapse Analytics
-
-Time required: 15 minutes
-
-The first step is to deploy and configure the resources. It's easy to do from the Azure Portal.
-
-![The Azure Synapse Analytics area of the diagram is highlighted.](media/synapse.png "Azure Synapse Analytics")
-
-### Task 1: Create Azure Synapse Analytics workspace
-
-1. Navigate to the Azure portal (<https://portal.azure.com>) to create the Azure Synapse Analytics workspace.
-
-2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics (workspaces preview)**.
-
-    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
-
-3. Select **Add**.
-
-    ![The add button is selected.](media/synapse-add.png "Add")
-
-4. In the `Create Synapse workspace` form, enter the values shown in the table below. For the Azure Data Lake Storage Gen2 account name, select **Create new**, enter the account name, then select **OK**.
-
-    ![The form is shown as described below.](media/create-synapse-1.png "Create Synapse workspace 1")
-
-    | Parameters | Settings | Remarks |
-    | --- | --- | --- |
-    | Subscription | Any | Select the Azure subscription used for this lab. |
-    | Resource group | `synapse-lab-infrastructure` | Select **Create new**, then enter the name. |
-    | Workspace name | `synapselabinfra` + your initials + `asws` (example: `synapselabinfrajdhasws`) | Lowercase alphanumeric characters only |
-    | Region | Select the region closest to you, such as `West US`. | |
-    | Select Data Lake Storage Gen2 | From subscription | Default settings |
-    | Account name | `synapselabinfra` + your initials + `adls` (example: `synapselabinfrajdhadls`) | Select **Create new** (lowercase alphanumeric characters only) |
-
-5. Select **Create new** for `File system name`, type **datalake** in the name field, then select **OK**.
-
-    ![The form is shown as described.](media/create-synapse-2.png "Create Synapse workspace 2")
-
-6. Check the `Assign myself the Storage Blob Data Contributor role` checkbox, then select **Next: Security and networking**.
-
-    ![The checkbox is checked and the Next button is highlighted.](media/create-synapse-3.png "Create Synapse workspace 3")
-
-7. Review the settings, then select **Review + create**.
-
-    ![The network settings are displayed.](media/create-synapse-4.png "Create Synapse workspace network settings")
-
-8. Review the settings, then select **Create**. It takes around five minutes to create the workspace.
-
-    ![The Create button is highlighted.](media/create-synapse-5.png "Create Synapse workspace review")
-
-### Task 2: Set up blob data owner
-
-Data access permissions on the data lake must be set separately from the resource's permissions.
-
-1. When the Azure Synapse Analytics workspace deployment completes, navigate to the `synapse-lab-infrastructure` resource group. In the Azure portal, use the top search bar to search for `synapse-lab-infrastructure`, then select the **synapse-lab-infrastructure** resource group in the search results under **Resource Groups**.
-
-    ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
-
-2. Within the resource group, select the storage account you created when you deployed the Azure Synapse Analytics workspace.
-
-    ![The storage account is highlighted in the resource group.](media/resource-group-storage-account.png "Resource group")
-
-3. Within the storage account, select **Access control (IAM)**. Select **+ Add**, then **Add role assignment**.
-
-    ![The access control blade is displayed.](media/storage-iam.png "Access control")
-
-4. Select the **Storage Blob Data Owner** role. Select **Azure AD user, group, or service principal** under assign access to. Search for and select your Azure account, then select **Save**.
-
-    ![The add role assignment form is configured as described.](media/storage-add-role-assignment.png "Add role assignment")
-
-### Task 3: Set up user access administrator
-
-1. Return to the `synapse-lab-infrastructure` resource group and select the Azure Synapse Analytics workspace within.
-
-    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
-
-2. Within the Synapse workspace, select **Access control (IAM)**. Select **+ Add**, then **Add role assignment**.
-
-    ![The access control blade is displayed.](media/synapse-iam.png "Access control")
-
-3. Select the **User Access Administrator** role. Select **Azure AD user, group, or service principal** under assign access to. Search for and select your Azure account, then select **Save**.
-
-    ![The add role assignment form is configured as described.](media/synapse-add-role-assignment.png "Add role assignment")
-
-### Task 4: Log in to Synapse Studio
-
-1. Return to the `synapse-lab-infrastructure` resource group and select the Azure Synapse Analytics workspace within.
-
-    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
-
-2. In the **Overview** blade, select the **Workspace web URL** to navigate to Synapse Studio for this workspace.
-
-    ![The workspace web URL is highlighted.](media/synapse-workspace-url.png "Workspace web URL")
-
-    After authenticating your account, you should see the Synapse Studio home page for your workspace.
-
-    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
-
-3. If you see the Getting started dialog, select **Close**.
-
-    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
-
-## Exercise 2: Moving data to the data lake using Copy activity
+## Exercise 1: Moving data to the data lake using Copy activity
 
 Time required: 30 minutes
 
@@ -261,12 +148,36 @@ In this exercise, you will import a large amount of data into the primary data l
 
 The data integration feature, Synapse Pipeline, is designed with the following concepts:
 
-* **Linked Service**: Contains definitions about the connection, such as the database and server information.
-* **Dataset**: Browses the Linked Service and defines table information, for example.
-* **Activity**: Browses, for example, a Dataset to define processing such as data movement.
-* **Pipeline**: Defines the order and conditions in which Activities are run.
-* **Integration Runtime**: Defines the processing infrastructure used by Linked Services and Activities.
-* **Trigger**: Defines when and how the Pipeline will run.
+- **Linked Service**: Contains definitions about the connection, such as the database and server information.
+- **Dataset**: Browses the Linked Service and defines table information, for example.
+- **Activity**: Browses, for example, a Dataset to define processing such as data movement.
+- **Pipeline**: Defines the order and conditions in which Activities are run.
+- **Integration Runtime**: Defines the processing infrastructure used by Linked Services and Activities.
+- **Trigger**: Defines when and how the Pipeline will run.
+
+### Task 1: Log in to Synapse Studio
+
+Synapse Studio is the web-based interface for working with your Azure Synapse Analytics workspace.
+
+![The Azure Synapse Analytics area of the diagram is highlighted.](media/synapse.png "Azure Synapse Analytics")
+
+1. Navigate to the Azure portal (<https://portal.azure.com>).
+
+2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
+
+    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
+
+3. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+    After authenticating your account, you should see the Synapse Studio home page for your workspace.
+
+    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
+
+4. If you see the Getting started dialog, select **Close**.
+
+    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
 
 ### Task 1: Create a Linked Service
 
@@ -372,7 +283,7 @@ The data integration feature, Synapse Pipeline, is designed with the following c
 
     ![The datalake data is displayed.](media/datalake-files.png "Datalake files")
 
-## Exercise 3: Create a SQL Pool and table
+## Exercise 2: Create a SQL Pool and table
 
 Time required: 20 minutes
 
@@ -461,7 +372,7 @@ A SQL pool offers T-SQL based compute and storage capabilities. After creating a
 
     ![The DelaySummary table is displayed.](media/delaysummary-table.png "DelaySummary table")
 
-## Exercise 4: Implement Spark ETL with the GUI
+## Exercise 3: Implement Spark ETL with the GUI
 
 Time required: 45 minutes
 
@@ -817,7 +728,7 @@ When the data flow pipeline has successfully completed, view the data it wrote t
 
     ![The query result set is displayed.](media/delaysummary-table-result-set.png "DelaySummary table result set")
 
-## Exercise 5: Visualize with Power BI
+## Exercise 4: Visualize with Power BI
 
 Time required: 15 minutes
 
@@ -1052,7 +963,7 @@ To build the architecture, complete the following tasks:
 - Process scoring and create load processing to DWH
 - Run sensor data analysis report
 
-## Exercise 6: Create stream processing
+## Exercise 5: Create stream processing
 
 Time required: 30 minutes
 
@@ -1074,54 +985,35 @@ Synapse Link with Cosmos DB can now be converted to column-oriented format with 
 
 Azure Synapse Link for Azure Cosmos DB: (https://docs.microsoft.com/azure/cosmos-db/synapse-link)
 
-### Task 1: IoT Hub resource creation
+### Task 1: Configure IoT Hub resource
 
-1. Navigate to the Azure portal (<https://portal.azure.com>) to create the IoT Hub resource.
+1. Navigate to the Azure portal (<https://portal.azure.com>).
 
-2. In the search menu, type **IoT Hub**, then select **IoT Hub**.
+2. In the search bar, type **IoT**, then select **IoT Hub** from the search results.
 
-    ![IoT Hub is highlighted in the search box, and the IoT Hub item in the results is highlighted.](media/search-iot-hub.png "IoT Hub search")
+    ![The IoT Hub search result is selected.](media/search-iot.png "Search IoT")
 
-3. Select **Add**.
+3. Select the IoT Hub resource you created for this lab, or that was provided to you in your lab environment.
 
-    ![The add button is selected.](media/iot-hub-add.png "Add")
+    ![The IoT Hub service is selected.](media/select-iot-hub.png "IoT Hub selected")
 
-4. In the `Create Synapse workspace` form, enter the values shown in the table below. Select **Review + create**.
-
-    ![The form is shown as described below.](media/create-iot-hub.png "Create IoT Hub")
-
-    | Parameters | Settings | Remarks |
-    | --- | --- | --- |
-    | Subscription | Any | Select the Azure subscription used for this lab. |
-    | Resource group | `synapse-lab-infrastructure` | Select existing resource group you have been using for this lab |
-    | Region | Select the region closest to you, such as `West US`. | |
-    | Workspace name | `synapselabinfra` + your initials + `ioth` (example: `synapselabinfrajdhioth`) | Lowercase alphanumeric characters only |
-
-5. Review the settings, then select **Create**. It takes a few minutes to create the resource.
-
-    ![The Create button is highlighted.](media/create-iot-hub-create.png "Create IoT Hub")
-
-6. When the deployment completes, navigate to the IoT Hub resource by selecting **Go to resource**. Alternately, you may navigate to the `synapse-lab-infrastructure` resource group and select the IoT Hub resource there.
-
-    ![Go to resource is highlighted.](media/iot-hub-deployed.png "Your deployment is complete")
-
-7. Select **IoT devices** in the left-hand menu, then select **+ New** in the IoT devices blade.
+4. Select **IoT devices** in the left-hand menu, then select **+ New** in the IoT devices blade.
 
     ![The IoT devices menu item is highlighted, as well as the New button on its blade.](media/iot-devices.png "IoT devices")
 
-8. Enter **vdev01** as the Device ID, select the **Symmetric key** authentication type, **Check** auto-generate key, and **Enable** the option to connect this device to an IoT Hub. Select **Save**.
+5. Enter **vdev01** as the Device ID, select the **Symmetric key** authentication type, **Check** auto-generate key, and **Enable** the option to connect this device to an IoT Hub. Select **Save**.
 
     ![The form is configured as described.](media/iot-device-create.png "Create a device")
 
-9. Select the device ID of the new device you created.
+6. Select the device ID of the new device you created.
 
     ![The new IoT device is highlighted.](media/iot-device-select.png "IoT device")
 
-10. Copy the **Primary Key** and save it to Notepad or similar text editor for later.
+7. Copy the **Primary Key** and save it to Notepad or similar text editor for later.
 
     ![The device's primary key is highlighted.](media/iot-device-primary-key.png "Primary key")
 
-11. Navigate back to the IoT Hub resource and select **Built-in endpoints** on the left-hand menu. Scroll down to **Consumer Groups**. In the **Create a new consumer group** box, enter **streamanalytics**. Select **Save** to apply your changes.
+8. Navigate back to the IoT Hub resource and select **Built-in endpoints** on the left-hand menu. Scroll down to **Consumer Groups**. In the **Create a new consumer group** box, enter **streamanalytics**. Select **Save** to apply your changes.
 
     ![The streamanalytics consumer group is highlighted.](media/iot-hub-consumer-group.png "Built-in endpoints")
 
@@ -1188,40 +1080,23 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
 
     ![The described items are highlighted in the Overview blade.](media/iot-hub-messages-used-today.png "IoT Hub overview")
 
-### Task 3: Create and configure Stream Analytics resources
+### Task 3: Configure Stream Analytics resources
 
-1. Navigate to the Azure portal (<https://portal.azure.com>) to create the IoT Hub resource.
+1. Navigate to the Azure portal (<https://portal.azure.com>).
 
 2. In the search menu, type **stream**, then select **Stream Analytics jobs**.
 
     ![Stream is highlighted in the search box, and the Stream Analytics jobs item in the results is highlighted.](media/search-sa.png "Stream search")
 
-3. Select **Add**.
+3. Select the Stream Analytics job you created for this lab, or that was provided to you in your lab environment.
 
-    ![The add button is selected.](media/sa-add.png "Add")
+    ![The Stream Analytics job is selected.](media/select-stream-analytics.png "Stream Analytics selected")
 
-4. In the `New Stream Analytics job` form, enter the values shown in the table below. Select **Create**.
-
-    ![The form is shown as described below.](media/create-sa.png "Create IoT Hub")
-
-    | Parameters | Settings | Remarks |
-    | --- | --- | --- |
-    | Job name | `synapselabinfra` + your initials + `asa` (example: `synapselabinfrajdhasa`) | Lowercase alphanumeric characters only |
-    | Subscription | Any | Select the Azure subscription used for this lab. |
-    | Resource group | `synapse-lab-infrastructure` | Select existing resource group you have been using for this lab |
-    | Region | Select the region closest to you, such as `West US`. | |
-    | Hosting environment | Cloud | |
-    | Streaming units | 1 | |
-
-5. The resource should be ready in a few seconds. After it deploys, select **Go to resource**.
-
-    ![Go to resource is highlighted.](media/sa-deployed.png "Your deployment is complete")
-
-6. Select **Inputs** on the left-hand menu, select **+ Add stream input**, then **IoT Hub** in the drop-down menu.
+4. Select **Inputs** on the left-hand menu, select **+ Add stream input**, then **IoT Hub** in the drop-down menu.
 
     ![The IoT Hub menu item is highlighted.](media/sa-add-iot-hub-input.png "Inputs")
 
-7. In the `IoT Hub` form, enter the values shown in the table below. Select **Save**.
+5. In the `IoT Hub` form, enter the values shown in the table below. Select **Save**.
 
     ![The form is shown as described below.](media/sa-add-iot-hub-input-form.png "Create IoT Hub")
 
@@ -1237,11 +1112,11 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
     | Encoding | UTF-8 | Default settings |
     | Event compression type | None | Default settings |
 
-8. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu.
+6. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu.
 
     ![The storage menu item is highlighted.](media/sa-add-storage-input.png "Outputs")
 
-9. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
+7. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
 
     ![The form is shown as described below.](media/sa-add-storage-input-form.png "Create Storage output")
 
@@ -1261,11 +1136,11 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
     | Hours/minutes | `0` hours, `1` minute | |
     | Authentication mode | Connection string | Default settings |
 
-10. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu to add another output.
+8. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu to add another output.
 
     ![The storage menu item is highlighted.](media/sa-add-storage-input.png "Outputs")
 
-11. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
+9. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
 
     ![The form is shown as described below.](media/sa-add-storage-input-form-curated.png "Create Storage output")
 
@@ -1285,7 +1160,7 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
     | Hours/minutes | `0` hours, `1` minute | Default settings |
     | Authentication mode | Connection string | Default settings |
 
-12. Select **Query** in the left-hand menu. Copy and paste the following query into the query area on the right, then select **Save query**.
+10. Select **Query** in the left-hand menu. Copy and paste the following query into the query area on the right, then select **Save query**.
 
     ```sql
     --Use 30 second average
@@ -1315,15 +1190,15 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
 
     ![The query is displayed.](media/sa-query.png "Query")
 
-13. Select **Overview** in the left-hand menu, then select **Start**.
+11. Select **Overview** in the left-hand menu, then select **Start**.
 
     ![The Start button is highlighted on the Overview blade.](media/sa-start.png "Start")
 
-14. In the Start job dialog, select **Start** to begin the job.
+12. In the Start job dialog, select **Start** to begin the job.
 
     ![The Start button is highlighted.](media/sa-start-dialog.png "Start")
 
-## Exercise 7: Explore Data with Query-as-a-Service
+## Exercise 6: Explore Data with Query-as-a-Service
 
 Time required: 15 minutes
 
@@ -1469,7 +1344,7 @@ In addition to the traditional SQL data warehouse functionality, Azure Synapse A
 
     ![The save dialog is displayed.](media/pbi-save-od.png "Save")
 
-## Exercise 8: Create a structured process for large amounts of data with Spark
+## Exercise 7: Create a structured process for large amounts of data with Spark
 
 Time required: 10 minutes
 
@@ -1539,7 +1414,7 @@ In this task, you will use the `SensorPrep.ipynb` notebook in the `source/ETLand
     | Aggregation | MAX |
     | Aggregation over all results | Unchecked |
 
-## Exercise 9: Spark ML learning/inference and SQL pool load
+## Exercise 8: Spark ML learning/inference and SQL pool load
 
 Time required: 10 minutes
 
@@ -1565,7 +1440,7 @@ Train and run machine learning models in a Spark pool and load the predicted res
 
 4. Run the notebook to run SparkML and load the data into your SQL pool.
 
-## Exercise 10: Visualize with Power BI
+## Exercise 9: Visualize with Power BI
 
 Time required: 10 minutes
 
@@ -1678,7 +1553,7 @@ Create a sensor summary report in Power BI.
 
 21. **Save** the report.
 
-## Exercise 11: End processing
+## Exercise 10: End processing
 
 Time required: 5 minutes
 
