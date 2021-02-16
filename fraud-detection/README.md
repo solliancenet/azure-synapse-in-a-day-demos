@@ -631,15 +631,31 @@ This first task will export credit card predictions from the prior exercise into
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-3. Ensure that you are connected to the **SQL on-demand** option.  Then, in the Use database drop-down, select **synapse**.
+3. Ensure that you are connected to the **Built-in** option. Then, enter the following script into the script window and select **Run**.
+
+    ```sql
+    CREATE DATABASE synapse
+    ```
+
+    ![Create a new database.](media/azure-synapse-on-demand-db.png 'Create a synapse database')
+
+4. Change the name of the script in the properties to **CreateOnDemandDB**.
+
+    ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
+
+5. From the **+** menu, choose **SQL script** to open a new script.
+
+    ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
+
+6. Ensure that you are connected to the **Built-in** option. Then, in the Use database drop-down, select **synapse**.
 
     ![The synapse database is selected.](media/azure-synapse-synapse-database.png 'Use database synapse')
 
-4. Change the name of the script to **CreateViewCreditCardLonLat**.
+7. Change the name of the script to **CreateViewCreditCardLonLat**.
 
     ![The script is named CreateViewCreditCardLonLat.](media/azure-synapse-createview.png 'New script name')
 
-5. Copy and paste the following into the script window.  Change the `synapselabfraud###adls` references to the storage account you created.  Then select **Run** to execute the script.
+8. Copy and paste the following into the script window.  Change the `synapselabfraud###adls` references to the storage account you created.  Then select **Run** to execute the script.
 
     ```sql
     CREATE VIEW dbo.CreditCardLonLat AS

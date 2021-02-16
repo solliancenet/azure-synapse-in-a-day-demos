@@ -13,7 +13,6 @@
     - [Task 6: Upload Materials Required for the Hands-On Training](#task-6-upload-materials-required-for-the-hands-on-training)
     - [Task 7: Create a Synapse dedicated SQL Pool](#task-7-create-a-synapse-dedicated-sql-pool)
     - [Task 8: Create a Spark Pool](#task-8-create-a-spark-pool)
-    - [Task 9: Create a Synapse serverless SQL Database](#task-9-create-a-synapse-serverless-sql-database)
   - [Lab guide](#lab-guide)
 
 ## Overview
@@ -294,32 +293,6 @@ Azure Data Lake Storage Gen2 will be critical for integration throughout the han
     ![In the Create Apache Spark pool output, form field entries are filled in.](media/azure-synapse-create-spark-pool.png 'Create Apache Spark pool output')
 
 3. Select **Review + create**. On the review screen, select **Create**.  Provisioning may take several minutes.
-
-### Task 9: Create a Synapse serverless SQL Database
-
-1. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
-
-    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
-
-2. Select the **Develop** tab from Synapse studio.
-
-    ![The Develop option is selected.](media/azure-synapse-develop.png 'Develop')
-
-3. From the **+** menu, choose **SQL script** to open a new script.
-
-    ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
-
-4. Ensure that you are connected to the **Built-in** option. Then, enter the following script into the script window and select **Run**.
-
-    ```sql
-    CREATE DATABASE synapse
-    ```
-
-    ![Create a new database.](media/azure-synapse-on-demand-db.png 'Create a synapse database')
-
-5. Change the name of the script in the properties to **CreateOnDemandDB**.
-
-    ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
 
 ## Lab guide
 
