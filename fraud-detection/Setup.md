@@ -221,11 +221,15 @@ Azure Data Lake Storage Gen2 will be critical for integration throughout the han
 
    > **Important**: Be sure to check the box which reads "Assign myself the Storage Blob Data Contributor role on the Data Lake Storage Gen2 account"!  If you do not check this box, you will be unable to complete certain exercises unless you add your account as a Storage Blob Data Contributor later.
 
-4. Select **Next : Security + networking >** to move on to the Security and Networking page.  On the Security and Networking page, enter a valid password you will remember. Leave the other options at their default values.
+4. Select **Next : Security >** to move on to the Security page. On the Security and Networking page, enter **asa.sql.admin** for the Admin username and a valid password you will remember. Leave the other options at their default values.
 
-    ![The Security and Networking page with a valid password entered.](media/azure-create-synapse-2.png 'Security and Networking')
+    ![The Security page with a valid password entered.](media/azure-create-synapse-2.png 'Security')
 
-5. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes.
+5. Select **Next: Networking >** to move to the Networking page. Make sure **Allow connections from all IP addresses** is checked.
+
+    ![The Networking page is displayed.](media/azure-create-synapse-networking.png "Networking")
+
+6. Select **Review + create**. On the review screen, select **Create**.  Provisioning takes **up to 10** minutes.
 
 ### Task 6: Upload Materials Required for the Hands-On Training
 
