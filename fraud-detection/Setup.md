@@ -247,7 +247,7 @@ Azure Data Lake Storage Gen2 will be critical for integration throughout the han
 
     ![The Container named synapse is selected.](media/azure-storage-account-synapse.png 'The synapse storage container')
 
-4. Select the **Upload** option. In the Files section, select the folder icon to upload files. Navigate to `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\csv\` and select **CityList.csv**, as the file for upload. Then select **Upload** to finish uploading the file.  Repeat the process for **CountryList.csv**, **CreditCard.csv**, and **rf_model.onnx** files.  The **rf_model.onnx** file will be in the parent directory, `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\`.
+4. Select the **Upload** option. In the Files section, select the folder icon to upload files. Navigate to `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\csv\` and select **CityList.csv**, as the file for upload. Then select **Upload** to finish uploading the file.  Repeat the process for **CountryList.csv**, **CreditCard.csv**, **credit_card_model.onnx.hex**, and **rf_model.onnx** files. The **credit_card_model.onnx.hex** and **rf_model.onnx** files will be in the parent directory, `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\`.
 
     ![The city list data is uploaded.](media/azure-synapse-upload.png 'Upload blob')
 

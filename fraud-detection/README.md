@@ -13,7 +13,7 @@
   - [Machine Learning Algorithm Used for Scoring in Exercise 1](#machine-learning-algorithm-used-for-scoring-in-exercise-1)
   - [Lab pre-requisite: Create a Power BI Workspace](#lab-pre-requisite-create-a-power-bi-workspace)
   - [Exercise 1:  Scoring predictions from T-SQL using a pre-trained model](#exercise-1--scoring-predictions-from-t-sql-using-a-pre-trained-model)
-    - [Task 1:  Dataset Creation](#task-1--dataset-creation)
+    - [Task 1: Dataset Creation](#task-1-dataset-creation)
     - [Task 2:  Query Development](#task-2--query-development)
     - [Task 3:  Power BI Report Development](#task-3--power-bi-report-development)
   - [Exercise 2:  Perform Ad Hoc Queries from the Storage Account](#exercise-2--perform-ad-hoc-queries-from-the-storage-account)
@@ -145,19 +145,27 @@ In this hands-on training, we'll use T-SQL to score an ONNX-format machine learn
 
 3. If you are prompted to upgrade to Power BI Pro, select **Try free**. Select **Got it** to confirm the pro subscription.
 
-4. In the Create a workspace menu, enter **FraudDetection** as the name and select **Save**.
+4. In the Create a workspace menu, enter **FraudDetection** as the name and select **Save**. If the name "FraudDetection" is not available, append a set of unique characters to the name, such as the `UniqueId` value if you are using a hosted lab environment, or your initials.
 
     ![The FraudDetection workspace is saved.](media/power-bi-create-workspace-1.png 'FraudDetection workspace')
 
-5. Return to the Synapse studio.  Select the **Home** option.
+5. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics** from the results.
 
-    ![The Home option is selected.](media/azure-synapse-home.png 'Home')
+    ![In the Services search result list, Azure Synapse Analytics is selected.](media/azure-create-synapse-search.png 'Azure Synapse Analytics')
 
-6. Select the **Visualize** option.
+6. Select the workspace you created before the hands-on lab, or that is provided by your hosted lab environment.
+
+    ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'synapselabfraudjdhasws workspace')
+
+7. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+8. On the home page, select the **Visualize** option.
 
     ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
 
-7. In the **Connect to Power BI** tab, complete the following and then select **Connect** to create a new Power BI connection.
+9. In the **Connect to Power BI** tab, complete the following and then select **Connect** to create a new Power BI connection.
 
     | Field                          | Value                                              |
     | ------------------------------ | ------------------------------------------         |
@@ -167,14 +175,13 @@ In this hands-on training, we'll use T-SQL to score an ONNX-format machine learn
 
     ![In the Connect to Power BI tab, form field entries are filled in.](media/azure-synapse-connect-power-bi.png 'Connect to Power BI')
 
-
 ## Exercise 1:  Scoring predictions from T-SQL using a pre-trained model
 
 Duration: 45 minutes
 
 You will use masked data, obtained by applying principal component analysis to credit card transaction data, to evaluate which transactions are fraudulent and to analyze trends in elapsed time and fraud amounts.
 
-### Task 1:  Dataset Creation
+### Task 1: Dataset Creation
 
 1. In the [Azure portal](https://portal.azure.com), type in "azure synapse analytics" in the top search menu and then select **Azure Synapse Analytics** from the results.
 
@@ -184,39 +191,53 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The Azure Synapse Analytics workspace for the lab is selected.](media/azure-synapse-select.png 'synapselabfraudjdhasws workspace')
 
-3. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
+3. Select the `synapsesql` dedicated SQL pool on the Overview pane of the Synapse workspace.
+
+    ![The dedicated SQL pool is selected.](media/select-dedicated-sql-pool.png "SQL pools")
+
+4. If the dedicated SQL pool is currently paused, select **Resume**.
+
+    ![The resume button is highlighted.](media/dedicated-sql-pool-resume.png "Resume")
+
+5. When prompted whether you are sure you want to resume the pool, select **Yes**.
+
+6. Select **Overview** in the left-hand menu **after** the SQL pool resumes.
+
+    ![The Overview link is highlighted.](media/synapse-workspace-select-overview.png "Overview")
+
+7. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
 
     ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
 
-4. Select the **Develop** tab from Synapse studio.
+8. Select the **Develop** tab from Synapse studio.
 
     ![The Develop option is selected.](media/azure-synapse-develop.png 'Develop')
 
-5. From the **+** menu, choose **SQL script** to open a new script.
+9. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-6. Choose the **synapsesql** connection option and the **synapsesql** database from the database drop-down list.
+10. Choose the **synapsesql** connection option and the **synapsesql** database from the database drop-down list.
 
     ![The synapsesql database is selected.](media/azure-synapse-develop-synapsesql.png 'synapsesql database')
 
-7. Change the name of the script to **CreateSchema**.
+11. Change the name of the script to **CreateSchema**.
 
     ![The script is named CreateSchema.](media/azure-synapse-script-createschema.png 'CreateSchema')
 
-8. Enter the following code into the script window.  Then, select **Run** to execute the code.
+12. Enter the following code into the script window. Then, select **Run** to execute the code.
 
     ```sql
     CREATE SCHEMA synapse
     ```
 
-    ![The create schema script has been run.](media/azure-synapse-script-createschema.png 'Create Schema')
+    ![The Run button is highlighted.](media/azure-synapse-create-schema-script-run.png "Run")
 
-9. From the **+** menu, choose **SQL script** to open a new script.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
+13. From the **+** menu, choose **SQL script** to open a new script. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-10. Change the name of this script to **CreateMasterKey**.  Enter the following into the script window, changing `{Password}` to a password you can remember.  Then, select **Run** to execute the code.
+14. Change the name of this script to **CreateMasterKey**. Enter the following into the script window, changing `{Password}` to a password you can remember. Then, select **Run** to execute the code.
 
     ```sql
     CREATE MASTER KEY ENCRYPTION BY PASSWORD = '{Password}'
@@ -224,11 +245,11 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The master key creation script has been run.](media/azure-synapse-script-createmasterkey.png 'Create Master Key')
 
-11. From the **+** menu, choose **SQL script** to open a new script.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
+15. From the **+** menu, choose **SQL script** to open a new script.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-12. Change the name of this script to **CreateAzureStorageAccountKey**.  Enter the following into the script window, filling in your storage account name and access key.  Then, select **Run** to execute the code.
+16. Change the name of this script to **CreateAzureStorageAccountKey**. Connect to the **synapsesql** dedicated SQL pool, then enter the following into the script window, filling in your storage account name and access key. Select **Run** to execute the code.
 
     ```sql
     CREATE DATABASE SCOPED CREDENTIAL AzureStorageAccountKey
@@ -238,11 +259,15 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The database scoped credential has been created.](media/azure-synapse-script-create-dsc.png 'Create Database Scoped Credential')
 
-13. From the **+** menu, choose **SQL script** to open a new script.
+    To find the storage account name and access key, navigate to the resource group for your lab and open the provisioned Azure storage account. Select **Access keys** in the left-hand menu. Here you can copy the **Storage account name** and paste it in place of `<Your Storage Account>` in the SQL script, and copy the **Key** to replace `<Your Access Key>` in the SQL script.
+
+    ![The storage account name and key are highlighted.](media/storage-account-keys.png "Access keys")
+
+17. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-14. Change the name of this script to **CreateCSVDataSource**.  Enter the following into the script window, filling in your storage account name and access key.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.  Then, select **Run** to execute the code.
+18. Change the name of this script to **CreateCSVDataSource**. Enter the following into the script window, filling in your storage account name and access key. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database. Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL DATA SOURCE CSVDataSource WITH
@@ -255,11 +280,11 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The external data source has been created.](media/azure-synapse-create-data-source.png 'Create External Data Source')
 
-15. From the **+** menu, choose **SQL script** to open a new script.
+19. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-16. Change the name of this script to **CreateCSVFileFormat**.  Enter the following into the script window, filling in your storage account name and access key.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.  Then, select **Run** to execute the code.
+20. Change the name of this script to **CreateCSVFileFormat**. Enter the following into the script window to create two external file formats. One is for reading the source CSV files and the other is to read the machine learning (ML) model file. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database. Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL FILE FORMAT CSVFileFormat
@@ -272,15 +297,28 @@ You will use masked data, obtained by applying principal component analysis to c
             USE_TYPE_DEFAULT=TRUE
         )
     );
+    GO
+
+    CREATE EXTERNAL FILE FORMAT csv
+    WITH (
+        FORMAT_TYPE = DELIMITEDTEXT,
+        FORMAT_OPTIONS (
+            FIELD_TERMINATOR = ',',
+            STRING_DELIMITER = '',
+            DATE_FORMAT = '',
+            USE_TYPE_DEFAULT = False
+        )
+    );
+    GO
     ```
 
     ![The external file format has been created.](media/azure-synapse-script-create-fileformat.png 'Create External File Format')
 
-17. From the **+** menu, choose **SQL script** to open a new script.
+21. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-18. Change the name of this script to **CreateExternalCreditCard**.  Enter the following into the script window, filling in your storage account name and access key.  Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database.  Then, select **Run** to execute the code.
+22. Change the name of this script to **CreateExternalCreditCard**. Enter the following into the script window to create an external table for the credit card CSV data and an external table for the ML model. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database. Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL TABLE synapse.exCreditCard
@@ -297,57 +335,77 @@ You will use masked data, obtained by applying principal component analysis to c
             DATA_SOURCE = [CSVDataSource],
             FILE_FORMAT = [CSVFileFormat]
     );
+    GO
+
+    CREATE EXTERNAL TABLE synapse.[MLModelExt]
+    (
+    [Model] [varbinary](max) NULL
+    )
+    WITH
+    (
+        LOCATION='credit_card_model.onnx.hex' ,
+        DATA_SOURCE = [CSVDataSource] ,
+        FILE_FORMAT = csv ,
+        REJECT_TYPE = VALUE ,
+        REJECT_VALUE = 0
+    );
+    GO
     ```
 
     ![The external table has been created.](media/azure-synapse-script-create-externalcc.png 'Create External Table')
 
-19. Select the **Data** option from the menu.  Navigate to **synapsesql** and then **External tables**.  Right-click on the **synapse.exCreditCard** table and choose **New SQL script** and then **Select TOP 100 rows**.
+23. Select the **Data** hub in the left-hand menu.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+24. Expand **Databases** under the Workspace tab, expand **synapsesql**, then expand **External tables**. Right-click on the **synapse.exCreditCard** table and choose **New SQL script** and then **Select TOP 100 rows**.
 
     ![Select the top 100 rows is selected.](media/azure-synapse-script-select-top100.png 'Select TOP 100 rows')
 
-20. Select the **Properties** icon to display the menu.  Rename the name to **SelectExternalCreditCard**.  Then, select **Publish all**.
+25. Select the **Properties** icon to display the menu. Rename the name to **SelectExternalCreditCard**. Then, select **Publish all**.
 
     ![The publish all option is selected.](media/azure-synapse-publish-all-2.png 'Publish all')
 
-21. Select the **Publish** option to save these scripts.
+26. Select the **Publish** option to save these scripts.
 
     ![The Publish option is selected.](media/azure-synapse-publish-2.png 'Publish')
 
 ### Task 2:  Query Development
 
-1. From the **+** menu, choose **SQL script** to open a new script.
+1. Navigate to the **Develop** hub.
+
+    ![Develop hub.](media/develop-hub.png "Develop hub")
+
+2. From the **+** menu, choose **SQL script** to open a new script.
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-2. Choose the **synapsesql** connection option and the **synapsesql** database from the database drop-down list.
-
-    ![The synapsesql database is selected.](media/azure-synapse-develop-synapsesql.png 'synapsesql database')
-
-3. Change the name of the script in the properties to **SelectIntoCreditCard**.
-
-    ![The script is named SelectIntoCreditCard.](media/azure-synapse-selectintocreditcard.png 'SelectIntoCreditCard')
-
-4. Open the script named **SelectIntoCreditCard.sql** in your local folder, `c:\azure-synapse-in-a-day-demos-master\fraud-detection\Resources\`.  Copy and paste its contents into the script window.  The script will look like the code below, but will include a lengthy `@modelexample` binary value and will not include the `THROW` call.  Run the script and let it insert data into a new `synapse.CreditCard` table.
+3. Change the name of this script to **SelectIntoCreditCard**. Enter the following into the script window to create an external table for the credit card CSV data and an external table for the ML model. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database. Then, select **Run** to execute the script and let it insert data into a new `synapse.CreditCard` table.
 
     ```sql
-    THROW 50001, 'Please do not run this code. Open the script named SelectIntoCreditCard.sql instead.', 1;
-    DECLARE @modelexample varbinary(max) = 0x08041208736B6C326F6E6E781 ...
+    DECLARE @modelexample varbinary(max) = (SELECT [Model] FROM synapse.[MLModelExt]);
 
     SELECT
-        d.*, p.*
+    d.*, p.*
     INTO synapse.CreditCard
-    FROM PREDICT(MODEL = @modelexample, DATA = synapse.exCreditCard AS d) WITH (output_label bigint) AS p;
+    FROM PREDICT(MODEL = @modelexample,
+        DATA = synapse.exCreditCard AS d,
+        RUNTIME = ONNX) WITH (output_label bigint) AS p;
     ```
 
     ![The scored credit card prediction table has been created.](media/azure-synapse-script-create-creditcard.png 'Run predictions')
 
-5. In the **Tables** folder for **synapsesql**, select the ellipsis (...) and choose **Refresh** to see the `synapse.CreditCard` table.
+4. In the **Tables** folder for **synapsesql**, select the ellipsis (...) and choose **Refresh** to see the `synapse.CreditCard` table.
 
     ![The list of tables is refreshed.](media/azure-synapse-refresh-tables.png 'Refresh')
 
-6. In the **synapse.CreditCard** table entry, select the ellipsis (...) and choose **New SQL Script** and then **Select TOP 100 rows** to open a new script pre-populated with a SQL query.
+5. In the **synapse.CreditCard** table entry, select the ellipsis (...) and choose **New SQL Script** and then **Select TOP 100 rows** to open a new script pre-populated with a SQL query.
 
     ![The option to select the top 100 rows in the credit card predictions table is selected.](media/azure-synapse-creditcard-select.png 'Select TOP 100 rows')
+
+    The `Output_label` field shows the prediction from the model.
+
+    ![The output label field is highlighted.](media/azure-synapse-creditcard-select-output.png "Query results")
 
 ### Task 3:  Power BI Report Development
 
