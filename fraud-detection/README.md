@@ -409,7 +409,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
 ### Task 3:  Power BI Report Development
 
-1. Open the RDP file from the Before the Hands-On Lab section and select **Connect** to access the virtual machine.  When prompted for credentials, enter `powerbiuser` for the username and the password you chose.
+1. Open the RDP file from the Before the Hands-On Lab section and select **Connect** to access the virtual machine.  When prompted for credentials, enter `powerbiuser` for the username and the password you chose, or which were provided to you in your hosted lab environment details.
 
     ![Connect to a remote host.](media/azure-vm-connect-3.png 'Connect to a remote host')
 
@@ -425,11 +425,11 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
 
-5. Select **Visualize** from the Synapse studio front page.
+5. Select the **Develop** hub.
 
-    ![The Visualize option is selected.](media/azure-synapse-visualize.png 'Visualize')
+    ![Develop hub.](media/develop-hub.png "Develop hub")
 
-6. Drill down into **Power BI** and then **FraudDetection**.  From there, select the ellipsis (...) and select **Open**.
+6. Drill down into **Power BI** and then **FraudDetectionWorkspace**. Select **Power BI datasets**.
 
     ![The Open option is selected.](media/azure-synapse-power-bi-dataset-open.png 'Open')
 
@@ -449,7 +449,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The Power BI dataset file is downloaded.](media/power-bi-new-dataset-3.png 'Download pbids file')
 
-11. Open the downloaded Power BI dataset file in Power BI Desktop.  When prompted to enter a username and password, select **Database** and enter the Synapse username and password you created before the hands-on lab.  The username will be **sqladminuser** by default.  Then select **Connect** to connect to the SQL pool.
+11. Open the downloaded Power BI dataset file in Power BI Desktop.  When prompted to enter a username and password, select **Database** and enter the Synapse username and password you created before the hands-on lab, or which was provided to you as part of a hosted environment. The username will be **sqladminuser** by default. Then select **Connect** to connect to the SQL pool.
 
     ![The credentials for the Synapse admin user are entered.](media/power-bi-new-dataset-4.png 'Connect to SQL Pool')
 
