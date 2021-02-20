@@ -267,7 +267,7 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![Create a new SQL script.](media/azure-synapse-new-script.png 'SQL script')
 
-18. Change the name of this script to **CreateCSVDataSource**. Enter the following into the script window, filling in your storage account name and access key. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database. Then, select **Run** to execute the code.
+18. Change the name of this script to **CreateCSVDataSource**. Enter the following into the script window, filling in your storage account name in place of `<Your Storage Account>`. Ensure that you are connected to the **synapsesql** SQL pool and the **synapsesql** database. Then, select **Run** to execute the code.
 
     ```sql
     CREATE EXTERNAL DATA SOURCE CSVDataSource WITH
@@ -433,6 +433,10 @@ You will use masked data, obtained by applying principal component analysis to c
 
     ![The Open option is selected.](media/azure-synapse-power-bi-dataset-open.png 'Open')
 
+    If you do not see the **Power BI** section under Develop, select **Refresh** in the upper-right corner of Synapse Studio to refresh the UI.
+
+    ![The refresh button is highlighted.](media/synapse-studio-refresh.png "Refresh")
+
 7. Select **+ New Power BI dataset**.
 
     ![The New Power BI dataset option is selected.](media/azure-synapse-power-bi-dataset-new.png 'New Power BI dataset')
@@ -523,11 +527,11 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The Manage option is selected.](media/azure-synapse-manage.png 'Manage')
 
-5. Select the **Linked services** option from the External connections section.  Then select **+ New** to add a new linked service.
+5. Select the **Linked services** option from the External connections section. Then select **+ New** to add a new linked service.
 
     ![The option to add a new linked service is selected.](media/azure-synapse-new-linked-service.png 'New linked service')
 
-6. Enter **synapse** into the search menu and select the **Azure Synapse Analytics (formerly SQL DW)** option.  Then, select **Continue**.
+6. Enter **synapse** into the search menu and select the **Azure Synapse Analytics (formerly SQL DW)** option. Then, select **Continue**.
 
     ![The option to add a new Azure Synapse Analytics linked service is selected.](media/azure-synapse-new-linked-service-1.png 'New Azure Synapse Analytics service')
 
@@ -539,11 +543,11 @@ This first task will export credit card predictions from the prior exercise into
     | Connect via integration runtime | _select `AutoResolveIntegrationRuntime`_           |
     | Account selection method        | _select `From Azure subscription`_                 |
     | Azure subscription              | _select your Azure subscription_                   |
-    | Server name                     | _`synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`)_ |
+    | Server name                     | _`synapselabfraud` + unique id (example: `synapselabfraud311554`)_ |
     | Database name                   | _select `synapsesql`_                              |
     | Authentication type             | _select `SQL authentication`_                      |
-    | User name                       | _enter `sqladminuser`_                             |
-    | Password                        | _enter the password you created earlier_           |
+    | User name                       | _enter `asa.sql.admin`_                             |
+    | Password                        | _enter the password you created earlier or that was provided to you for your hosted lab environment_           |
 
     ![In the New linked service tab, form field entries are filled in.](media/azure-synapse-new-linked-service-2.png 'New linked service')
 
@@ -555,7 +559,7 @@ This first task will export credit card predictions from the prior exercise into
 
     ![Create a new Data flow.](media/azure-synapse-new-data-flow.png 'Data flow')
 
-10. Name the data flow **DataflowCreditCard** and the Dataset **DatasetSqlPoolCreditCard**.  Then, select **Create** to create the data flow.
+10. Name the data flow **DataflowCreditCard** and the integration dataset name **DatasetSqlPoolCreditCard**. Then, select **Create** to create the data flow.
 
     ![Names are provided for the data flow and dataset.](media/azure-synapse-dataflowcreditcard.png 'DataflowCreditCard')
 
@@ -583,7 +587,7 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The new Dataset option is selected.](media/azure-synapse-sinkcreditcard.png 'New Dataset')
 
-17. From the New dataset menu, select **Azure Data Lake Storage Gen2** and then select **Continue**.
+17. From the New integration dataset menu, select **Azure Data Lake Storage Gen2** and then select **Continue**.
 
     ![The new Dataset option is selected.](media/azure-synapse-sink-dlsgen2.png 'New Dataset')
 
@@ -599,11 +603,11 @@ This first task will export credit card predictions from the prior exercise into
 
     | Field                          | Value                                              |
     | ------------------------------ | ------------------------------------------         |
-    | Name                           | _`synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`)_ |
+    | Name                           | _`SynapseLabFraudADLS`_ |
     | Authentication method          | _select `Account key`_                             |
     | Account selection method       | _select `From Azure subscription`_                 |
     | Azure subscription             | _select your Azure subscription_                   |
-    | Storage account name           | _`synapselabfraud` + your initials + `adls` (example: `synapselabfraudjdhadls`)_ |
+    | Storage account name           | _`synapselabfraud` + unique id (example: `synapselabfraud312535`)_ |
 
     ![The new linked service is selected.](media/azure-synapse-linked-service.png 'Set properties')
 
@@ -615,11 +619,11 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The data flow debug option is selected.](media/azure-synapse-data-flow-debug.png 'Data flow debug')
 
-23. Choose the **AutoResolveIntegrationRuntime** and select **OK**.  It may take several minutes for setup to complete.
+23. Choose the **AutoResolveIntegrationRuntime** integration runtime, select **1 hour** for time to live, and select **OK**. It may take several minutes for setup to complete.
 
     ![The data flow debug option is selected.](media/azure-synapse-data-flow-ir.png 'Data flow debug')
 
-24. After the debugging check completes, select **Publish all**.
+24. After the debugger starts, select **Publish all**.
 
     ![The Publish all option is selected.](media/azure-synapse-data-flow-publish-all.png 'Publish all')
 
@@ -627,9 +631,9 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The Publish option is selected.](media/azure-synapse-data-flow-publish.png 'Publish')
 
-26. Select the **Orchestrate** tab from Synapse studio.
+26. Navigate to the **Integrate** hub.
 
-    ![The Orchestrate option is selected.](media/azure-synapse-orchestrate.png 'Orchestrate')
+    ![Integrate hub.](media/integrate-hub.png "Integrate hub")
 
 27. Select **+** and then choose **Pipeline** to create a new pipeline.
 
@@ -647,7 +651,7 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The data flow is selected.](media/azure-synapse-pipeline-dataflow-1.png 'Data flow')
 
-31. Select the data flow and then navigate to the **Settings** menu.  In the PolyBase sub-menu, change the Staging linked service to **synapselabfraud###adls**, the staging storage folder's container to **synapse** and folder to **creditcard**.
+31. Select the data flow and then navigate to the **Settings** menu.  In the PolyBase sub-menu, change the Staging linked service to **SynapseLabFraudADLS**, the staging storage folder's container to **synapse** and folder to **creditcard**.
 
     ![The PolyBase settings are created.](media/azure-synapse-pipeline-dataflow-settings.png 'Settings')
 
@@ -655,7 +659,7 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The option to debug the newly-created pipeline is selected.](media/azure-synapse-pipeline-dataflow-debug.png 'Debug')
 
-33. Wait until the Output tab has a **Succeeded** status message.
+33. Wait until the Output tab has a **Succeeded** status message. You may need to periodically select the **Refresh** button to view the updated status.
 
     ![The debug run has succeeded.](media/azure-synapse-pipeline-dataflow-succeeded.png 'Debug Succeeded')
 
@@ -697,9 +701,9 @@ This first task will export credit card predictions from the prior exercise into
 
     ![Create a new database.](media/azure-synapse-on-demand-db.png 'Create a synapse database')
 
-4. Change the name of the script in the properties to **CreateOnDemandDB**.
+4. Change the name of the script in the properties to **CreateServerlessDB**.
 
-    ![The script is named CreateOnDemandDB.](media/azure-synapse-createondemanddb.png 'CreateOnDemandDB')
+    ![The script is named CreateServerlessDB](media/azure-synapse-createserverlessdb.png "CreateServerlessDB")
 
 5. From the **+** menu, choose **SQL script** to open a new script.
 
@@ -713,7 +717,7 @@ This first task will export credit card predictions from the prior exercise into
 
     ![The script is named CreateViewCreditCardLonLat.](media/azure-synapse-createview.png 'New script name')
 
-8. Copy and paste the following into the script window.  Change the `synapselabfraud###adls` references to the storage account you created.  Then select **Run** to execute the script.
+8. Copy and paste the following into the script window. Change the three `synapselabfraud###` references to the primary ADLS Gen2 storage account for the Synapse workspace. Then select **Run** to execute the script.
 
     ```sql
     CREATE VIEW dbo.CreditCardLonLat AS
@@ -757,7 +761,7 @@ This first task will export credit card predictions from the prior exercise into
             credit.id
     FROM
     OPENROWSET(
-            BULK 'https://synapselabfraud###adls.blob.core.windows.net/synapse/CreditCardScored.csv',
+            BULK 'https://synapselabfraud###.blob.core.windows.net/synapse/CreditCardScored.csv',
             FORMAT = 'CSV',
             FIELDTERMINATOR =',',
             FIRSTROW = 2,
@@ -772,7 +776,7 @@ This first task will export credit card predictions from the prior exercise into
         ) AS [credit]
     LEFT JOIN
     OPENROWSET(
-            BULK 'https://synapselabfraud###adls.dfs.core.windows.net/synapse/CityList.csv',
+            BULK 'https://synapselabfraud###.dfs.core.windows.net/synapse/CityList.csv',
             FORMAT = 'CSV',
             FIELDTERMINATOR =',',
             FIRSTROW = 2,
@@ -789,7 +793,7 @@ This first task will export credit card predictions from the prior exercise into
         credit.id = city.id
     LEFT JOIN
     OPENROWSET(
-            BULK 'https://synapselabfraud###adls.dfs.core.windows.net/synapse/CountryList.csv',
+            BULK 'https://synapselabfraud###.dfs.core.windows.net/synapse/CountryList.csv',
             FORMAT = 'CSV',
             FIELDTERMINATOR =',',
             FIRSTROW = 2,
@@ -833,63 +837,53 @@ This first task will export credit card predictions from the prior exercise into
 
     ![Create a new Power BI dataset.](media/azure-synapse-new-power-bi-dataset.png 'New Power BI dataset')
 
-7. Choose **FraudDetectionReport** and then select **Create**.
-
-    ![The FraudDetectionReport is selected.](media/azure-synapse-frauddetectionreport.png 'FraudDetectionReport')
-
-8. Hover over the **synapsesql** on-demand database and then select **Download .pbids file**.
+7. Hover over the **synapsesql** serverless SQL database and then select **Download .pbids file**.
 
     ![The option to download a Power BI dataset file is selected.](media/power-bi-pbids.png 'New Power BI dataset')
 
-9. Open the downloaded Power BI dataset file in Power BI Desktop. On the Navigator page, select the **CreditCardLonLat** view and then select **Load**.
+8. Open the downloaded Power BI dataset file in Power BI Desktop. If you are prompted to sign in to the Power BI dataset, select **Microsoft account** in the left-hand menu, then click the **Sign in** button to enter your Azure credentials.
+
+    ![The Microsoft account tab and sign in button are highlighted.](media/power-bi-serverless-signin.png "SQL Server database")
+
+9. After signing in with your Azure credentials, click **Connect**.
+
+    ![The Connect button is highlighted.](media/power-bi-serverless-signin2.png "SQL Server database")
+
+10. On the Navigator page, select the **CreditCardLonLat** view and then select **Load**.
 
     ![The credit card longitude and latitude view is selected.](media/power-bi-lonlat-1.png 'Navigator')
 
-10. In the Connection settings modal dialog, select **Import** and then select **OK**.
+11. In the Connection settings modal dialog, select **Import** and then select **OK**.
 
     ![The Import option is selected.](media/power-bi-new-dataset-6.png 'Connection settings')
 
-11. Select the **lat** column. In the **Column tools** tab, select the drop-down for Data category and choose **Latitude**.  Repeat this for the **lon** column, setting the Data category to **Longitude**.
+12. Select the **lat** column. In the **Column tools** tab, select the drop-down for Summarization and select **Don't summarize**. Select the drop-down for Data category and choose **Latitude**. Repeat this for the **lon** column, setting the Data category to **Longitude** and Summarization to **Don't summarize**.
 
     ![The lat column has a data category of Latitude.](media/power-bi-new-lonlat-lat.png 'Data category')
 
-12. Select the **Map** visual and drag it onto the canvas.  Expand it to fill the canvas.
+13. Select the **ArcGIS Maps for Power BI** visualization and drag it onto the canvas. Expand it to fill the canvas.
 
-    ![The map visual is selected.](media/power-bi-new-lonlat-map.png 'Map visual')
+    ![The ArcGIS Map visualization is selected.](media/power-bi-new-lonlat-gismap.png "ArcGIS Maps for Power BI Visualization")
 
-13. Drag the **Amount** data field into the Legend, the **lat** data field into Latitude, and the **lon** data field into Longitude.  Select the drop-down for the latitude and longitude columns and change the value to **Don't summarize**.
+    > **Note**: You do not need to sign in to the ArcGIS service.
 
-    ![The credit card data fields are added to the map.](media/power-bi-new-lonlat-2.png 'Visualizations and Filters')
+14. Drag the **Amount** data field into `Size` and `Color`, the **lat** data field into `Latitude`, and the **lon** data field into `Longitude`.
 
-14. Drag the **Class** data field into the **Filters on this visual** section.  In the Filter type drop-down, select **Basic filtering**.
+    ![The credit card data fields are added to the map.](media/power-bi-new-lonlat2.png 'Visualizations and Filters')
+
+15. Drag the **Class** data field into the **Filters on this visual** section. In the Filter type drop-down, select **Basic filtering**.
 
     ![The Class filter has been added to the map visual.](media/power-bi-new-lonlat-3.png 'Filters on this visual')
 
-15. Change the filter on **Class** to include only fraudulent transactions.
+16. Change the filter on **Class** to include only fraudulent transactions by checking the **1 checkbox**. This report allows you to understand the geographical features of the unauthorized use of credit cards and to implement concrete measures to temporarily restrict the use of credit cards in cities that show the beginnings of a concentration of unauthorized uses of credit cards for large amounts.
 
-    ![The Class filter has been added to the map visual.](media/power-bi-new-lonlat-4.png 'Filters on this visual')
-
-16. Save the Power BI report as **FraudDetectionMap**.
-
-17. In the **File** menu, select **Publish** and then **Publish to Power BI**.
-
-    ![The Publish to Power BI option is selected.](media/power-bi-publish.png 'Publish to Power BI')
-
-18. Select the **FraudDetection** workspace and then choose **Select**.
-
-    ![The FraudDetection workspace is selected.](media/power-bi-select-destination.png 'Select a destination')
-
-19. After the Power BI report deploys, return to Azure Synapse Analytics Studio and select **Close and refresh**.  Select the ellipsis (...) in the **Power BI reports** menu and then select **Refresh**.
-
-    ![The Power BI reports list is refreshed.](media/azure-synapse-reports-refresh.png 'Power BI reports')
-
-20. Select the **FraudDetectionMap** report.  This report allows you to understand the geographical features of the unauthorized use of credit cards and to implement concrete measures to temporarily restrict the use of credit cards in cities that show the beginnings of a concentration of unauthorized uses of credit cards for large amounts.
-
-    ![The fraud detection Power BI report is refreshed.](media/azure-synapse-reports-map.png 'Fraud Detection Map')
+    ![The Class filter has been added to the map visual.](media/power-bi-new-lonlat4.png 'Filters on this visual')
 
 ## After the hands-on lab
 
 Duration: 10 minutes
+
+> **Note**: Only complete these steps if you are not using a hosted lab environment and deployed these resources in your own Azure subscription.
 
 ### Task 1: Delete Lab Resources
 
