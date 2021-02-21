@@ -11,7 +11,7 @@
     - [Task 6: Prepare a Virtual Machine to run data generator and Power BI Desktop](#task-6-prepare-a-virtual-machine-to-run-data-generator-and-power-bi-desktop)
     - [Task 7: Download lab files](#task-7-download-lab-files)
     - [Task 8: Install Azure Storage Explorer and upload lab files](#task-8-install-azure-storage-explorer-and-upload-lab-files)
-  - [Exercise 3: Deploy resources for the data collection step](#exercise-3-deploy-resources-for-the-data-collection-step)
+  - [Exercise 2: Deploy resources for the data collection step](#exercise-2-deploy-resources-for-the-data-collection-step)
     - [Task 1: Deploy ARM template](#task-1-deploy-arm-template)
     - [Task 2: Create Azure Data Lake Storage Gen2 account](#task-2-create-azure-data-lake-storage-gen2-account)
   - [Lab guide](#lab-guide)
@@ -307,7 +307,7 @@ There are files you need to upload to the primary ADLS Gen2 account for your Syn
 
     ![The files successfully uploaded to the sampledata container.](media/ase-sampledata-uploaded.png "Files successfully uploaded")
 
-## Exercise 3: Deploy resources for the data collection step
+## Exercise 2: Deploy resources for the data collection step
 
 Time required: 20 minutes
 

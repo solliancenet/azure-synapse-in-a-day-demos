@@ -12,9 +12,7 @@
   - [Hands-on lab story description](#hands-on-lab-story-description)
   - [Hands-on environment](#hands-on-environment)
   - [Exercise 1: Security](#exercise-1-security)
-    - [Task 1: Synapse workspace connection restrictions with IP firewalls](#task-1-synapse-workspace-connection-restrictions-with-ip-firewalls)
-    - [Task 2: Log in to Synapse Studio](#task-2-log-in-to-synapse-studio)
-    - [Task 3: Enable private endpoint on the data lake](#task-3-enable-private-endpoint-on-the-data-lake)
+    - [Task 1: Enable private endpoint on the data lake](#task-1-enable-private-endpoint-on-the-data-lake)
     - [Task 4: Add the workspace managed identity to database role](#task-4-add-the-workspace-managed-identity-to-database-role)
     - [Task 5: Managed identity](#task-5-managed-identity)
   - [Exercise 2: Data collection](#exercise-2-data-collection)
@@ -125,49 +123,11 @@ The following is a diagram of the data analytics infrastructure that you will bu
 
 Time required: 10 minutes
 
-### Task 1: Synapse workspace connection restrictions with IP firewalls
-
-Based on the source IP address of each request, you can allow or deny access to the Synapse workspace and all public endpoints of the workspace (SQL pool, SQL on-demand, development). For example, prevent unauthorized access from unspecified locations by allowing only access from the working environment.
-
-1. Navigate to the Azure portal (<https://portal.azure.com>).
-
-2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
-
-    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
-
-3. Select the Synapse Workspace that you created for this lab, or that was provided for you in the lab environment.
-
-4. Select **Firewalls** on the left-hand menu **(1)**. Verify that the "Allow Azure services and resources to access this workspace" setting is turned **Off (2)**. **Delete** the `showAll` IP address rule **(3)**, then **Save** your settings **(4)**.
-
-    ![The firewall settings are configured.](media/synapse-firewalls-setting.png "Firewalls")
-
-### Task 2: Log in to Synapse Studio
-
-1. Select the **Overview** blade in the left-hand menu, then select **Open** underneath **Open Synapse Studio** to navigate to Synapse Studio for this workspace.
-
-    ![The Open link is highlighted.](media/open-synapse-studio.png "Open Synapse Studio")
-
-2. You should see a message stating that you need permission to access the workspace, due to the firewall settings you changed:
-
-    ![Access to the workspace is denied.](media/synapse-workspace-denied.png "Access denied")
-
-3. Open the workspace **Firewalls (1)** configuration once again, then turn  the "Allow Azure services and resources to access this workspace" setting to **On (2)**. Add a new client IP address rule named **`showAll`** with a Start IP of **`0.0.0.0`** and End IP of **`255.255.255.255` (3)**. Select **Save (4)**.
-
-    ![The firewall settings are configured as described.](media/synapse-firewalls-setting-enable.png "Firewalls")
-
-4. Return to Synapse Studio and refresh the page. After authenticating your account, you should see the Synapse Studio home page for your workspace.
-
-    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
-
-5. If you see the Getting started dialog, select **Close**.
-
-    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
-
-### Task 3: Enable private endpoint on the data lake
+### Task 1: Enable private endpoint on the data lake
 
 Managed private endpoint uses a private IP address from within the Synapse workspace's Managed Virtual Network to connect to an Azure resource or your own private link service. Connections using managed private endpoints provide access to Azure resources or private link services.
 
-When you created the Synapse workspace earlier in this lab, you enabled the managed virtual network (VNet) option. This setting allows the workspace to be network-isolated and to be linked from the VNet privately to the SQL pool, Spark pool, and other Azure services, such as ADLS Gen2 and Azure Cosmos DB.
+When you created the Synapse workspace during the lab setup, you enabled the managed virtual network (VNet) option. If you are using a hosted lab environment, the Synapse workspace was provisioned with a VNet for you. This setting allows the workspace to be network-isolated and to be linked from the VNet privately to the SQL pool, Spark pool, and other Azure services, such as ADLS Gen2 and Azure Cosmos DB.
 
 The use of private links protects traffic from the risk of data breaches because it passes through Microsoft's backbone network.
 
@@ -177,39 +137,57 @@ When you create datasets with the ADLS Gen2 account's Synapse linked service lat
 
 In this task, you create a new managed private endpoint for the ADLS Gen2 account.
 
-1. In Synapse Studio, select the **Manage hub**.
+1. Navigate to the Azure portal (<https://portal.azure.com>).
+
+2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
+
+    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
+
+3. Select the **Overview** blade in the left-hand menu, then select **Open** underneath **Open Synapse Studio** to navigate to Synapse Studio for this workspace.
+
+    ![The Open link is highlighted.](media/open-synapse-studio.png "Open Synapse Studio")
+
+4. If you see the Getting started dialog, select **Close**.
+
+    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
+
+5. In Synapse Studio, select the **Manage hub**.
 
     ![Manage hub.](media/manage-hub.png "Manage hub")
 
-2. Select **Managed private endpoints** on the left-hand menu, then select **+ New**.
+6. Select **Managed private endpoints** on the left-hand menu, then select **+ New**.
 
     ![The new button is highlighted.](media/managed-private-endpoints-new.png "Managed private endpoints")
 
-3. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+7. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
 
     ![The ADLS Gen2 option is selected.](media/managed-private-endpoints-new-type.png "New managed private endpoint")
 
-4. On the new managed private endpoint form, enter **`data-lake`** for the name. Select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`), then select **Create**.
+8. On the new managed private endpoint form, enter **`data-lake`** for the name. Select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + unique id), then select **Create**.
 
     ![The form is configured as described.](media/managed-private-endpoint-new-form.png "New managed private endpoint")
 
-5. Return to the `synapse-lab-infrastructure` resource group and select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`) within.
+9. While you are in the Manage hub, select **SQL pools** on the left-hand menu. If the dedicated SQL pool (`SqlPool`) is paused, hover over it and select **Resume**.
 
-    ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
+    ![The resume button is highlighted.](media/resume-sql-pool.png "SQL pools")
 
-6. Select **Private endpoint connections** on the left-hand menu **(1)**. You should see the new private endpoint connection in a Pending status. Before you can use it, you must approve the request. **Check** the pending request **(2)**, then select **Approve**.
+10. Return to the `synapse-lab-retail` resource group used for this lab, and select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + unique id) within.
 
-    ![The pending connection requet is checked and the Approve button is highlighted.](media/adls-approve-private-endpoint.png "Private endpoint connections")
+    ![The ADLS Gen2 account is highlighted in the resource group.](media/resource-group-adls.png "Resource group")
 
-7. Enter a description for the approval, such as "Synapse data lake", then select **Yes** to complete the approval.
+11. Select **Networking** on the left-hand menu **(1)**, then select the **Private endpoint connections** tab **(2)**. You should see the new private endpoint connection in a Pending status. Before you can use it, you must approve the request. **Check** the pending request **(3)**, then select **Approve (4)**.
+
+    ![The pending connection request is checked and the Approve button is highlighted.](media/adls-approve-private-endpoint.png "Private endpoint connections")
+
+12. Enter a description for the approval, such as "Synapse data lake", then select **Yes** to complete the approval.
 
     ![The form is displayed as described.](media/adls-approve-connection.png "Approve connection")
 
-8. Return to Synapse studio and select the **Manage hub**.
+13. Return to Synapse studio and select the **Manage hub**.
 
     ![Manage hub.](media/manage-hub.png "Manage hub")
 
-9. Select **Managed private endpoints** on the left-hand menu. You should see the new **data-lake** private endpoint. It will take about 1 minute for the approval status to refresh. Select the **Refresh** button periodically until the approval status shows as Approved.
+14. Select **Managed private endpoints** on the left-hand menu. You should see the new **data-lake** private endpoint. It will take about 1-2 minutes for the approval status to refresh. Select the **Refresh** button periodically until the approval status shows as Approved.
 
     ![The new data-lake private endpoint is highlighted.](media/managed-private-endpoints.png "Managed private endpoints")
 
@@ -236,6 +214,10 @@ Later on in this lab, you will create a data pipeline that includes a copy activ
 
     ![The script is displayed as described.](media/sql-create-user-add-to-role.png "Create user and add to role")
 
+    **Note**: If you receive an error after running the script, `User, group, or role 'synapselabretail#####' already exists in the current database.`, you can ignore the error and continue. This may happen if you are running the lab in a hosted environment.
+
+    ![The error is highlighted.](media/managed-identity-error.png "User, group, or role already exists in the current database")
+
 ### Task 5: Managed identity
 
 When accessing other services in the Azure Synapse workspace, authentication is now possible using a system allocated ID. This allows authentication in conjunction with Azure AD without using the credentials issued within each service (such as a Data Lake Storage access key).
@@ -260,11 +242,11 @@ When accessing other services in the Azure Synapse workspace, authentication is 
 
     ![ADLS Gen2 is highlighted.](media/new-linked-service-adls-gen2.png "New linked service")
 
-6. On the new linked service form, select **Managed Identity** for the authentication method, select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + your initials + `adls`). You will see the `data-lake` **Managed private endpoint** selected with the **Approved** status, and the Managed identity name and object ID values displayed below **(3)**.
+6. On the new linked service form, select **Managed Identity** for the authentication method, select the ADLS Gen2 primary account for the Synapse workspace (ex. `synapselabretail` + unique id). You will see the `data-lake` **Managed private endpoint** selected with the **Approved** status, and the Managed identity name and object ID values displayed below **(3)**.
 
     ![The new linked service form is displayed.](media/new-linked-service-managed-identity.png "New linked service")
 
-7. Select **Cancel**. We do not need to create this linked service.
+7. Select **Create** to finish creating the new linked service.
 
 ## Exercise 2: Data collection
 
@@ -327,7 +309,7 @@ You will learn:
 
     ![The synapse-lab-infrastructure search results are displayed.](media/search-resource-group.png "Search")
 
-2. Within the resource group, select the **`handson-iothub-sensor + <unique suffix>`** IoT Hub account.
+2. Within the resource group, select the **`handson-iothub-sensor + <unique suffix>`** IoT Hub account (notice there are two IoT Hub accounts - this one contains the word **sensor**).
 
     ![The handson-iothub-sensor account is highlighted.](media/resource-group-iothub-sensor.png "IoT Hub - Sensor")
 
@@ -491,7 +473,7 @@ You will learn:
    | Field                          | Value                                              |
    | ------------------------------ | ------------------------------------------         |
    | Input alias                   | _enter `rf-m-item`_              |
-   | Storage account                 | _select `synapselabretail` + your initials + `adls` (example: `synapselabretailjdhadls`) This is the ADLS Gen2 account you created along with the Synapse Analytics workspace_                      |
+   | Storage account                 | _select `synapselabretail` + unique id (example: `synapselabretail311170`) This is the ADLS Gen2 account created along with the Synapse Analytics workspace_                      |
    | Container           | _select `Use existing`, then select **`sampledata`**_      |
    | Path pattern | _enter `master/m_item/m_item.csv`_             |
    | Event serialization format | _select `CSV`_ |
@@ -600,13 +582,13 @@ The concept of this use is expressed in this hands-on training, as follows.
 
 2. Open Windows Explorer and navigate to **`C:\handson\program\`**.
 
-3. Open **SendFaceData.js** in Notepad and replace the `connectionString` value between the single quotes (`'REPLACE-WITH-YOUR-CONNECTION-STRING'`) on **line 7** with the IoT device connection string that you copied in Task 4 (for AI camera).
+3. Open **SendFaceData.js** in Notepad and replace the `connectionString` value between the single quotes (`'REPLACE-WITH-YOUR-CONNECTION-STRING'`) on **line 7** with the IoT device connection string that you copied in Task 2 (for AI camera).
 
     ![The connection string line is highlighted.](media/edit-sendfacedata.png "SendFaceData in Notepad")
 
 4. **Save** the file.
 
-5. Open **SendSensorData.js** in Notepad and replace the `connectionString` value between the single quotes (`'REPLACE-WITH-YOUR-CONNECTION-STRING'`) on **line 7** with the IoT device connection string that you copied in Task 6 (for weight sensor).
+5. Open **SendSensorData.js** in Notepad and replace the `connectionString` value between the single quotes (`'REPLACE-WITH-YOUR-CONNECTION-STRING'`) on **line 7** with the IoT device connection string that you copied in Task 4 (for weight sensor).
 
     ![The connection string line is highlighted.](media/edit-sendsensordata.png "SendFaceData in Notepad")
 
@@ -707,9 +689,9 @@ The diagram below shows the Synapse Studio elements that help us build the data 
 
     ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
 
-2. In the **Overview** blade, select the **Workspace web URL** or **Launch Synapse Studio** to navigate to Synapse Studio for this workspace.
+2. Select the **Overview** blade in the left-hand menu, then select **Open** underneath **Open Synapse Studio** to navigate to Synapse Studio for this workspace.
 
-    ![The workspace web URL is highlighted.](media/synapse-workspace-url.png "Workspace web URL")
+    ![The Open link is highlighted.](media/open-synapse-studio.png "Open Synapse Studio")
 
 3. In Synapse Studio, navigate to the **Data hub** in the left-hand menu.
 
@@ -874,7 +856,7 @@ Sample data (data items: `date`, `gender`, `age`, and `count`):
 
 4. Select **{} Add code** to add a new cell to the notebook.
 
-5. Paste the following into the cell. Replace **`YOUR_DATA_LAKE_NAME`** with the name of the primary ADLS Gen2 account for your Synapse workspace (ex. `synapselabretail` + your initials + `adls`):
+5. Paste the following into the cell. Replace **`YOUR_DATA_LAKE_NAME`** with the name of the primary ADLS Gen2 account for your Synapse workspace (ex. `synapselabretail` + unique id):
 
     ```python
     file_path = 'abfss://sampledata@YOUR_DATA_LAKE_NAME.dfs.core.windows.net/out/join/'
@@ -988,7 +970,7 @@ The interactive authoring capability is used during authoring for functionalitie
    | Field                          | Value                                              |
    | ------------------------------ | ------------------------------------------         |
    | Name | _enter `input_sensor`_ |
-   | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+   | Linked service | _select `AzureDataLakeStorage1` (This is the linked service that you created at the beginning of the lab)_ |
    | File path | _enter `sampledata` for the file system, then enter `tran/sensor/2020/04/01` for the directory_ |
    | Import schema | _select `From connection/store`_ |
 
@@ -1023,7 +1005,7 @@ The interactive authoring capability is used during authoring for functionalitie
    | Field                          | Value                                              |
    | ------------------------------ | ------------------------------------------         |
    | Name | _enter `input_face`_ |
-   | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+   | Linked service | _select `AzureDataLakeStorage1` (This is the linked service that you created at the beginning of the lab)_ |
    | File path | _enter `sampledata` for the file system, then enter `tran/face/2020/04/01` for the directory_ |
    | Import schema | _select `From connection/store`_ |
 
@@ -1078,7 +1060,7 @@ The interactive authoring capability is used during authoring for functionalitie
    | Field                          | Value                                              |
    | ------------------------------ | ------------------------------------------         |
    | Name | _enter `output_data`_ |
-   | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+   | Linked service | _select `AzureDataLakeStorage1` (This is the linked service that you created at the beginning of the lab)_ |
    | File path | _enter `sampledata` for the file system, then enter `out/join` for the directory_ |
    | Import schema | _select `From connection/store`_ |
 
@@ -1119,7 +1101,7 @@ The interactive authoring capability is used during authoring for functionalitie
 
    ![The form is completed as described.](media/df-sensor-settings.png "Source settings")
 
-6. Turn on **Data flow debug** at the top of the data flow screen.
+6. Turn on **Data flow debug** at the top of the data flow screen, then select **OK** in the dialog that appears.
 
     > It will take about 3-4 minutes for the debug to turn on.
 
@@ -1127,7 +1109,7 @@ The interactive authoring capability is used during authoring for functionalitie
 
     **Tip:** Handling schema errors:
 
-    In a data flow, when the fields in the input data (Source) frequently change, build in generic data conversion logic to ingest errors flexibly. Select Allow Schema drift in Options when adding a Source or Sink, to import and write all fields sent and received in addition to the column and type defined in the Data flow in advance.
+    When the fields in the input data (Source) frequently change, the data flow's built-in generic data conversion logic enables you to ingest errors flexibly. Select Allow Schema drift in Options when adding a Source or Sink, to import and write all fields sent and received in addition to the column and type defined in the Data flow in advance.
 
     Moreover, when you select Infer drifted column types in Options, the data type of columns not defined in advance (errors) will be assumed automatically.
 
@@ -1315,7 +1297,7 @@ The interactive authoring capability is used during authoring for functionalitie
     | Field                          | Value                                              |
     | ------------------------------ | ------------------------------------------         |
     | Name | _enter `input_item_count`_ |
-    | Linked service | _select `synapselabretail` + your initials + `asws-WorkspaceDefaultStorage` (example: `synapselabretailjdhasws-WorkspaceDefaultStorage`) This is the linked service for the ADLS Gen2 account you created along with the Synapse Analytics workspace_ |
+    | Linked service | _select `AzureDataLakeStorage1` (This is the linked service that you created at the beginning of the lab)_ |
     | File path | _enter `sampledata` for the file system, then enter `out/item_count` for the directory_ |
     | Import schema | _select `From connection/store`_ |
 
@@ -1338,16 +1320,16 @@ The interactive authoring capability is used during authoring for functionalitie
 
     ![The sink tab is highlighted.](media/pipeline-copy-sink-new.png "New sink dataset")
 
-19. Select **SQL Analytics pool**, then select **Continue**.
+19. Select **Azure Synapse dedicated SQL pool**, then select **Continue**.
 
-    ![SQL Analytics pool is highlighted.](media/new-dataset-sql-pool.png "New dataset")
+    ![Azure Synapse dedicated SQL pool is highlighted.](media/new-dataset-sql-pool.png "New dataset")
 
 20. In the dataset properties form, complete the following:
 
     | Field                          | Value                                              |
     | ------------------------------ | ------------------------------------------         |
     | Name | _enter `output_item_count`_ |
-    | SQL Analytics pool | _select `SqlPool`_ |
+    | Azure Synapse dedicated SQL pool | _select `SqlPool`_ |
     | Table name | _select `dbo.t_item_count`_ |
     | Import schema | _select `From connection/store`_ |
 
@@ -1358,7 +1340,7 @@ The interactive authoring capability is used during authoring for functionalitie
 22. Verify that `output_item_count` is the selected sink dataset, then set the `Copy method` to **Bulk insert** and paste the following SQL script into the **Pre-copy script** field:
 
     ```sql
-    TRUNCATE TABLE [dbo].[t_item_count]`
+    TRUNCATE TABLE [dbo].[t_item_count]
     ```
 
     ![The new dataset is selected.](media/pipeline-copy-sink.png "Sink")
@@ -1609,7 +1591,7 @@ Time required: 15 minutes
 
 ### Task 1: Login to Power BI
 
-1. In a new browser tab, navigate to <https://powerbi.microsoft.com/en-us/>.
+1. In a new browser tab, navigate to <https://powerbi.microsoft.com/>.
 
 2. Sign in with the same account used to sign in to Azure by selecting the **Sign in** link on the upper-right corner.
 
@@ -1619,7 +1601,7 @@ Time required: 15 minutes
 
     ![The create a workspace button is highlighted.](media/pbi-create-workspace.png "Create a workspace")
 
-2. Set the name to **SynapseRetail**, then select **Save**.
+2. Set the name to **SynapseRetail** + `<unique id>` (where `<unique id>` is the unique id provided to you for your hosted environment, or your initials), then select **Save**.
 
     ![The form is displayed.](media/pbi-create-workspace-form.png "Create a workspace")
 
@@ -1642,7 +1624,7 @@ Time required: 15 minutes
     | Field                          | Value                                              |
     | ------------------------------ | ------------------------------------------         |
     | Name | _enter `handson_powerbi`_ |
-    | Workspace name | _select `SynapseRetail`_ |
+    | Workspace name | _select `SynapseRetail` + `<unique id>` (the name of the workspace you created)_ |
 
     ![The form is displayed.](media/new-linked-service-power-bi-form.png "New linked service")
 
