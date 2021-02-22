@@ -14,7 +14,8 @@
     - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
   - [Exercise 2: Create a SQL Pool and table](#exercise-2-create-a-sql-pool-and-table)
     - [Task 1: Create a SQL Pool](#task-1-create-a-sql-pool)
-    - [Task 2: Create table](#task-2-create-table)
+    - [Task 2: Allow pipelines to access SQL pools](#task-2-allow-pipelines-to-access-sql-pools)
+    - [Task 3: Create table](#task-3-create-table)
   - [Exercise 3: Implement Spark ETL with the GUI](#exercise-3-implement-spark-etl-with-the-gui)
     - [Task 1: Create ADLS Gen2 Linked Service](#task-1-create-adls-gen2-linked-service)
     - [Task 2: Create mapping data flow sources](#task-2-create-mapping-data-flow-sources)
@@ -190,7 +191,7 @@ Synapse Studio is the web-based interface for working with your Azure Synapse An
 
 ### Task 2: Create a Copy pipeline
 
-1. Select the **Orchestrate** hub, select **+**, then select **Pipeline**.
+1. Select the **Integrate** hub, select **+**, then select **Pipeline**.
 
     ![The new pipeline link is highlighted.](media/new-pipeline.png "New pipeline")
 
@@ -274,9 +275,7 @@ Time required: 20 minutes
 
 ![The SQL Pool portion of the diagram is highlighted.](media/diagram-sql-pool.png "SQL Pool")
 
-SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data.
-
-A SQL pool offers T-SQL based compute and storage capabilities. After creating a SQL pool in your Synapse workspace, data can be loaded, modeled, processed, and delivered for faster analytic insight.
+A dedicated SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data. It offers T-SQL based compute and storage capabilities. After creating a dedicated SQL pool in your Synapse workspace, data can be loaded, modeled, processed, and delivered for faster analytic insight.
 
 ### Task 1: Create a SQL Pool
 
@@ -288,7 +287,7 @@ A SQL pool offers T-SQL based compute and storage capabilities. After creating a
 
     ![The SQL pools blade is displayed.](media/new-sql-pool.png "SQL pools")
 
-3. Enter **aiaddw** for the SQL pool name, select the **DW100c** performance level, then select **Review + create**.
+3. Enter **aiaddw** for the dedicated SQL pool name, select the **DW100c** performance level, then select **Review + create**.
 
     ![The form is displayed as described.](media/new-sql-pool-form.png "Create SQL pool")
 
@@ -298,7 +297,23 @@ A SQL pool offers T-SQL based compute and storage capabilities. After creating a
 
     ![The SQL pool is deploying and the refresh button is highlighted.](media/sql-pool-deploying.png "SQL pools")
 
-### Task 2: Create table
+### Task 2: Allow pipelines to access SQL pools
+
+Later in this lab, you will use the Automated Integration Runtime (IR) to copy data to the dedicated SQL pool within a data flow. But first, you must adjust the system assigned managed identity settings for your Synapse workspace to allow pipelines to access the pool.
+
+1. Return to the Azure portal (<https://portal.azure.com>).
+
+2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
+
+    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
+
+3. Select the Synapse Workspace that you created for this lab, or that was provided for you in the lab environment.
+
+4. Select **Managed identities** in the left-hand menu, check the box to **Allow pipelines (running as workspace's system assigned identity) to access SQL pools**, then select **Save**.
+
+    ![The checkbox is checked.](media/synapse-allow-pipelines.png "Managed identities")
+
+### Task 3: Create table
 
 1. Select the **Develop** hub.
 
@@ -389,7 +404,7 @@ Mapping data flows provide an entirely visual experience with the Synapse Studio
     | Authentication method | Account Key | Default settings |
     | Account selection method | From Azure subscription | Default settings |
     | Azure subscription | Any | Select the Azure subscription for this lab |
-    | Storage account name | Any | Select the storage account you created when deploying the workspace |
+    | Storage account name | Any | Select the primary storage account for your Synapse workspace |
 
 ### Task 2: Create mapping data flow sources
 
@@ -491,7 +506,7 @@ Create a filter for the records.
 
     ![The enter filter box is highlighted.](media/flightdelay-filter-enter-filter.png "Filter settings")
 
-3. Copy and paste the following query into the query area to the right of FUNCTIONS. Select **Refresh** to review the data preview, then select **Save and finish**.
+3. Copy and paste the following query into the Expression box. Select **Refresh** to review the data preview, then select **Save and finish**.
 
     ```javascript
     toInteger(DepDelay) > 0
@@ -507,11 +522,11 @@ In this data, a delay of `1:30` is represented as `130`. Create a delay time col
 
     ![The plus button and Derived Column menu option are highlighted.](media/flightdelay-withairportcodes-add-derivedcolumn.png "Derived Column")
 
-2. Under Columns, type **CRSDepHour**, and then select **Expression**.
+2. Under Columns, type **CRSDepHour**, select **Expression**, then select **Open expression builder**.
 
     ![The derived column's settings blade is displayed.](media/flightdelay-withairportcodes-derivedcolumn-columns.png "Derived column's settings")
 
-3. Copy and paste the following query into EXPRESSION FOR FIELD "CRSDEPHOUR". Select **Refresh** to review the Data rpeview, and then select **Save and finish**.
+3. Copy and paste the following query into the Expression box. Select **Refresh** to review the Data preview, and then select **Save and finish**.
 
     ```javascript
     floor(toInteger(CRSDepTime)/100)
@@ -563,33 +578,17 @@ Add aggregation processing so that delays are aggregated at the granularity of t
 
     ![The Aggregates header is highlighted.](media/flightdelay-withairportcodes-aggregate-columns-aggregate.png "Aggregates")
 
-4. In Columns, type **DepDelayCount**, and then select **Expression**.
+4. In Columns, type **DepDelayCount**, select **Expression**, then paste `sum(1)`.
 
     ![The DepDelayCount column is highlighted.](media/flightdelay-withairportcodes-aggregate-add-depdelaycount.png "DepDelayCount")
 
-5. Paste the following expression into EXPRESSION FOR FIELD "DEPDELAYCOUNT" and select **Save and finish**:
-
-    ```javascript
-    sum(1)
-    ```
-
-    ![The expression is highlighted.](media/flightdelay-withairportcodes-aggregate-depdelaycount-expression.png "Visual expression builder")
-
-6. Select **+** to the right of the column you just added, then select **Add column**.
+5. Select **+** to the right of the column you just added, then select **Add column**.
 
     ![The add column menu item is highlighted.](media/flightdelay-withairportcodes-aggregate-add-column.png "Add column")
 
-7. In Columns, type **DepDelay15Count**, and then select **Expression**.
+6. In Columns, type **DepDelay15Count**, select **Expression**, then paste `sum(toInteger(DepDel15))`.
 
     ![The DepDelayCount column is highlighted.](media/flightdelay-withairportcodes-aggregate-add-depdelay15count.png "DepDelayCount")
-
-8. Paste the following expression into EXPRESSION FOR FIELD "DEPDELAY15COUNT" and select **Save and finish**:
-
-    ```javascript
-    sum(toInteger(DepDel15))
-    ```
-
-    ![The expression is highlighted.](media/flightdelay-withairportcodes-aggregate-depdelay15count-expression.png "Visual expression builder")
 
 ### Task 7: Data join process
 
@@ -624,7 +623,7 @@ Add a sink process to output to the SQL Pool and create a dataset that defines t
 
     ![The new dataset button is highlighted.](media/flight-delay-sink-dataset-new.png "Sink")
 
-3. Select **Azure Synapse Analytics (formerly SQL DW)**, then select **Continue**.
+3. Select **Azure Synapse Analytics**, then select **Continue**.
 
     ![Azure Synapse Analytics is selected in the list.](media/flightdelay-sink-dataset-synapse.png "New dataset")
 
@@ -657,7 +656,7 @@ Add a sink process to output to the SQL Pool and create a dataset that defines t
 
 ### Task 9: Create and run Pipeline
 
-1. Select the **Orchestrate** hub, select **+**, then select **Pipeline**.
+1. Select the **Integrate** hub, select **+**, then select **Pipeline**.
 
     ![The new pipeline link is highlighted.](media/new-pipeline.png "New pipeline")
 
@@ -727,7 +726,7 @@ Power BI reports can be created, edited, and viewed from within Synapse Studio. 
 
     ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
 
-2. In the **Overview** blade, copy the **SQL endpoint** value.
+2. In the **Overview** blade, copy the **Dedicated SQL endpoint** value.
 
     ![The SQL endpoint is highlighted.](media/synapse-workspace-sql-endpoint.png "Synapse Workspace")
 
@@ -806,7 +805,7 @@ If you have a Power BI Pro license and have create permissions, perform the foll
 
     ![The create a workspace button is highlighted.](media/pbi-create-workspace-link.png "Create a workspace")
 
-3. Type **AIAD_SynapseWorkspace** for the workspace name, then select **Save**.
+3. Type **AIAD_SynapseWorkspace** + `<unique id>` (where `<unique id>` is the unique id provided for your hosted lab environment, your initials, or any other value that ensures a unique name) for the workspace name, then select **Save**.
 
     ![The workspace name and save button are highlighted.](media/pbi-create-workspace.png "Create a workspace")
 
@@ -880,7 +879,7 @@ If you were able to create a Power BI workspace, you can continue with this task
 
     ![Select the workspace, then click select.](media/pbi-ds-select-workspace.png "Publish to Power BI")
 
-13. When Power BI Desktop finishes publishing, sign in to the Power BI service (<https://powerbi.microsoft.com/landing/signin/>). Select the **AIAD_SynapseWorkspace** workspace on the left, then select the **Datasets** tab. Select **...(More options)** under the Actions column of the `FlightDelaysDS` dataset, then select **Settings**.
+13. When Power BI Desktop finishes publishing, sign in to the Power BI service (<https://powerbi.microsoft.com/landing/signin/>). Select the **AIAD_SynapseWorkspace** workspace on the left, then select the **Datasets + dataflows** tab. Select **...(More options)** under the Actions column of the `FlightDelaysDS` dataset, then select **Settings**.
 
     ![The dataset actions more options list is displayed with the Settings menu item highlighted.](media/pbi-more-options.png "More options")
 
@@ -888,7 +887,7 @@ If you were able to create a Power BI workspace, you can continue with this task
 
     ![Edit credentials is highlighted.](media/pbi-dataset-settings.png "Settings")
 
-15. Select the **OAuth2** authentication method and set the privacy level for this data source to **Public**. **Check the box** to have report viewers use their own Power BI identities in DirectQuery mode, then select **Sign in**.
+15. Select the **OAuth2** authentication method, then select **Sign in**.
 
     ![The dataset credentials are configured as described.](media/pbi-dataset-credentials.png "Configure FlightDelaysDS")
 
@@ -904,7 +903,7 @@ If you were able to create a Power BI workspace, you can continue with this task
 
     ![The New Power BI report icon is highlighted.](media/pbi-datasets-new-report.png "Power BI datasets")
 
-19. When the screen for the new report opens, run the report.
+19. When the screen for the new report opens, modify the report as you wish.
 
     ![The new Power BI report is displayed.](media/pbi-new-report.png "New report")
 
@@ -998,7 +997,7 @@ Azure Synapse Link for Azure Cosmos DB: (https://docs.microsoft.com/azure/cosmos
 
     ![The device's primary key is highlighted.](media/iot-device-primary-key.png "Primary key")
 
-8. Navigate back to the IoT Hub resource and select **Built-in endpoints** on the left-hand menu. Scroll down to **Consumer Groups**. In the **Create a new consumer group** box, enter **streamanalytics**. Select **Save** to apply your changes.
+8. Navigate back to the IoT Hub resource and select **Built-in endpoints** on the left-hand menu. Scroll down to **Consumer Groups**. In the **Create a new consumer group** box, enter **streamanalytics**.
 
     ![The streamanalytics consumer group is highlighted.](media/iot-hub-consumer-group.png "Built-in endpoints")
 
@@ -1097,7 +1096,7 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
     | Encoding | UTF-8 | Default settings |
     | Event compression type | None | Default settings |
 
-6. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob Storage/Data Lake Storage Gen2** in the drop-down menu.
+6. Select **Outputs** on the left-hand menu, select **+ Add**, then **Blob storage/ADLS Gen2** in the drop-down menu.
 
     ![The storage menu item is highlighted.](media/sa-add-storage-input.png "Outputs")
 
@@ -1112,7 +1111,7 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
     | Storage account | Any | Select the data lake storage account you created when you deployed Synapse Analytics |
     | Container | `datalake` (choose use existing) | |
     | Path pattern | `sensor-stream/{date}` | |
-    | Date format | `YYY/MM/DD` | Default settings |
+    | Date format | `YYYY/MM/DD` | Default settings |
     | Time format | HH | Default settings |
     | Event serialization format | JSON | Default settings |
     | Encoding | UTF-8 | Default settings |
@@ -1125,7 +1124,7 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
 
     ![The storage menu item is highlighted.](media/sa-add-storage-input.png "Outputs")
 
-9. In the `Blob Storage/Data Lake Storage Gen2` form, enter the values shown in the table below. Select **Save**.
+9. In the `Blob storage/ADLS Gen2` form, enter the values shown in the table below. Select **Save**.
 
     ![The form is shown as described below.](media/sa-add-storage-input-form-curated.png "Create Storage output")
 
@@ -1136,11 +1135,10 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
     | Storage account | Any | Select the data lake storage account you created when you deployed Synapse Analytics |
     | Container | `datalake` (choose use existing) | |
     | Path pattern | `curated/sensor_asa/{date}` | |
-    | Date format | `YYY/MM/DD` | Default settings |
+    | Date format | `YYYY/MM/DD` | Default settings |
     | Time format | HH | Default settings |
     | Event serialization format | Parquet | Default settings |
     | Encoding | UTF-8 | Default settings |
-    | Format | Line separated | Default settings |
     | Minimum rows | `2000` | Default settings |
     | Hours/minutes | `0` hours, `1` minute | Default settings |
     | Authentication mode | Connection string | Default settings |
@@ -1189,7 +1187,7 @@ Time required: 15 minutes
 
 ![The SQL Serverless portion of the diagram is highlighted.](media/diagram-sql-serverless.png "SQL Serverless")
 
-In addition to the traditional SQL data warehouse functionality, Azure Synapse Analytics has added SQL serverless as a way to execute SQL queries directly against the data lake. SQL serverless does not have persistent tables, but is billed based on query run time, enabling rapid data search and cost optimization.
+In addition to the traditional SQL data warehouse functionality, Azure Synapse Analytics has added serverless SQL pools as a way to execute SQL queries directly against the data lake. Serverless SQL pools do not have persistent tables, but are billed based on query run time, enabling rapid data search and cost optimization.
 
 ### Task 1: Query for Parquet files
 
@@ -1269,9 +1267,9 @@ In addition to the traditional SQL data warehouse functionality, Azure Synapse A
 
     ![The Synapse workspace is highlighted in the resource group.](media/resource-group-synapse-workspace.png "Resource group")
 
-2. In the **Overview** blade, copy the **SQL on-demand endpoint** value.
+2. In the **Overview** blade, copy the **Serverless SQL endpoint** value.
 
-    ![The SQL on-demand endpoint is highlighted.](media/synapse-workspace-sql-od-endpoint.png "Synapse Workspace")
+    ![The Serverless SQL endpoint is highlighted.](media/synapse-workspace-sql-od-endpoint.png "Synapse Workspace")
 
 3. Open Power BI Desktop. Close the sign-in window with the **X** on the upper-right corner.
 
@@ -1281,7 +1279,7 @@ In addition to the traditional SQL data warehouse functionality, Azure Synapse A
 
     ![The options are highlighted as described.](media/pbi-get-data.png "Get Data")
 
-5. Set the **Server** value to your copied SQL on-demand endpoint, and enter **AIAD** for the **Database** name. Select the **DirectQuery** data connectivity mode, then click **OK**.
+5. Set the **Server** value to your copied serverless SQL endpoint, and enter **AIAD** for the **Database** name. Select the **DirectQuery** data connectivity mode, then click **OK**.
 
     ![The connection settings are configured as described.](media/pbi-connection-od.png "SQL Server database")
 
@@ -1378,7 +1376,7 @@ In this task, you will use the `SensorPrep.ipynb` notebook in the `source/ETLand
 
     ![The SensorPrep file is highlighted.](media/sensorprep-file.png "Open")
 
-4. With the `SensorPrep` notebook open, edit the storage `account_name` value in **Cell 2**. Enter just the account name (eg. `synapselabinfrajdhadls`) and not the fully-qualified name.
+4. With the `SensorPrep` notebook open, edit the storage `account_name` value in **Cell 2**. Enter just the account name (eg. `synapselabinfra311568`) and not the fully-qualified name.
 
     ![The account name variable is highlighted.](media/sensorprep-cell2.png "Edit Cell 2")
 
@@ -1398,6 +1396,10 @@ In this task, you will use the `SensorPrep.ipynb` notebook in the `source/ETLand
     | Series Group | |
     | Aggregation | MAX |
     | Aggregation over all results | Unchecked |
+
+7. When you are finished running all of the cells in the notebook, select the **Stop session** button on the top-right corner of the notebook, then select **Stop now** when prompted. This ends the Spark session so that the compute resources are free to execute the next notebook.
+
+    ![The Stop session button is highlighted.](media/notebook-stop-session.png "Stop session")
 
 ## Exercise 8: Spark ML learning/inference and SQL pool load
 
@@ -1447,55 +1449,51 @@ Create a sensor summary report in Power BI.
 
     ![The Get Data dialog is displayed.](media/pbi-get-data-sensor.png "Get Data")
 
-4. Select **Get Data**, then select **Azure** in the left-hand menu of the dialog that appears. Select **Azure Synapse Analytics (SQL DW)**, then select **Connect**.
-
-    ![The options are highlighted as described.](media/pbi-get-data.png "Get Data")
-
-5. Set the **Server** value to your copied SQL endpoint, and enter **aiaddw** for the **Database** name. Select the **DirectQuery** data connectivity mode, then click **OK**.
+4. Set the **Server** value to your copied SQL endpoint, and enter **aiaddw** for the **Database** name. Select the **DirectQuery** data connectivity mode, then click **OK**.
 
     ![The connection settings are configured as described.](media/pbi-connection.png "SQL Server database")
 
-6. **Optional**: If you are prompted to sign in, select **Microsoft account** on the left-hand menu. **Sign in**, then click **Connect**.
+5. **Optional**: If you are prompted to sign in, select **Microsoft account** on the left-hand menu. **Sign in**, then click **Connect**.
 
     ![The authentication form is displayed.](media/pbi-auth.png "Authentication")
 
-7. Check the check boxes next to **PREDICT_SensorRUL** and **Sensor**, then click **Load**.
+6. Check the check boxes next to **PREDICT_SensorRUL** and **Sensor**, then click **Load**.
 
     ![The two tables are checked and the Load button is highlighted.](media/pbi-load-2-tables.png "Navigator")
 
-8. If you get prompted by Power BI Desktop that adding new data sources presents a potential security risk, click **OK** to build the model.
+7. If you get prompted by Power BI Desktop that adding new data sources presents a potential security risk, click **OK** to build the model.
 
     ![The OK button is highlighted.](media/pbi-security-risk.png "Potential security risk")
 
-9. Select the **Modeling** tab, then click **Manage relationships** in the menu.
+8. Select the **Modeling** tab, then click **Manage relationships** in the menu.
 
     ![Manage relationships is highlighted.](media/pbi-modeling-tab.png "Modeling tab")
 
-10. Click **New**.
+9. Click **New**.
 
     ![The New button is highlighted.](media/pbi-relationships-new.png "Manage relationships")
 
-11. Select the **PREDICT_SensorRUL** table in the first drop-down list, then select **Sensor** in the second drop-down list. Click **OK** to apply the table relationship. Notice that it automatically selected `DeviceId` as the relationship key and set the cardinality to `1:*`.
+10. Select the **PREDICT_SensorRUL** table in the first drop-down list, then select **Sensor** in the second drop-down list. Click **OK** to apply the table relationship. Notice that it automatically selected `DeviceId` as the relationship key and set the cardinality to `1:*`.
 
     ![The two tables are added and the OK button is highlighted.](media/pbi-relationships-predict-sensor.png "Create relationship")
 
-12. Click **New** to create a new relationship.
+11. Click **New** to create a new relationship.
 
     ![The New button is highlighted.](media/pbi-relationship-new2.png "Manage relationships")
 
-13. Select the **PREDICT_SensorRUL** table in the first drop-down list, then select **v_sensor_ondemand** in the second drop-down list. Click **OK to apply the table relationship. This adds a relationship to the SQL serverless (On-demand) view you created earlier.
+12. Select the **PREDICT_SensorRUL** table in the first drop-down list, then select **v_sensor_ondemand** in the second drop-down list. Click **OK to apply the table relationship. This adds a relationship to the SQL serverless (On-demand) view you created earlier.
 
     ![The two tables are added and the OK button is highlighted.](media/pbi-relationships-predict-od.png "Create relationship")
 
-14. Click **Close**.
+13. Click **Close**.
 
     ![The Close button is highlighted.](media/pbi-relationship-new3.png "Manage relationships")
 
-15. On the Report tab, click **+** to add a new report.
+14. On the Report tab, click **+** to add a new report.
 
     ![The + button is highlighted on the report tab.](media/pbi-new-tab.png "New report")
 
-16. Click an empty location in the report area. Under Visualizations, select **Table**, then use the table below to set the field values.
+15. Click an empty location in the report area. Under Visualizations, select **Table**, then use the table below to set the field values.
 
     | Parameters | Settings | Remarks |
     | --- | --- | --- |
@@ -1508,7 +1506,7 @@ Create a sensor summary report in Power BI.
 
     ![The chart is configured as described.](media/pbi-table.png "Table")
 
-17. Click an empty location in the report area. Under Visualizations, select **Clustered column chart**, then use the table below to set the field values.
+16. Click an empty location in the report area. Under Visualizations, select **Clustered column chart**, then use the table below to set the field values.
 
     | Parameters | Settings | Remarks |
     | --- | --- | --- |
@@ -1518,11 +1516,11 @@ Create a sensor summary report in Power BI.
 
     ![The chart is configured as described.](media/pbi-clustered-column.png "Clustered column chart")
 
-18. Click **Cycle** and select **Maximum**. This lets us verify how many cycles were sustained before required maintenance for each Device.
+17. Click **Cycle** and select **Maximum**. This lets us verify how many cycles were sustained before required maintenance for each Device.
 
     ![The Maximum value is selected for Cycle.](media/pbi-cycle-max.png "Max of Cycle")
 
-19. Click an empty location in the report area. Under Visualizations, select **Line chart**, then use the table below to set the field values.
+18. Click an empty location in the report area. Under Visualizations, select **Line chart**, then use the table below to set the field values.
 
     | Parameters | Settings | Remarks |
     | --- | --- | --- |
@@ -1532,11 +1530,11 @@ Create a sensor summary report in Power BI.
 
     ![The chart is configured as described.](media/pbi-line-chart2.png "Line chart")
 
-20. Click **Sensor11** to and select **Average** to make sure that the sensor blur is growing in the second half of the cycle prior to maintenance.
+19. Click **Sensor11** to and select **Average** to make sure that the sensor blur is growing in the second half of the cycle prior to maintenance.
 
     ![The Average value is selected for Sensor11.](media/pbi-sensor11-avg.png "Average of Sensor11")
 
-21. **Save** the report.
+20. **Save** the report.
 
 ## Exercise 10: End processing
 
