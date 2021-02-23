@@ -9,12 +9,12 @@
     - [Task 3: Set up user access administrator](#task-3-set-up-user-access-administrator)
     - [Task 4: IoT Hub resource creation](#task-4-iot-hub-resource-creation)
     - [Task 5: Create and configure Stream Analytics resources](#task-5-create-and-configure-stream-analytics-resources)
-  - [Exercise 2: Moving data to the data lake using Copy activity](#exercise-2-moving-data-to-the-data-lake-using-copy-activity)
+  - [Exercise 2: Movie data to the data lake using Copy activity](#exercise-2-movie-data-to-the-data-lake-using-copy-activity)
     - [About Synapse Pipeline](#about-synapse-pipeline)
     - [Task 1: Log in to Synapse Studio](#task-1-log-in-to-synapse-studio)
-    - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
-    - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
-    - [Task 3: Create a SQL Pool](#task-3-create-a-sql-pool)
+    - [Task 2: Create a Linked Service](#task-2-create-a-linked-service)
+    - [Task 3: Create a Copy pipeline](#task-3-create-a-copy-pipeline)
+    - [Task 4: Create a SQL Pool](#task-4-create-a-sql-pool)
   - [Lab guide](#lab-guide)
 
 ## Pre-requisites
@@ -184,7 +184,7 @@ Data access permissions on the data lake must be set separately from the resourc
     | Hosting environment | Cloud | |
     | Streaming units | 1 | |
 
-## Exercise 2: Moving data to the data lake using Copy activity
+## Exercise 2: Movie data to the data lake using Copy activity
 
 Time required: 30 minutes
 
@@ -229,7 +229,7 @@ Synapse Studio is the web-based interface for working with your Azure Synapse An
 
     ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
 
-### Task 1: Create a Linked Service
+### Task 2: Create a Linked Service
 
 1. Select the **Manage** hub, **Linked services**, then select **+ New**.
 
@@ -253,7 +253,7 @@ Synapse Studio is the web-based interface for working with your Azure Synapse An
     | SAS token| '' | Enter two single quotes |
     | Test connection | To linked service | Default settings |
 
-### Task 2: Create a Copy pipeline
+### Task 3: Create a Copy pipeline
 
 1. Select the **Integrate** hub, select **+**, then select **Pipeline**.
 
@@ -333,7 +333,7 @@ Synapse Studio is the web-based interface for working with your Azure Synapse An
 
     ![The datalake data is displayed.](media/datalake-files.png "Datalake files")
 
-### Task 3: Create a SQL Pool
+### Task 4: Create a SQL Pool
 
 ![The SQL Pool portion of the diagram is highlighted.](media/diagram-sql-pool.png "SQL Pool")
 
