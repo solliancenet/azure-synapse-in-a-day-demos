@@ -3,12 +3,18 @@
 - [Azure Synapse in a day demos - Infrastructure](#azure-synapse-in-a-day-demos---infrastructure)
   - [Pre-requisites](#pre-requisites)
   - [Exercise 0: Download lab files](#exercise-0-download-lab-files)
-  - [Exercise 1: Deploy Azure Synapse Analytics](#exercise-1-deploy-azure-synapse-analytics)
+  - [Exercise 1: Deploy Resources](#exercise-1-deploy-resources)
     - [Task 1: Create Azure Synapse Analytics workspace](#task-1-create-azure-synapse-analytics-workspace)
     - [Task 2: Set up blob data owner](#task-2-set-up-blob-data-owner)
     - [Task 3: Set up user access administrator](#task-3-set-up-user-access-administrator)
     - [Task 4: IoT Hub resource creation](#task-4-iot-hub-resource-creation)
     - [Task 5: Create and configure Stream Analytics resources](#task-5-create-and-configure-stream-analytics-resources)
+  - [Exercise 2: Moving data to the data lake using Copy activity](#exercise-2-moving-data-to-the-data-lake-using-copy-activity)
+    - [About Synapse Pipeline](#about-synapse-pipeline)
+    - [Task 1: Log in to Synapse Studio](#task-1-log-in-to-synapse-studio)
+    - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
+    - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
+    - [Task 3: Create a SQL Pool](#task-3-create-a-sql-pool)
   - [Lab guide](#lab-guide)
 
 ## Pre-requisites
@@ -43,7 +49,7 @@ The lab files are located in a GitHub repo. You must unzip the file and extract 
 
     ![The extracted files are displayed in Windows Explorer.](media/extracted-files.png "Extracted files")
 
-## Exercise 1: Deploy Azure Synapse Analytics
+## Exercise 1: Deploy Resources
 
 Time required: 15 minutes
 
@@ -177,6 +183,179 @@ Data access permissions on the data lake must be set separately from the resourc
     | Region | Select the region closest to you, such as `West US`. | |
     | Hosting environment | Cloud | |
     | Streaming units | 1 | |
+
+## Exercise 2: Moving data to the data lake using Copy activity
+
+Time required: 30 minutes
+
+In this exercise, you will import a large amount of data into the primary data lake account.
+
+![The copy activity portion of the diagram is highlighted.](media/diagram-copy.png "Copy activity")
+
+### About Synapse Pipeline
+
+The data integration feature, Synapse Pipeline, is designed with the following concepts:
+
+- **Linked Service**: Contains definitions about the connection, such as the database and server information.
+- **Dataset**: Browses the Linked Service and defines table information, for example.
+- **Activity**: Browses, for example, a Dataset to define processing such as data movement.
+- **Pipeline**: Defines the order and conditions in which Activities are run.
+- **Integration Runtime**: Defines the processing infrastructure used by Linked Services and Activities.
+- **Trigger**: Defines when and how the Pipeline will run.
+
+### Task 1: Log in to Synapse Studio
+
+Synapse Studio is the web-based interface for working with your Azure Synapse Analytics workspace.
+
+![The Azure Synapse Analytics area of the diagram is highlighted.](media/synapse.png "Azure Synapse Analytics")
+
+1. Navigate to the Azure portal (<https://portal.azure.com>).
+
+2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
+
+    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
+
+3. Select the Synapse Workspace that you created for this lab, or that was provided for you in the lab environment.
+
+4. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+    After authenticating your account, you should see the Synapse Studio home page for your workspace.
+
+    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
+
+5. If you see the Getting started dialog, select **Close**.
+
+    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
+
+### Task 1: Create a Linked Service
+
+1. Select the **Manage** hub, **Linked services**, then select **+ New**.
+
+    ![The new linked service option is highlighted.](media/new-linked-service.png "New linked service")
+
+2. Select **Azure Blob Storage**, then select **Continue**.
+
+    ![Azure Blob Storage and the Continue button are highlighted.](media/new-linked-service-blob-storage.png "New linked service")
+
+3. Enter each setting described below, then select **Test connection**. When the connection is successful, select **Create**.
+
+    ![The new linked service form is displayed.](media/new-linked-service-holsource.png "New linked service")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `HOLSource` | |
+    | Description | No entry required | Default settings |
+    | Connect via integration runtime | AutoResolveIntegrationRuntime | Default settings |
+    | Authentication method | SAS URL | |
+    | SAS URL | `https://solliancepublicdata.blob.core.windows.net` | |
+    | SAS token| '' | Enter two single quotes |
+    | Test connection | To linked service | Default settings |
+
+### Task 2: Create a Copy pipeline
+
+1. Select the **Integrate** hub, select **+**, then select **Pipeline**.
+
+    ![The new pipeline link is highlighted.](media/new-pipeline.png "New pipeline")
+
+2. For **Name**, enter `ImportData`, then select **Properties** to close the dialog.
+
+    ![The properties dialog is displayed.](media/import-data-name.png "ImportData pipeline name")
+
+3. Expand **Move & transform** under the Activities menu. Drag and drop the **Copy data** activity onto the canvas area to the right.
+
+    ![The copy data activity has an arrow pointing to where it was added to the canvas.](media/import-data-add-copy-data.png "Add copy data activity")
+
+4. Select the **Source** tab, then select **+ New** next to the source dataset.
+
+    ![The source tab and new button are both highlighted.](media/import-data-source-new.png "Source")
+
+5. Select **Azure Blob Storage**, then select **Continue**.
+
+    ![Azure Blob Storage and the Continue button are highlighted.](media/import-data-source-new-blob-storage.png "New dataset")
+
+6. Select the **Binary** format, then select **Continue**.
+
+    ![Binary and the Continue button are highlighted.](media/import-data-source-new-blob-storage-binary.png "Select format")
+
+7. Enter each setting as displayed in the table below, and then select **OK**.
+
+    ![The form is completed as described in the table below.](media/import-data-source-new-blob-storage-properties.png "Set properties")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `holsource` | Be careful not to include extra spaces when copying |
+    | Linked service | HOLSource | Select the linked service you created earlier |
+    | File path | `synapse-in-a-day/infrastructure` | Enter `synapse-in-a-day` in the first field, and `infrastructure` in the second field. *Note*: you may see an error if you try to browse, due to the lack of list permissions on the entire public data source. To review the contents, select the drop down arrow and select "From specified path" |
+
+8. Select the **Sink** tab, then select **+ New** next to the sink dataset.
+
+    ![The sink tab and new button are both highlighted.](media/import-data-sink-new.png "Sink")
+
+9. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
+
+    ![Azure Data lake Storage Gen2 and the Continue button are highlighted.](media/import-data-sink-new-adls.png "New dataset")
+
+10. Select the **Binary** format, then select **Continue**.
+
+    ![Binary and the Continue button are highlighted.](media/import-data-source-new-blob-storage-binary.png "Select format")
+
+11. Enter each setting as displayed in the table below, and then select **OK**.
+
+    ![The form is completed as described in the table below.](media/import-data-sink-new-adls-properties.png "Set properties")
+
+    | Parameters | Settings | Remarks |
+    | --- | --- | --- |
+    | Name | `holdist` | Be careful not to include extra spaces when copying |
+    | Linked service | Select the default storage for your workspace (`<Synapse workspace name>-WorkspaceDefaultStorage`) | |
+    | File path | `datalake` | Enter `datalake` in the first field |
+
+12. Select **Publish all**, then select **Publish** in the dialog.
+
+    ![Publish all is highlighted.](media/publish-all.png "Publish all")
+
+    > ※	For the remainder of the lab, select **Publish** as appropriate to save your work.
+
+13. Select **Add trigger**, then select **Trigger now**.
+
+    ![The add trigger and trigger now menu options are displayed.](media/import-data-trigger.png "Trigger now")
+
+14. Select **OK** to run the trigger.
+
+    ![The OK button is highlighted.](media/import-data-trigger-pipeline-run.png "Pipeline run")
+
+15. Select the **Monitor** hub, then **Pipeline runs**. If the pipeline run status is `Succeeded` after a few minutes, then the pipeline run successfully completed.
+
+    ![The pipeline run successfully completed.](media/import-data-monitor.png "Monitor pipeline runs")
+
+16. Select the **Data** hub, select the **Linked** tab, expand storage accounts, then select **datalake** underneath the primary storage account. You will see the imported data on the right-hand side.
+
+    ![The datalake data is displayed.](media/datalake-files.png "Datalake files")
+
+### Task 3: Create a SQL Pool
+
+![The SQL Pool portion of the diagram is highlighted.](media/diagram-sql-pool.png "SQL Pool")
+
+A dedicated SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data. It offers T-SQL based compute and storage capabilities. After creating a dedicated SQL pool in your Synapse workspace, data can be loaded, modeled, processed, and delivered for faster analytic insight.
+
+1. Select the **Manage** hub.
+
+    ![The manage hub is highlighted.](media/manage-hub.png "Manage hub")
+
+2. Select **SQL pools**, then select **+ New**.
+
+    ![The SQL pools blade is displayed.](media/new-sql-pool.png "SQL pools")
+
+3. Enter **aiaddw** for the dedicated SQL pool name, select the **DW100c** performance level, then select **Review + create**.
+
+    ![The form is displayed as described.](media/new-sql-pool-form.png "Create SQL pool")
+
+4. Select **Create** in the review blade.
+
+5. Wait for the SQL pool deployment to complete. You may need to periodically select **Refresh** to update the status.
+
+    ![The SQL pool is deploying and the refresh button is highlighted.](media/sql-pool-deploying.png "SQL pools")
 
 ## Lab guide
 

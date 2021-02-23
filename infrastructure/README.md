@@ -8,16 +8,10 @@
     - [About the latest data analysis infrastructure](#about-the-latest-data-analysis-infrastructure)
     - [Scenario](#scenario)
     - [Hands-on architecture](#hands-on-architecture)
-  - [Exercise 1: Moving data to the data lake using Copy activity](#exercise-1-moving-data-to-the-data-lake-using-copy-activity)
-    - [About Synapse Pipeline](#about-synapse-pipeline)
-    - [Task 1: Log in to Synapse Studio](#task-1-log-in-to-synapse-studio)
-    - [Task 1: Create a Linked Service](#task-1-create-a-linked-service)
-    - [Task 2: Create a Copy pipeline](#task-2-create-a-copy-pipeline)
-  - [Exercise 2: Create a SQL Pool and table](#exercise-2-create-a-sql-pool-and-table)
-    - [Task 1: Create a SQL Pool](#task-1-create-a-sql-pool)
-    - [Task 2: Allow pipelines to access SQL pools](#task-2-allow-pipelines-to-access-sql-pools)
-    - [Task 3: Create table](#task-3-create-table)
-  - [Exercise 3: Implement Spark ETL with the GUI](#exercise-3-implement-spark-etl-with-the-gui)
+  - [Exercise 1: Set up SQL pool access and create table](#exercise-1-set-up-sql-pool-access-and-create-table)
+    - [Task 1: Allow pipelines to access SQL pools](#task-1-allow-pipelines-to-access-sql-pools)
+    - [Task 2: Create table](#task-2-create-table)
+  - [Exercise 2: Implement Spark ETL with the GUI](#exercise-2-implement-spark-etl-with-the-gui)
     - [Task 1: Create ADLS Gen2 Linked Service](#task-1-create-adls-gen2-linked-service)
     - [Task 2: Create mapping data flow sources](#task-2-create-mapping-data-flow-sources)
     - [Task 3: Create a filter](#task-3-create-a-filter)
@@ -28,7 +22,7 @@
     - [Task 8: Data output](#task-8-data-output)
     - [Task 9: Create and run Pipeline](#task-9-create-and-run-pipeline)
     - [Task 10: View the transformed data](#task-10-view-the-transformed-data)
-  - [Exercise 4: Visualize with Power BI](#exercise-4-visualize-with-power-bi)
+  - [Exercise 3: Visualize with Power BI](#exercise-3-visualize-with-power-bi)
     - [Task 1: Connect Power BI Desktop](#task-1-connect-power-bi-desktop)
     - [Task 2: Create a report](#task-2-create-a-report)
     - [Task 3: Save Power BI Desktop report](#task-3-save-power-bi-desktop-report)
@@ -39,22 +33,22 @@
     - [About Lambda Architecture](#about-lambda-architecture)
     - [Scenario](#scenario-1)
     - [Hands-on architecture](#hands-on-architecture-1)
-  - [Exercise 5: Create stream processing](#exercise-5-create-stream-processing)
+  - [Exercise 4: Create stream processing](#exercise-4-create-stream-processing)
     - [Task 1: Configure IoT Hub resource](#task-1-configure-iot-hub-resource)
     - [Task 2: Event source settings](#task-2-event-source-settings)
     - [Task 3: Configure Stream Analytics resources](#task-3-configure-stream-analytics-resources)
-  - [Exercise 6: Explore Data with Query-as-a-Service](#exercise-6-explore-data-with-query-as-a-service)
+  - [Exercise 5: Explore Data with Query-as-a-Service](#exercise-5-explore-data-with-query-as-a-service)
     - [Task 1: Query for Parquet files](#task-1-query-for-parquet-files)
     - [Task 2: Create a view](#task-2-create-a-view)
     - [Task 3: Create near-real-time dashboards](#task-3-create-near-real-time-dashboards)
-  - [Exercise 7: Create a structured process for large amounts of data with Spark](#exercise-7-create-a-structured-process-for-large-amounts-of-data-with-spark)
+  - [Exercise 6: Create a structured process for large amounts of data with Spark](#exercise-6-create-a-structured-process-for-large-amounts-of-data-with-spark)
     - [Task 1: Create a Spark pool](#task-1-create-a-spark-pool)
     - [Task 2: Develop Spark ETL](#task-2-develop-spark-etl)
-  - [Exercise 8: Spark ML learning/inference and SQL pool load](#exercise-8-spark-ml-learninginference-and-sql-pool-load)
+  - [Exercise 7: Spark ML learning/inference and SQL pool load](#exercise-7-spark-ml-learninginference-and-sql-pool-load)
     - [Task 1: Import and execute notebook](#task-1-import-and-execute-notebook)
-  - [Exercise 9: Visualize with Power BI](#exercise-9-visualize-with-power-bi)
+  - [Exercise 8: Visualize with Power BI](#exercise-8-visualize-with-power-bi)
     - [Task 1: Create connections and relationships](#task-1-create-connections-and-relationships)
-  - [Exercise 10: End processing](#exercise-10-end-processing)
+  - [Exercise 9: End processing](#exercise-9-end-processing)
     - [Task 1: Pause the SQL pool](#task-1-pause-the-sql-pool)
     - [Task 2: Stop Stream Analytics](#task-2-stop-stream-analytics)
     - [Task 3: Stop Virtual Devices application](#task-3-stop-virtual-devices-application)
@@ -133,188 +127,19 @@ To build the architecture, complete the following tasks:
 4. Create distributed ETL processing in the GUI with Mapping Data Flow
 5. Visualize flight delay
 
-## Exercise 1: Moving data to the data lake using Copy activity
+## Exercise 1: Set up SQL pool access and create table
 
-Time required: 30 minutes
-
-In this exercise, you will import a large amount of data into the primary data lake account.
-
-![The copy activity portion of the diagram is highlighted.](media/diagram-copy.png "Copy activity")
-
-### About Synapse Pipeline
-
-The data integration feature, Synapse Pipeline, is designed with the following concepts:
-
-- **Linked Service**: Contains definitions about the connection, such as the database and server information.
-- **Dataset**: Browses the Linked Service and defines table information, for example.
-- **Activity**: Browses, for example, a Dataset to define processing such as data movement.
-- **Pipeline**: Defines the order and conditions in which Activities are run.
-- **Integration Runtime**: Defines the processing infrastructure used by Linked Services and Activities.
-- **Trigger**: Defines when and how the Pipeline will run.
-
-### Task 1: Log in to Synapse Studio
-
-Synapse Studio is the web-based interface for working with your Azure Synapse Analytics workspace.
-
-![The Azure Synapse Analytics area of the diagram is highlighted.](media/synapse.png "Azure Synapse Analytics")
-
-1. Navigate to the Azure portal (<https://portal.azure.com>).
-
-2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
-
-    ![Synapse is highlighted in the search box, and the Azure Synapse Analytics workspace preview item in the results is highlighted.](media/search-synapse.png "Synapse search")
-
-3. Select the Synapse Workspace that you created for this lab, or that was provided for you in the lab environment.
-
-4. Select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
-
-    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
-
-    After authenticating your account, you should see the Synapse Studio home page for your workspace.
-
-    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
-
-5. If you see the Getting started dialog, select **Close**.
-
-    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
-
-### Task 1: Create a Linked Service
-
-1. Select the **Manage** hub, **Linked services**, then select **+ New**.
-
-    ![The new linked service option is highlighted.](media/new-linked-service.png "New linked service")
-
-2. Select **Azure Blob Storage**, then select **Continue**.
-
-    ![Azure Blob Storage and the Continue button are highlighted.](media/new-linked-service-blob-storage.png "New linked service")
-
-3. Enter each setting described below, then select **Test connection**. When the connection is successful, select **Create**.
-
-    ![The new linked service form is displayed.](media/new-linked-service-holsource.png "New linked service")
-
-    | Parameters | Settings | Remarks |
-    | --- | --- | --- |
-    | Name | `HOLSource` | |
-    | Description | No entry required | Default settings |
-    | Connect via integration runtime | AutoResolveIntegrationRuntime | Default settings |
-    | Authentication method | SAS URL | |
-    | SAS URL | `https://solliancepublicdata.blob.core.windows.net` | |
-    | SAS token| '' | Enter two single quotes |
-    | Test connection | To linked service | Default settings |
-
-### Task 2: Create a Copy pipeline
-
-1. Select the **Integrate** hub, select **+**, then select **Pipeline**.
-
-    ![The new pipeline link is highlighted.](media/new-pipeline.png "New pipeline")
-
-2. For **Name**, enter `ImportData`, then select **Properties** to close the dialog.
-
-    ![The properties dialog is displayed.](media/import-data-name.png "ImportData pipeline name")
-
-3. Expand **Move & transform** under the Activities menu. Drag and drop the **Copy data** activity onto the canvas area to the right.
-
-    ![The copy data activity has an arrow pointing to where it was added to the canvas.](media/import-data-add-copy-data.png "Add copy data activity")
-
-4. Select the **Source** tab, then select **+ New** next to the source dataset.
-
-    ![The source tab and new button are both highlighted.](media/import-data-source-new.png "Source")
-
-5. Select **Azure Blob Storage**, then select **Continue**.
-
-    ![Azure Blob Storage and the Continue button are highlighted.](media/import-data-source-new-blob-storage.png "New dataset")
-
-6. Select the **Binary** format, then select **Continue**.
-
-    ![Binary and the Continue button are highlighted.](media/import-data-source-new-blob-storage-binary.png "Select format")
-
-7. Enter each setting as displayed in the table below, and then select **OK**.
-
-    ![The form is completed as described in the table below.](media/import-data-source-new-blob-storage-properties.png "Set properties")
-
-    | Parameters | Settings | Remarks |
-    | --- | --- | --- |
-    | Name | `holsource` | Be careful not to include extra spaces when copying |
-    | Linked service | HOLSource | Select the linked service you created earlier |
-    | File path | `synapse-in-a-day/infrastructure` | Enter `synapse-in-a-day` in the first field, and `infrastructure` in the second field. *Note*: you may see an error if you try to browse, due to the lack of list permissions on the entire public data source. To review the contents, select the drop down arrow and select "From specified path" |
-
-8. Select the **Sink** tab, then select **+ New** next to the sink dataset.
-
-    ![The sink tab and new button are both highlighted.](media/import-data-sink-new.png "Sink")
-
-9. Select **Azure Data Lake Storage Gen2**, then select **Continue**.
-
-    ![Azure Data lake Storage Gen2 and the Continue button are highlighted.](media/import-data-sink-new-adls.png "New dataset")
-
-10. Select the **Binary** format, then select **Continue**.
-
-    ![Binary and the Continue button are highlighted.](media/import-data-source-new-blob-storage-binary.png "Select format")
-
-11. Enter each setting as displayed in the table below, and then select **OK**.
-
-    ![The form is completed as described in the table below.](media/import-data-sink-new-adls-properties.png "Set properties")
-
-    | Parameters | Settings | Remarks |
-    | --- | --- | --- |
-    | Name | `holdist` | Be careful not to include extra spaces when copying |
-    | Linked service | Select the default storage for your workspace (`<Synapse workspace name>-WorkspaceDefaultStorage`) | |
-    | File path | `datalake` | Enter `datalake` in the first field |
-
-12. Select **Publish all**, then select **Publish** in the dialog.
-
-    ![Publish all is highlighted.](media/publish-all.png "Publish all")
-
-    > ※	For the remainder of the lab, select **Publish** as appropriate to save your work.
-
-13. Select **Add trigger**, then select **Trigger now**.
-
-    ![The add trigger and trigger now menu options are displayed.](media/import-data-trigger.png "Trigger now")
-
-14. Select **OK** to run the trigger.
-
-    ![The OK button is highlighted.](media/import-data-trigger-pipeline-run.png "Pipeline run")
-
-15. Select the **Monitor** hub, then **Pipeline runs**. If the pipeline run status is `Succeeded` after a few minutes, then the pipeline run successfully completed.
-
-    ![The pipeline run successfully completed.](media/import-data-monitor.png "Monitor pipeline runs")
-
-16. Select the **Data** hub, select the **Linked** tab, expand storage accounts, then select **datalake** underneath the primary storage account. You will see the imported data on the right-hand side.
-
-    ![The datalake data is displayed.](media/datalake-files.png "Datalake files")
-
-## Exercise 2: Create a SQL Pool and table
-
-Time required: 20 minutes
+Time required: 10 minutes
 
 ![The SQL Pool portion of the diagram is highlighted.](media/diagram-sql-pool.png "SQL Pool")
 
-A dedicated SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data. It offers T-SQL based compute and storage capabilities. After creating a dedicated SQL pool in your Synapse workspace, data can be loaded, modeled, processed, and delivered for faster analytic insight.
+A dedicated SQL Pool is one of the analytic runtimes in Azure Synapse Analytics that help you ingest, transform, model, and analyze your data. It offers T-SQL based compute and storage capabilities. With a dedicated SQL pool in your Synapse workspace, data can be loaded, modeled, processed, and delivered for faster analytic insight.
 
-### Task 1: Create a SQL Pool
-
-1. Select the **Manage** hub.
-
-    ![The manage hub is highlighted.](media/manage-hub.png "Manage hub")
-
-2. Select **SQL pools**, then select **+ New**.
-
-    ![The SQL pools blade is displayed.](media/new-sql-pool.png "SQL pools")
-
-3. Enter **aiaddw** for the dedicated SQL pool name, select the **DW100c** performance level, then select **Review + create**.
-
-    ![The form is displayed as described.](media/new-sql-pool-form.png "Create SQL pool")
-
-4. Select **Create** in the review blade.
-
-5. Wait for the SQL pool deployment to complete. You may need to periodically select **Refresh** to update the status.
-
-    ![The SQL pool is deploying and the refresh button is highlighted.](media/sql-pool-deploying.png "SQL pools")
-
-### Task 2: Allow pipelines to access SQL pools
+### Task 1: Allow pipelines to access SQL pools
 
 Later in this lab, you will use the Automated Integration Runtime (IR) to copy data to the dedicated SQL pool within a data flow. But first, you must adjust the system assigned managed identity settings for your Synapse workspace to allow pipelines to access the pool.
 
-1. Return to the Azure portal (<https://portal.azure.com>).
+1. Navigate to the Azure portal (<https://portal.azure.com>).
 
 2. In the search menu, type **Synapse**, then select **Azure Synapse Analytics**.
 
@@ -326,17 +151,29 @@ Later in this lab, you will use the Automated Integration Runtime (IR) to copy d
 
     ![The checkbox is checked.](media/synapse-allow-pipelines.png "Managed identities")
 
-### Task 3: Create table
+### Task 2: Create table
 
-1. Select the **Develop** hub.
+1. Select **Overview** in the left-hand menu of the Synapse workspace, then select **Open** underneath **Open Synapse Studio** from the Synapse workspace page.
+
+    ![Launch Synapse Studio is selected.](media/azure-synapse-launch-studio.png 'Launch Synapse Studio')
+
+    After authenticating your account, you should see the Synapse Studio home page for your workspace.
+
+    ![The home page for the workspace is displayed.](media/synapse-workspace-home.png "Synapse Studio home")
+
+2. If you see the Getting started dialog, select **Close**.
+
+    ![The close button is highlighted.](media/synapse-studio-getting-started.png "Getting started")
+
+3. Select the **Develop** hub.
 
     ![The Develop hub is selected.](media/develop-hub.png "Develop hub")
 
-2. Select **+**, then select **SQL script**.
+4. Select **+**, then select **SQL script**.
 
     ![The new SQL script is selected.](media/new-sql-script.png "New SQL script")
 
-3. Enter **Create DelaySummary** in the Name value within the Properties blade. Select the **aiaddw** SQL pool you created in the previous task. Paste the script below into the script area, then select **Run**.
+5. Enter **Create DelaySummary** in the Name value within the Properties blade. Select the **aiaddw** dedicated SQL pool. Paste the script below into the script area, then select **Run**.
 
     ```sql
     --Set up Polybase
@@ -367,25 +204,25 @@ Later in this lab, you will use the Automated Integration Runtime (IR) to copy d
 
     ![The DelaySummary script is displayed.](media/delaysummary-script.png "New SQL script")
 
-4. After you run the script, you should see a status that the script executed successfully.
+6. After you run the script, you should see a status that the script executed successfully.
 
     ![The script successfully completed.](media/delaysummary-script-successful.png "Query executed successfully")
 
-5. Select **Publish all**, then select **Publish** in the dialog.
+7. Select **Publish all**, then select **Publish** in the dialog.
 
     ![Publish all is highlighted.](media/publish-all.png "Publish all")
 
     > ※	For the remainder of the lab, select **Publish** as appropriate to save your work.
 
-6. Select the **Data** hub.
+8. Select the **Data** hub.
 
     ![The data hub is selected.](media/data-hub.png "Data hub")
 
-7. Select the **Workspace** tab, expand **Databases**, expand the **aiaddw** SQL pool, and expand **Tables**. You will see the `DelaySummary` table. If it does not appear, select **Refresh**.
+9. Select the **Workspace** tab, expand **Databases**, expand the **aiaddw** SQL pool, and expand **Tables**. You will see the `DelaySummary` table. If it does not appear, select **Refresh**.
 
     ![The DelaySummary table is displayed.](media/delaysummary-table.png "DelaySummary table")
 
-## Exercise 3: Implement Spark ETL with the GUI
+## Exercise 2: Implement Spark ETL with the GUI
 
 Time required: 45 minutes
 
@@ -725,7 +562,7 @@ When the data flow pipeline has successfully completed, view the data it wrote t
 
     ![The query result set is displayed.](media/delaysummary-table-result-set.png "DelaySummary table result set")
 
-## Exercise 4: Visualize with Power BI
+## Exercise 3: Visualize with Power BI
 
 Time required: 15 minutes
 
@@ -960,7 +797,7 @@ To build the architecture, complete the following tasks:
 - Process scoring and create load processing to DWH
 - Run sensor data analysis report
 
-## Exercise 5: Create stream processing
+## Exercise 4: Create stream processing
 
 Time required: 30 minutes
 
@@ -1194,7 +1031,7 @@ In this task, we configure the `IoTVirtualDevices` virtual device simulator that
 
     ![The Start button is highlighted.](media/sa-start-dialog.png "Start")
 
-## Exercise 6: Explore Data with Query-as-a-Service
+## Exercise 5: Explore Data with Query-as-a-Service
 
 Time required: 15 minutes
 
@@ -1340,7 +1177,7 @@ In addition to the traditional SQL data warehouse functionality, Azure Synapse A
 
     ![The save dialog is displayed.](media/pbi-save-od.png "Save")
 
-## Exercise 7: Create a structured process for large amounts of data with Spark
+## Exercise 6: Create a structured process for large amounts of data with Spark
 
 Time required: 10 minutes
 
@@ -1414,7 +1251,7 @@ In this task, you will use the `SensorPrep.ipynb` notebook in the `source/ETLand
 
     ![The Stop session button is highlighted.](media/notebook-stop-session.png "Stop session")
 
-## Exercise 8: Spark ML learning/inference and SQL pool load
+## Exercise 7: Spark ML learning/inference and SQL pool load
 
 Time required: 10 minutes
 
@@ -1440,7 +1277,7 @@ Train and run machine learning models in a Spark pool and load the predicted res
 
 4. Run the notebook to run SparkML and load the data into your SQL pool.
 
-## Exercise 9: Visualize with Power BI
+## Exercise 8: Visualize with Power BI
 
 Time required: 10 minutes
 
@@ -1549,7 +1386,7 @@ Create a sensor summary report in Power BI.
 
 20. **Save** the report.
 
-## Exercise 10: End processing
+## Exercise 9: End processing
 
 Time required: 5 minutes
 
