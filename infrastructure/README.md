@@ -492,6 +492,10 @@ Add a sink process to output to the SQL Pool and create a dataset that defines t
 
     ![The Open button is highlighted.](media/flightdelay-sink-dataset-open.png "Sink")
 
+    > **Note**: If you receive an error message reading "Cannot connect to SQL Database" and "Check the linked service configuration is correct, and make sure the SQL Database firewall allows the integration runtime to access" the solution is to select the Synapse workspace from the Azure portal, navigate to **Managed identities** under the **Security** menu, and select the option **Allow pipelines (running as workspace's system assigned identity) to access SQL pools.**
+
+    ![The option to allow pipelines to access SQL pools is selected.](media/managed-identities.png "Allow pipelines to access SQL pools")
+
 6. Under the **Connection** tab of the dataset properties, enter **aiaddw** SQL pool name for the **DBName** value. Select **Refresh** next to the table list, then select **dbo.DelaySummary** from the list.
 
     ![The form values are configured as described.](media/dw-delaysummary-properties.png "dw_DelaySummary properties")
